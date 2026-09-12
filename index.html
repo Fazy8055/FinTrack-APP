@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinTrack - Financial Planning Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .gold-card { background: linear-gradient(135deg, #FFFDF0 0%, #FFF5D6 100%); border-color: #D4AF37; }
+    .gold-text { color: #B8860B; }
+    .profit-card { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border-color: #10B981; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+    .auth-screen { display: none; }
+    .auth-screen.active { display: flex; }
+    body { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    .pastel-indigo { background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%); }
+    .pastel-rose { background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%); }
+    .pastel-emerald { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); }
+    .pastel-amber { background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); }
+    .pastel-sky { background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); }
+    .pastel-violet { background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%); }
+    .pastel-red { background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%); }
+    .pastel-slate { background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%); }
+    .money-expense { color: #DC2626; }
+    .money-income { color: #059669; }
+    .money-neutral { color: #475569; }
+    .money-transfer { color: #0284C7; }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col">
+
+  <!-- AUTH SCREENS -->
+  <div id="authContainer" class="fixed inset-0 bg-slate-900/95 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-slate-200">
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-8 text-center text-white">
+        <div class="w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xl text-slate-900 text-2xl font-black transform rotate-3">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h1 class="text-3xl font-black tracking-wider uppercase">FinTrack</h1>
+        <p class="text-xs text-amber-400 font-semibold tracking-widest mt-1 uppercase">Financial Planning & Portfolio</p>
+      </div>
+
+      <div id="loginScreen" class="auth-screen active p-6 space-y-4">
+        <form id="loginForm" class="space-y-4" onsubmit="handleLogin(event)">
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">User ID</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-user"></i></span>
+              <input type="text" id="loginId" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Enter your User ID">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Password</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-lock"></i></span>
+              <input type="password" id="loginPass" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Enter your password">
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" id="rememberMe" class="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4">
+              <span class="text-slate-600 font-medium">Remember Password</span>
+            </label>
+            <button type="button" onclick="showAuthScreen('forgotScreen')" class="text-indigo-600 hover:text-indigo-700 font-semibold">Forgot Password?</button>
+          </div>
+          <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md transition-all">Access FinTrack <i class="fa-solid fa-arrow-right ml-1"></i></button>
+          <div class="text-center pt-2 border-t border-slate-100">
+            <p class="text-xs text-slate-500">Don't have an account? <button type="button" onclick="showAuthScreen('createScreen')" class="text-indigo-600 hover:text-indigo-700 font-bold">Create Account</button></p>
+          </div>
+        </form>
+      </div>
+
+      <div id="createScreen" class="auth-screen p-6 space-y-4">
+        <form id="createForm" class="space-y-4" onsubmit="handleCreateAccount(event)">
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Full Name</label><input type="text" id="createName" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Enter your name"></div>
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">User ID</label><input type="text" id="createLoginId" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Choose a User ID"></div>
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Password</label><input type="password" id="createPass" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Choose a password"></div>
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Confirm Password</label><input type="password" id="createPassConfirm" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Re-enter password"></div>
+          <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-md transition-all">Create Account <i class="fa-solid fa-user-plus ml-1"></i></button>
+          <div class="text-center pt-2 border-t border-slate-100"><p class="text-xs text-slate-500">Already have an account? <button type="button" onclick="showAuthScreen('loginScreen')" class="text-indigo-600 hover:text-indigo-700 font-bold">Login</button></p></div>
+        </form>
+      </div>
+
+      <div id="forgotScreen" class="auth-screen p-6 space-y-4">
+        <form id="forgotForm" class="space-y-4" onsubmit="handleForgotStep1(event)">
+          <p class="text-xs text-slate-500 text-center bg-slate-50 p-3 rounded-lg">Enter your User ID to receive a password reset OTP.</p>
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">User ID</label><input type="text" id="forgotLoginId" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Enter your User ID"></div>
+          <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg shadow-md transition-all">Send OTP <i class="fa-solid fa-paper-plane ml-1"></i></button>
+          <div class="text-center pt-2 border-t border-slate-100"><button type="button" onclick="showAuthScreen('loginScreen')" class="text-xs text-slate-500 hover:text-slate-700 font-semibold">Back to Login</button></div>
+        </form>
+      </div>
+
+      <div id="otpScreen" class="auth-screen p-6 space-y-4">
+        <form id="otpForm" class="space-y-4" onsubmit="handleOtpVerify(event)">
+          <p class="text-xs text-emerald-600 text-center bg-emerald-50 p-3 rounded-lg font-medium"><i class="fa-solid fa-message mr-1"></i> An OTP has been shared with you on WhatsApp.</p>
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Enter OTP</label><input type="text" id="otpInput" required maxlength="6" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-center text-lg tracking-widest" placeholder="------"></div>
+          <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg shadow-md transition-all">Verify OTP <i class="fa-solid fa-check ml-1"></i></button>
+          <div class="text-center pt-2 border-t border-slate-100"><button type="button" onclick="showAuthScreen('forgotScreen')" class="text-xs text-slate-500 hover:text-slate-700 font-semibold">Back</button></div>
+        </form>
+      </div>
+
+      <div id="resetScreen" class="auth-screen p-6 space-y-4">
+        <form id="resetForm" class="space-y-4" onsubmit="handleResetPassword(event)">
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">New Password</label><input type="password" id="newPass" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Enter new password"></div>
+          <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Confirm New Password</label><input type="password" id="newPassConfirm" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none font-medium text-sm" placeholder="Re-enter new password"></div>
+          <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg shadow-md transition-all">Reset Password <i class="fa-solid fa-key ml-1"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="appContainer" class="hidden min-h-screen flex flex-col flex-grow">
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div class="flex items-center space-x-3">
+          <button onclick="toggleSidebar()" class="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition"><i class="fa-solid fa-bars text-lg"></i></button>
+          <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center text-slate-900 font-black shadow-lg">FT</div>
+          <div><h1 class="font-black text-lg leading-tight uppercase tracking-wider hidden sm:block">FinTrack</h1><p class="text-[10px] text-amber-400 font-semibold hidden sm:block" id="welcomeUser">Welcome</p></div>
+          <nav class="hidden lg:flex items-center space-x-1 ml-4 bg-slate-800/50 p-1 rounded-lg flex-wrap">
+            <button onclick="switchTab('overview')" id="top-tab-overview" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold bg-indigo-600 text-white transition">Overview</button>
+            <button onclick="switchTab('expenses')" id="top-tab-expenses" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Expenses</button>
+            <button onclick="switchTab('friends')" id="top-tab-friends" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Friends Split</button>
+            <button onclick="switchTab('settlements')" id="top-tab-settlements" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Settlements</button>
+            <button onclick="switchTab('liabilities')" id="top-tab-liabilities" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Liabilities</button>
+            <button onclick="switchTab('gold-sip')" id="top-tab-gold-sip" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Gold & SIP</button>
+            <button onclick="switchTab('transfers')" id="top-tab-transfers" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Transfers</button>
+            <button onclick="switchTab('settings')" id="top-tab-settings" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Settings</button>
+          </nav>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 space-x-2">
+            <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
+            <span class="text-xs font-semibold text-slate-300 hidden md:inline">Display:</span>
+            <select id="displayCurrencySelect" onchange="changeDisplayCurrency(this.value)" class="bg-slate-900 border border-slate-600 text-amber-400 font-bold rounded text-xs px-2 py-0.5 outline-none focus:border-amber-400">
+              <option value="INR">INR (₹)</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option>
+            </select>
+          </div>
+          <div class="flex items-center bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 space-x-2">
+            <i class="fa-solid fa-globe text-emerald-400 animate-pulse text-xs"></i>
+            <span class="text-xs font-semibold text-slate-300 hidden md:inline">SAR/INR:</span>
+            <div class="flex items-center space-x-1"><span class="text-xs font-bold text-emerald-400">₹</span><input type="number" step="0.01" id="liveRateInput" onchange="updateExchangeRate(this.value)" class="w-16 px-1.5 py-0.5 bg-slate-900 border border-slate-600 text-emerald-400 font-bold rounded text-xs text-center outline-none focus:border-emerald-400"></div>
+            <button onclick="fetchLiveRates()" title="Fetch Live Rates" class="text-emerald-400 hover:text-emerald-300 text-xs"><i class="fa-solid fa-rotate"></i></button>
+          </div>
+          <button onclick="handleLogout()" class="px-3 py-1.5 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-right-from-bracket md:mr-1"></i> <span class="hidden md:inline">Logout</span></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex flex-grow relative">
+      <aside id="sidebar" class="w-64 bg-slate-900 text-slate-300 flex-shrink-0 transition-all duration-300 z-20 flex flex-col border-r border-slate-800 hidden lg:flex">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between"><span class="text-xs font-extrabold uppercase tracking-widest text-slate-400">Navigation</span><button onclick="toggleSidebar()" class="text-slate-400 hover:text-white lg:hidden"><i class="fa-solid fa-xmark"></i></button></div>
+        <nav class="p-3 space-y-1 flex-grow overflow-y-auto">
+          <button onclick="switchTab('overview')" id="side-tab-overview" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold bg-indigo-600 text-white flex items-center space-x-3 transition"><i class="fa-solid fa-chart-pie w-5 text-center"></i><span>Financial Overview</span></button>
+          <button onclick="switchTab('expenses')" id="side-tab-expenses" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"><i class="fa-solid fa-calendar-days w-5 text-center"></i><span>Monthly Expenses</span></button>
+          <button onclick="switchTab('friends')" id="side-tab-friends" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"><i class="fa-solid fa-user-group w-5 text-center"></i><span>Friends Split</span></button>
+          <button onclick="switchTab('settlements')" id="side-tab-settlements" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"><i class="fa-solid fa-handshake w-5 text-center"></i><span>Settlements</span></button>
+          <button onclick="switchTab('liabilities')" id="side-tab-liabilities" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"><i class="fa-solid fa-hand-holding-dollar w-5 text-center"></i><span>Liabilities & Debts</span></button>
+          <button onclick="switchTab('gold-sip')" id="side-tab-gold-sip" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"><i class="fa-solid fa-coins w-5 text-center"></i><span>Gold & SIP Investments</span></button>
+          <button onclick="switchTab('transfers')" id="side-tab-transfers" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"><i class="fa-solid fa-money-bill-transfer w-5 text-center"></i><span>Bank & Cash Transfers</span></button>
+          <button onclick="switchTab('settings')" id="side-tab-settings" class="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"><i class="fa-solid fa-gear w-5 text-center"></i><span>Settings & People</span></button>
+        </nav>
+      </aside>
+
+      <main class="flex-grow p-4 md:p-6 space-y-6 max-w-7xl mx-auto w-full">
+        <!-- OVERVIEW -->
+        <section id="sec-overview" class="tab-content space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="pastel-slate p-5 rounded-2xl border border-slate-200 shadow-sm"><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Bank & Cash Balance</p><h3 class="text-2xl font-black text-slate-800 mt-2" id="sumBankBalance">₹0</h3><p class="text-xs text-slate-500 mt-1" id="sumBankBalanceSub">All Accounts Combined</p></div>
+            <div class="pastel-red p-5 rounded-2xl border border-red-200 shadow-sm"><p class="text-xs font-bold text-red-600 uppercase tracking-wider">Total Liabilities (Real-Time)</p><h3 class="text-2xl font-black text-red-700 mt-2" id="sumTotalDebts">₹0</h3><p class="text-xs text-red-600/80 mt-1">Remaining Debt Principal</p></div>
+            <div class="gold-card p-5 rounded-2xl border shadow-sm"><p class="text-xs font-bold gold-text uppercase tracking-wider">Total Savings & Gold</p><h3 class="text-2xl font-black text-amber-600 mt-2" id="sumGoldSip">₹0</h3><p class="text-xs text-amber-700/80 mt-1">Gold Today's Value + SIP</p></div>
+            <div class="profit-card p-5 rounded-2xl border shadow-sm"><p class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Net Financial Balance</p><h3 class="text-2xl font-black text-emerald-600 mt-2" id="sumNetPosition">₹0</h3><p class="text-xs text-emerald-700/80 mt-1">Liquid Accounts + Savings - Debt</p></div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="pastel-indigo p-5 rounded-2xl border border-indigo-200 shadow-sm space-y-4">
+              <div class="flex items-center justify-between border-b border-indigo-200 pb-3">
+                <h3 class="font-bold text-slate-800 flex items-center" id="bankType1Title"><i class="fa-solid fa-building-columns text-indigo-600 mr-2"></i> Bank Account 1</h3>
+                <div class="flex items-center gap-2">
+                  <input type="month" id="bankMonthSelect" onchange="renderOverview()" class="bg-white/70 border border-indigo-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none">
+                  <button onclick="openForm('modalBank', 'bankForm', {bankType: 1})" class="px-3 py-1 bg-indigo-600 text-white hover:bg-indigo-700 font-bold text-xs rounded-lg transition">+ Add Bank</button>
+                </div>
+              </div>
+              <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="text-slate-400 border-b"><th class="pb-2">Owner</th><th class="pb-2">Bank Name</th><th class="pb-2 text-right">Balance</th><th class="pb-2 text-right">In INR (₹)</th><th class="pb-2 text-center">Action</th></tr></thead><tbody id="bankType1Table" class="divide-y divide-indigo-100 font-medium text-slate-700"></tbody></table></div>
+            </div>
+            <div class="pastel-amber p-5 rounded-2xl border border-amber-200 shadow-sm space-y-4">
+              <div class="flex items-center justify-between border-b border-amber-200 pb-3">
+                <h3 class="font-bold text-slate-800 flex items-center" id="bankType2Title"><i class="fa-solid fa-vault text-amber-600 mr-2"></i> Bank Account 2</h3>
+                <div class="flex items-center gap-2">
+                  <input type="month" id="bankMonthSelect2" onchange="renderOverview()" class="bg-white/70 border border-amber-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none">
+                  <button onclick="openForm('modalBank', 'bankForm', {bankType: 2})" class="px-3 py-1 bg-amber-600 text-white hover:bg-amber-700 font-bold text-xs rounded-lg transition">+ Add Bank</button>
+                </div>
+              </div>
+              <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="text-slate-400 border-b"><th class="pb-2">Owner</th><th class="pb-2">Bank Name</th><th class="pb-2 text-right">Balance</th><th class="pb-2 text-right">In INR (₹)</th><th class="pb-2 text-center">Action</th></tr></thead><tbody id="bankType2Table" class="divide-y divide-amber-100 font-medium text-slate-700"></tbody></table></div>
+            </div>
+          </div>
+          <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 flex items-center"><i class="fa-solid fa-wallet text-emerald-600 mr-2"></i> Cash in Hand Balances</h3><div class="flex items-center gap-2"><input type="month" id="cashMonthSelect" onchange="renderOverview()" class="bg-white/70 border border-emerald-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none"><button onclick="openForm('modalBank', 'bankForm', {name: 'Cash in Hand', bankType: 1})" class="px-3 py-1 bg-emerald-600 text-white hover:bg-emerald-700 font-bold text-xs rounded-lg transition">+ Add Cash</button></div></div>
+            <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="text-slate-400 border-b"><th class="pb-2">Owner</th><th class="pb-2">Currency</th><th class="pb-2 text-right">Balance</th><th class="pb-2 text-right">In INR (₹)</th><th class="pb-2 text-center">Action</th></tr></thead><tbody id="cashTable" class="divide-y divide-emerald-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+          <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-md border border-slate-800 space-y-4">
+            <div class="border-b border-slate-800 pb-3 flex items-center justify-between"><h3 class="font-extrabold text-sm uppercase tracking-wider text-amber-400 flex items-center"><i class="fa-solid fa-users text-indigo-400 mr-2"></i> Individual Bank & Cash Balance Summary</h3><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded">Real-Time Individual Portfolio</span></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="individualSummaryContainer"></div>
+          </div>
+        </section>
+
+        <!-- MONTHLY EXPENSES -->
+        <section id="sec-expenses" class="tab-content hidden space-y-6">
+          <div class="pastel-rose p-5 rounded-2xl border border-rose-200 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-rose-200 pb-4">
+              <div><h3 class="font-bold text-slate-800 text-base">Monthly Shared Expense Tracker</h3><p class="text-xs text-slate-500">Real-time tracker. Logs update instantly upon saving.</p></div>
+              <div class="flex items-center space-x-3"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="expenseMonthSelect" onchange="renderExpenses()" class="bg-white/70 border border-rose-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"><button onclick="openNewExpenseModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow">+ Add Expense</button></div>
+            </div>
+            <div id="expenseSummaryContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <div class="overflow-x-auto border rounded-lg border-rose-200"><table class="w-full text-left text-xs"><thead><tr class="bg-rose-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">Description</th><th class="p-3 text-center">Paid By</th><th class="p-3 text-center">Account</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="expensesTable" class="divide-y divide-rose-100 font-medium text-slate-700"></tbody></table></div>
+            <div class="mt-6 border-t pt-4"><h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-clock-rotate-left mr-1 text-slate-400"></i> Settlement Transfer Logs (this month)</h4><div class="overflow-x-auto"><table class="w-full text-left text-xs bg-slate-50 rounded-lg"><tbody id="settlementsTable" class="divide-y divide-slate-200 text-slate-600"></tbody></table></div></div>
+          </div>
+        </section>
+
+        <!-- FRIENDS SPLIT -->
+        <section id="sec-friends" class="tab-content hidden space-y-6">
+          <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-scale-balanced text-emerald-600 mr-2"></i> Receivable & Payable Summary</h3><div class="flex items-center space-x-3"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="friendSplitMonthSelect" onchange="renderFriendsSplit()" class="bg-white/70 border border-emerald-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"></div></div>
+            <div id="receivablePayableContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+          <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-user-group text-emerald-600 mr-2"></i> Friends List</h3><button onclick="openFriendModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow">+ Add Friend</button></div>
+            <div id="friendsListContainer" class="flex flex-wrap gap-2"></div>
+          </div>
+          <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-receipt text-amber-600 mr-2"></i> Friends Split Transactions</h3><button onclick="openFriendSplitModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg shadow">+ Add Split Expense</button></div>
+            <div class="overflow-x-auto border rounded-lg border-emerald-200"><table class="w-full text-left text-xs"><thead><tr class="bg-emerald-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">Description</th><th class="p-3 text-center">Paid By</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Participants</th><th class="p-3 text-center">Share / Person</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="friendSplitsTable" class="divide-y divide-emerald-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- SETTLEMENTS -->
+        <section id="sec-settlements" class="tab-content hidden space-y-6">
+          <div class="pastel-violet p-5 rounded-2xl border border-violet-200 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-violet-200 pb-4">
+              <div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-handshake text-violet-600 mr-2"></i> Settlements & Friend Split Settlement</h3><p class="text-xs text-slate-500">Settlements are normally completed at the end of each month. Select a month to view or log settlements.</p></div>
+              <div class="flex items-center space-x-3">
+                <label class="text-xs font-bold text-slate-600 uppercase">Month:</label>
+                <input type="month" id="settlementMonthSelect" onchange="renderSettlements()" class="bg-white/70 border border-violet-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none">
+                <select id="settlementCurrencySelect" class="bg-white/70 border border-violet-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none">
+                  <option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option>
+                </select>
+                <button onclick="openSettlementForm(document.getElementById('settlementCurrencySelect').value, document.getElementById('settlementMonthSelect').value)" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs rounded-lg shadow">+ Log Settlement</button>
+              </div>
+            </div>
+            <div class="overflow-x-auto border rounded-lg border-violet-200"><table class="w-full text-left text-xs"><thead><tr class="bg-violet-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">Payer</th><th class="p-3">Payee</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="settlementsMainTable" class="divide-y divide-violet-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+          <div class="pastel-violet p-5 rounded-2xl border border-violet-200 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-violet-200 pb-4">
+              <div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-user-group text-violet-600 mr-2"></i> Friends Settlement Ledger</h3><p class="text-xs text-slate-500">Running balance with each friend — automatically carries forward across months. The balance is calculated only from settlement transactions; there is no manual balance entry.</p></div>
+              <button onclick="openFriendSettlementModal()" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs rounded-lg shadow">+ Record Friend Settlement</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-red-50 border border-red-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-red-600 uppercase">Total You Need To Pay</p><h4 class="text-lg font-black money-expense" id="fsTotalOwe">₹0</h4></div>
+              <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-emerald-700 uppercase">Total Friends Owe You</p><h4 class="text-lg font-black money-income" id="fsTotalOwed">₹0</h4></div>
+              <div class="bg-white/70 border border-slate-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-slate-600 uppercase">Net Settlement Position</p><h4 class="text-lg font-black money-neutral" id="fsNetPosition">₹0</h4></div>
+            </div>
+            <div class="overflow-x-auto border rounded-lg border-violet-200"><table class="w-full text-left text-xs"><thead><tr class="bg-violet-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Friend</th><th class="p-3">Status</th><th class="p-3 text-right">Outstanding</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="friendLedgerSummaryTable" class="divide-y divide-violet-100 font-medium text-slate-700"></tbody></table></div>
+            <h4 class="font-bold text-slate-800 text-sm border-t border-violet-200 pt-4"><i class="fa-solid fa-clock-rotate-left mr-1 text-slate-400"></i> Friend Settlement History (all months — never overwritten)</h4>
+            <div class="overflow-x-auto border rounded-lg border-violet-200"><table class="w-full text-left text-xs"><thead><tr class="bg-violet-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">Friend</th><th class="p-3">Direction</th><th class="p-3 text-right">Amount</th><th class="p-3">Account</th><th class="p-3">Notes</th><th class="p-3 text-right">Prev. Balance</th><th class="p-3 text-right">Balance After</th><th class="p-3 text-center">Delete</th></tr></thead><tbody id="friendLedgerHistoryTable" class="divide-y divide-violet-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- LIABILITIES -->
+        <section id="sec-liabilities" class="tab-content hidden space-y-6">
+          <div class="pastel-red p-5 rounded-2xl border border-red-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-red-200 pb-4"><div><h3 class="font-bold text-slate-800 text-base">Liabilities & Debt Management</h3><p class="text-xs text-slate-500">Track loan payments with exact dates, logs, and closing status.</p></div><button onclick="openForm('modalDebt', 'debtForm')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg shadow">+ Add New Debt</button></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="debtsContainer"></div>
+          </div>
+        </section>
+
+        <!-- GOLD & SIP -->
+        <section id="sec-gold-sip" class="tab-content hidden space-y-6">
+          <div class="gold-card p-5 rounded-2xl border shadow-sm space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-amber-200 pb-4"><div><h3 class="font-black text-amber-900 text-base flex items-center"><i class="fa-solid fa-coins text-amber-500 mr-2"></i> Gold Purchase & Dual Conversion Analysis</h3><p class="text-xs text-amber-800 mt-1">Compare physical gold value vs purchase-day conversion rate & live today conversion rate.</p></div><button onclick="openForm('modalGold', 'goldForm')" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-lg shadow">+ Add Gold Purchase</button></div>
+            <div class="bg-white/90 p-4 rounded-xl border border-amber-200 shadow-xs flex flex-wrap items-center justify-between gap-4"><div class="flex items-center space-x-2"><span class="text-xs font-bold text-amber-900 uppercase"><i class="fa-solid fa-tags text-amber-600 mr-1"></i> Common Today's Rate Update:</span></div><div class="flex flex-wrap items-center gap-2"><div class="inline-flex rounded-lg border border-amber-300 bg-amber-50 p-1"><button type="button" onclick="setCommonGoldPurity('24K')" id="commonPurity24K" class="px-3 py-1 text-xs font-bold rounded-md bg-amber-500 text-white transition">24K</button><button type="button" onclick="setCommonGoldPurity('22K')" id="commonPurity22K" class="px-3 py-1 text-xs font-bold rounded-md text-amber-900 hover:bg-amber-100 transition">22K</button><button type="button" onclick="setCommonGoldPurity('18K')" id="commonPurity18K" class="px-3 py-1 text-xs font-bold rounded-md text-amber-900 hover:bg-amber-100 transition">18K</button></div><div class="flex items-center space-x-1"><span class="text-xs font-bold text-slate-600">₹</span><input type="number" id="commonTodayRateInput" placeholder="Enter rate..." class="w-28 px-2 py-1.5 bg-white border border-amber-300 rounded-lg text-xs font-bold text-amber-900 outline-none focus:border-amber-500"></div><button type="button" onclick="applyCommonGoldRate()" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg shadow transition">Update All <span id="currentCommonPurityLabel">(24K)</span></button></div></div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 bg-white/80 p-4 rounded-xl border border-amber-200/60 shadow-xs">
+              <div><p class="text-[10px] font-bold text-slate-500 uppercase">Total SAR Invested</p><h4 class="text-base md:text-lg font-black text-slate-800" id="goldSummarySar">0 SAR</h4></div>
+              <div><p class="text-[10px] font-bold text-amber-700 uppercase">Purchase Day Conv. Total</p><h4 class="text-base md:text-lg font-black text-amber-800" id="goldSummaryPurchaseInr">₹0</h4><p class="text-[9px] text-amber-600/80">Based on purchase day rates</p></div>
+              <div><p class="text-[10px] font-bold text-indigo-700 uppercase">Converted Today (Live)</p><h4 class="text-base md:text-lg font-black text-indigo-800" id="goldSummaryTodayInr">₹0</h4><p class="text-[9px] text-indigo-600/80">If SAR remitted today</p></div>
+              <div><p class="text-[10px] font-bold text-amber-600 uppercase">Today's Gold Market Value</p><h4 class="text-base md:text-lg font-black text-amber-600" id="goldSummaryValue">₹0</h4><p class="text-[9px] text-amber-600/80">Physical gold current value</p></div>
+              <div class="col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l pl-0 md:pl-3 border-amber-300 pt-2 md:pt-0"><p class="text-[10px] font-bold text-slate-800 uppercase">Net Profit vs Purchase</p><h4 class="text-base md:text-lg font-black" id="goldSummaryProfit">₹0</h4><p class="text-[9px] text-slate-500" id="goldSummaryProfitSub">vs Today Remit: ₹0</p></div>
+            </div>
+            <div class="overflow-x-auto bg-white rounded-lg border border-amber-200"><table class="w-full text-left text-xs"><thead><tr class="bg-amber-100/60 text-amber-950 font-bold border-b border-amber-200 uppercase"><th class="p-2.5">Date</th><th class="p-2.5 text-center">Grams</th><th class="p-2.5 text-right">Bought (SAR)</th><th class="p-2.5 text-right">Day Rate</th><th class="p-2.5 text-right bg-amber-50/50">Purchase Day Conv. (₹)</th><th class="p-2.5 text-right bg-indigo-50/30">Converted Today (₹)</th><th class="p-2.5 text-right">Today Rate</th><th class="p-2.5 text-right bg-amber-100/40">Today Gold Value (₹)</th><th class="p-2.5 text-right">Profit vs Purchase (₹)</th><th class="p-2.5 text-center">Actions</th></tr></thead><tbody id="goldTable" class="divide-y divide-amber-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+          <div class="pastel-indigo p-5 rounded-2xl border border-indigo-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-indigo-200 pb-4"><h3 class="font-bold text-slate-800 text-base">SIP & Money Investments</h3><button onclick="openForm('modalSip', 'sipForm')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow">+ Add SIP</button></div>
+            <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-indigo-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">SIP Name</th><th class="p-3">Category</th><th class="p-3 text-right">Monthly (₹)</th><th class="p-3 text-right">Current Value (₹)</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="sipTable" class="divide-y divide-indigo-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- TRANSFERS -->
+        <section id="sec-transfers" class="tab-content hidden space-y-6">
+          <div class="pastel-sky p-5 rounded-2xl border border-sky-200 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-sky-200 pb-4"><div><h3 class="font-bold text-slate-800 text-base">Bank & Cash Transfers</h3><p class="text-xs text-slate-500">Record transfers between your accounts or cash in hand balances.</p></div><div class="flex items-center space-x-3"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="transferMonthSelect" onchange="renderTransfers()" class="bg-white/70 border border-sky-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"><button onclick="openTransferModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg shadow">+ New Transfer</button></div></div>
+            <div class="overflow-x-auto border rounded-lg border-sky-200"><table class="w-full text-left text-xs"><thead><tr class="bg-sky-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">From Account</th><th class="p-3">To Account</th><th class="p-3 text-right">Amount</th><th class="p-3">Notes</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="transfersTable" class="divide-y divide-sky-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="sec-settings" class="tab-content hidden space-y-6">
+          <div class="pastel-indigo p-5 rounded-2xl border border-indigo-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-indigo-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-building-columns text-indigo-600 mr-2"></i> Bank Account Types (Dashboard Categories)</h3><p class="text-xs text-slate-500">Configure the two bank-account categories shown in the Dashboard Summary. These replace the fixed bank-account concept.</p></div></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-white/70 p-4 rounded-xl border border-indigo-200 space-y-2">
+                <label class="block text-xs font-bold text-indigo-700 uppercase">Bank Account Type 1</label>
+                <input type="text" id="settingBankType1" placeholder="e.g. Indian Bank Account" class="w-full p-2 border border-indigo-200 rounded-lg font-bold text-sm">
+                <p class="text-[10px] text-slate-500">Shown as the first bank category in the Overview.</p>
+              </div>
+              <div class="bg-white/70 p-4 rounded-xl border border-amber-200 space-y-2">
+                <label class="block text-xs font-bold text-amber-700 uppercase">Bank Account Type 2</label>
+                <input type="text" id="settingBankType2" placeholder="e.g. GCC Saudi Bank Account" class="w-full p-2 border border-amber-200 rounded-lg font-bold text-sm">
+                <p class="text-[10px] text-slate-500">Shown as the second bank category in the Overview.</p>
+              </div>
+            </div>
+            <div class="flex justify-end"><button onclick="saveBankTypes()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow">Save Bank Types</button></div>
+            <div class="bg-slate-50 rounded-lg p-3 text-xs text-slate-600"><i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Suggestions: Indian Bank Account, GCC Saudi Bank Account, UAE Bank Account, Bahrain Bank Account — or enter any custom name you prefer.</div>
+          </div>
+          <div class="pastel-rose p-5 rounded-2xl border border-rose-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-rose-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-users text-rose-600 mr-2"></i> Monthly Expense People</h3><p class="text-xs text-slate-500">Configure the people used for monthly expense splitting. These are your household members.</p></div><button onclick="openPersonModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow">+ Add Person</button></div>
+            <div id="peopleListContainer" class="flex flex-wrap gap-2"></div>
+          </div>
+          <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-globe text-emerald-600 mr-2"></i> Exchange Rate Management</h3><p class="text-xs text-slate-500">Manage conversion rates to INR. Edit manually or fetch live rates online.</p></div><button onclick="fetchLiveRates()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow"><i class="fa-solid fa-rotate mr-1"></i> Fetch Live Rates</button></div>
+            <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-emerald-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Currency</th><th class="p-3">Country</th><th class="p-3 text-right">Rate to INR</th><th class="p-3 text-center">Action</th></tr></thead><tbody id="ratesTable" class="divide-y divide-emerald-100 font-medium text-slate-700"></tbody></table></div>
+          </div>
+          <div id="adminControlsCard" class="pastel-amber p-5 rounded-2xl border border-amber-200 shadow-sm space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-amber-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-shield-halved text-amber-600 mr-2"></i> Admin Controls — Account Limit</h3><p class="text-xs text-slate-500">Limit how many accounts can be created in this application. Example: 1 = admin-only (manual), 5 = only five members can create an ID, 10 = ten members.</p></div></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-white/70 p-4 rounded-xl border border-amber-200 space-y-2">
+                <label class="block text-xs font-bold text-amber-700 uppercase">Maximum Accounts Allowed</label>
+                <input type="number" min="1" id="maxUsersInput" placeholder="e.g. 5" class="w-full p-2 border border-amber-200 rounded-lg font-bold text-sm">
+                <p class="text-[10px] text-slate-500">New account creation is automatically blocked once this limit is reached.</p>
+              </div>
+              <div class="bg-white/70 p-4 rounded-xl border border-amber-200 space-y-2">
+                <label class="block text-xs font-bold text-amber-700 uppercase">Current Status</label>
+                <p class="text-sm font-bold text-slate-800" id="adminUserCount">—</p>
+                <p class="text-[10px] text-slate-500">Accounts currently registered in the application.</p>
+              </div>
+            </div>
+            <div class="flex justify-end"><button onclick="saveMaxUsers()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg shadow">Save Limit</button></div>
+          </div>
+          <div class="pastel-slate p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-user-shield text-amber-600 mr-2"></i> Account Information</h3>
+            <div id="accountInfoContainer" class="space-y-2 text-sm"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="bg-slate-950 text-slate-400 py-4 px-6 text-center border-t border-slate-800 mt-auto shadow-inner">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-6 text-xs mb-2">
+        <span class="flex items-center text-emerald-400 font-bold tracking-wider uppercase text-[10px]"><i class="fa-solid fa-satellite-dish animate-pulse mr-2"></i> Multi-User Secure</span>
+        <span class="hidden md:inline text-slate-600">|</span>
+        <span class="flex items-center text-indigo-400 font-bold tracking-wider uppercase text-[10px]"><i class="fa-solid fa-cloud mr-2"></i> Firebase Real-Time Cloud Database</span>
+        <span class="hidden md:inline text-slate-600">|</span>
+        <span class="flex items-center text-amber-400 font-bold tracking-wider uppercase text-[10px]"><i class="fa-solid fa-rotate mr-2"></i> Live Synchronization Active</span>
+      </div>
+      <p class="text-[10px] text-slate-500 mt-2">&copy; 2026 ATMOS Digital Solutions. All Rights Reserved. FinTrack Financial Suite v3.1 Multi-User.</p>
+    </footer>
+  </div>
+
+  <!-- MODALS -->
+  <div id="modalBank" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Account Entry</h3><form id="bankForm" onsubmit="saveBankEntry(event)" class="space-y-3 text-xs"><input type="hidden" id="bankId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Account Owner</label><select id="bankOwner" class="w-full p-2 border rounded-lg font-bold"></select></div><div><label class="block font-bold text-slate-600 mb-1">Bank Account Type</label><select id="bankType" onchange="onBankTypeChange()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="bankCurrency" class="w-full p-2 border rounded-lg font-bold"><option value="INR">INR (₹)</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="bankDate" class="w-full p-2 border rounded-lg font-bold"></div></div><div><label class="block font-bold text-slate-600 mb-1">Bank / Cash Name (enter manually)</label><input type="text" id="bankName" required placeholder="Enter bank or cash name" class="w-full p-2 border rounded-lg font-bold text-indigo-900"></div><div><label class="block font-bold text-slate-600 mb-1">Current Balance</label><input type="number" step="0.01" id="bankBalance" required class="w-full p-2 border rounded-lg font-bold"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalBank')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">Save Account</button></div></form></div></div>
+
+  <div id="modalExpense" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Expense Entry</h3><form id="expenseForm" onsubmit="saveExpense(event)" class="space-y-3 text-xs"><input type="hidden" id="expenseId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="expenseDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="expensePaidBy" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description</label><input type="text" id="expenseDesc" required class="w-full p-2 border rounded-lg"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="expenseCurrency" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="expenseAmount" required class="w-full p-2 border rounded-lg" oninput="document.getElementById('cashbackManualEdit').value='false'; handleTiqmoCashback();"></div></div><div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg space-y-1"><label class="block font-bold text-indigo-900">Deduct from Bank/Cash Account?</label><select id="expenseDeductBankId" class="w-full p-2 border rounded-lg text-xs bg-white" onchange="handleTiqmoCashback()"></select><p class="text-[10px] text-indigo-600">Selecting an account will directly reduce the amount from its balance. Deleting this expense later will restore the exact amount to the same account.</p></div><div id="cashbackWrapper" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg space-y-1"><label class="block font-bold text-amber-900">Tiqmo 1% Cashback (Auto-calc)</label><input type="number" step="0.01" id="expenseCashback" class="w-full p-2 border border-amber-300 rounded-lg text-xs font-bold" oninput="document.getElementById('cashbackManualEdit').value = 'true'"><input type="hidden" id="cashbackManualEdit" value="false"><p class="text-[10px] text-amber-700">This amount reduces the net deduction. Edit manually if shop didn't give full cashback.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalExpense')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Expense</button></div></form></div></div>
+
+  <div id="modalTransfer" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Transfer Money</h3><form id="transferForm" onsubmit="saveTransfer(event)" class="space-y-3 text-xs"><input type="hidden" id="transferId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="transferDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">From Account (Deduct)</label><select id="transferFrom" required class="w-full p-2 border rounded-lg font-bold bg-red-50 text-red-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">To Account (Add)</label><select id="transferTo" required class="w-full p-2 border rounded-lg font-bold bg-emerald-50 text-emerald-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">Transfer Amount</label><input type="number" step="0.01" id="transferAmount" required class="w-full p-2 border rounded-lg font-bold"></div><div><label class="block font-bold text-slate-600 mb-1">Notes / Reference</label><input type="text" id="transferNotes" class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalTransfer')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-lg">Execute Transfer</button></div></form></div></div>
+
+  <div id="modalSettlement" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Log Settlement Payment</h3><form id="settlementForm" onsubmit="saveSettlement(event)" class="space-y-3 text-xs"><input type="hidden" id="stlCurrency"><input type="hidden" id="stlMonth"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="stlDate" required class="w-full p-2 border rounded-lg"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Who Paid?</label><select id="stlPayer" onchange="updateSettlementBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div><div><label class="block font-bold text-slate-600 mb-1">To Whom?</label><select id="stlPayee" onchange="updateSettlementBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Amount Paid</label><input type="number" step="0.01" id="stlAmount" required class="w-full p-2 border rounded-lg font-bold"></div><div class="p-3 bg-emerald-50 border border-emerald-100 rounded-lg space-y-2"><div><label class="block font-bold text-emerald-900">Deduct from Payer's Account:</label><select id="stlPayerBankId" class="w-full p-2 border rounded-lg bg-white"></select></div><div><label class="block font-bold text-emerald-900">Add to Payee's Account:</label><select id="stlPayeeBankId" class="w-full p-2 border rounded-lg bg-white"></select></div><p class="text-[10px] text-emerald-700">Settlement will automatically adjust balances in the selected accounts.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalSettlement')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-violet-600 text-white font-bold rounded-lg">Save Log & Update Banks</button></div></form></div></div>
+
+  <div id="modalDebt" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Liability / Debt</h3><form id="debtForm" onsubmit="saveDataEntry(event, 'debts')" class="space-y-3 text-xs"><input type="hidden" id="debtId"><div><label class="block font-bold text-slate-600 mb-1">Debt Name</label><input type="text" id="debtName" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Total Principal Amount (INR ₹)</label><input type="number" id="debtTotal" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Date Taken</label><input type="date" id="debtDate" class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalDebt')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg">Save</button></div></form></div></div>
+
+  <div id="modalDebtPay" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Debt Payment Log</h3><form id="debtPayForm" onsubmit="saveDebtPayment(event)" class="space-y-3 text-xs"><input type="hidden" id="payParentId"><input type="hidden" id="payId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="payDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Amount Paid (INR ₹)</label><input type="number" id="payAmount" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Description / Note</label><input type="text" id="payNotes" required class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalDebtPay')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg">Save Log</button></div></form></div></div>
+
+  <div id="modalGold" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6"><h3 class="font-bold text-base mb-4">Gold Purchase Entry</h3><form id="goldForm" onsubmit="saveDataEntry(event, 'gold')" class="space-y-3 text-xs"><input type="hidden" id="goldId"><div class="grid grid-cols-2 gap-3"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="goldDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Purity</label><select id="goldPurity" class="w-full p-2 border rounded-lg"><option value="24K">24 K</option><option value="22K">22 K</option><option value="18K">18 K</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Grams (24K)</label><input type="number" step="0.1" id="goldGrams24" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Grams (22K)</label><input type="number" step="0.1" id="goldGrams22" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Purchase SAR</label><input type="number" id="goldSar" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Conv. Rate on Purchase Day</label><input type="number" step="0.01" id="goldConvRate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Day Kerala Rate</label><input type="number" id="goldKeralaRate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Today Market Rate</label><input type="number" id="goldTodayRate" required class="w-full p-2 border rounded-lg"></div></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalGold')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-amber-500 text-white font-bold rounded-lg">Save</button></div></form></div></div>
+
+  <div id="modalSip" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">SIP / Investment</h3><form id="sipForm" onsubmit="saveDataEntry(event, 'sips')" class="space-y-3 text-xs"><input type="hidden" id="sipId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="sipDate" class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Name</label><input type="text" id="sipName" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Category</label><input type="text" id="sipCategory" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Monthly SIP (₹)</label><input type="number" id="sipMonthly" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Current Value (₹)</label><input type="number" id="sipValue" required class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalSip')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">Save</button></div></form></div></div>
+
+  <div id="modalFriend" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Friend Entry</h3><form id="friendForm" onsubmit="saveFriend(event)" class="space-y-3 text-xs"><input type="hidden" id="friendId"><div><label class="block font-bold text-slate-600 mb-1">Friend Name</label><input type="text" id="friendName" required class="w-full p-2 border rounded-lg font-bold" placeholder="Enter friend's name"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriend')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg">Save Friend</button></div></form></div></div>
+
+  <div id="modalFriendSplit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Friends Split Expense</h3><form id="friendSplitForm" onsubmit="saveFriendSplit(event)" class="space-y-3 text-xs"><input type="hidden" id="friendSplitId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="friendSplitDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="friendSplitCurrency" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description / Reason</label><input type="text" id="friendSplitDesc" required class="w-full p-2 border rounded-lg" placeholder="e.g. Dinner, Movie, Trip"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="friendSplitAmount" required class="w-full p-2 border rounded-lg" oninput="updateSplitPreview()"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="friendSplitPaidBy" class="w-full p-2 border rounded-lg font-bold" onchange="updateSplitPreview()"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Participants (select who shared this expense)</label><div id="friendSplitParticipants" class="border rounded-lg p-3 bg-slate-50 space-y-1 max-h-40 overflow-y-auto"></div></div><div id="splitPreview" class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-800 font-medium"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriendSplit')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-amber-600 text-white font-bold rounded-lg">Save Split</button></div></form></div></div>
+
+  <div id="modalPerson" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Person Entry</h3><form id="personForm" onsubmit="savePerson(event)" class="space-y-3 text-xs"><input type="hidden" id="personId"><div><label class="block font-bold text-slate-600 mb-1">Person Name</label><input type="text" id="personName" required class="w-full p-2 border rounded-lg font-bold" placeholder="Enter person name"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalPerson')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Person</button></div></form></div></div>
+
+  <div id="modalFriendSettlement" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Record Friend Settlement</h3><form id="friendSettlementForm" onsubmit="saveFriendSettlement(event)" class="space-y-3 text-xs">
+<input type="hidden" id="fsLedgerId">
+<div><label class="block font-bold text-slate-600 mb-1">Friend</label><select id="fsFriend" required onchange="updateFsPreview()" class="w-full p-2 border rounded-lg font-bold"></select></div>
+<div><label class="block font-bold text-slate-600 mb-1">Type / Direction</label><select id="fsType" onchange="onFriendStlTypeChange()" class="w-full p-2 border rounded-lg font-bold"><option value="they_owe">They owe you (expense/amount assigned to friend)</option><option value="i_owe">You owe them (collection/amount assigned to you)</option><option value="they_paid">They paid you (money received)</option><option value="i_paid">You paid them (money paid to friend)</option></select></div>
+<div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="fsDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="fsAmount" required class="w-full p-2 border rounded-lg" oninput="updateFsPreview()"></div></div>
+<div id="fsCurrencyWrap"><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="fsCurrency" onchange="updateFsPreview()" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div>
+<div id="fsAccountWrap" class="hidden p-3 bg-emerald-50 border border-emerald-100 rounded-lg space-y-1"><label class="block font-bold text-emerald-900" id="fsAccountLabel">Received Into Account</label><select id="fsAccount" onchange="updateFsPreview()" class="w-full p-2 border rounded-lg bg-white"></select><p class="text-[10px] text-emerald-700" id="fsAccountHint">The amount will automatically be added to this account's balance.</p></div>
+<div><label class="block font-bold text-slate-600 mb-1">Notes / Description</label><input type="text" id="fsNotes" class="w-full p-2 border rounded-lg"></div>
+<div id="fsPreview" class="p-3 bg-violet-50 border border-violet-100 rounded-lg text-xs text-slate-700 font-medium"></div>
+<div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriendSettlement')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-violet-600 text-white font-bold rounded-lg">Save Settlement</button></div>
+</form></div></div>
+
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+import { getDatabase, ref, set, get, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyArwYOwIlBWV1GlvH-51_mfntMmfwRL408",
+  authDomain: "fintrack-d7618.firebaseapp.com",
+  databaseURL: "https://fintrack-d7618-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "fintrack-d7618",
+  storageBucket: "fintrack-d7618.firebasestorage.app",
+  messagingSenderId: "942185672616",
+  appId: "1:942185672616:web:f52b7c4592772810b1b79d",
+  measurementId: "G-NYV8F7ZSB2"
+};
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getDatabase(app);
+window.db = db;
+
+const FIXED_OTP = "9867"; window.FIXED_OTP = FIXED_OTP;
+const CURRENCIES = {
+  INR: { symbol: '₹', name: 'Indian Rupee', country: 'India' },
+  SAR: { symbol: 'SAR', name: 'Saudi Riyal', country: 'Saudi Arabia' },
+  AED: { symbol: 'AED', name: 'UAE Dirham', country: 'UAE' },
+  OMR: { symbol: 'OMR', name: 'Omani Rial', country: 'Oman' },
+  QAR: { symbol: 'QAR', name: 'Qatari Riyal', country: 'Qatar' },
+  BHD: { symbol: 'BHD', name: 'Bahraini Dinar', country: 'Bahrain' },
+  KWD: { symbol: 'KWD', name: 'Kuwaiti Dinar', country: 'Kuwait' }
+};
+window.CURRENCIES = CURRENCIES;
+const DEFAULT_RATES = { INR: 1, SAR: 25.50, AED: 22.75, OMR: 217.00, QAR: 23.20, BHD: 222.00, KWD: 275.00 };
+window.DEFAULT_RATES = DEFAULT_RATES;
+const DEFAULT_BANK_TYPE1 = 'Indian Bank Account';
+const DEFAULT_BANK_TYPE2 = 'GCC Saudi Bank Account';
+
+let currentUser = null; window.currentUser = null;
+let dataUnsubscribe = null;
+let activeCommonPurity = '24K'; window.activeCommonPurity = activeCommonPurity;
+let forgotPasswordLoginId = null;
+
+let state = {
+  rates: { ...DEFAULT_RATES }, displayCurrency: 'INR',
+  banks: [], debts: [], gold: [], sips: [],
+  expenses: {}, settlements: {}, transfers: [],
+  friends: [], friendSplits: {}, friendLedger: [],
+  settings: { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2 }
+};
+window.state = state;
+
+function encodePassword(pwd) { try { return btoa(unescape(encodeURIComponent(pwd))); } catch(e) { return pwd; } }
+function decodePassword(encoded) { try { return decodeURIComponent(escape(atob(encoded))); } catch(e) { return encoded; } }
+window.encodePassword = encodePassword; window.decodePassword = decodePassword;
+
+function convertToINR(amount, currency) { if (currency === 'INR') return amount; const rate = state.rates[currency] || DEFAULT_RATES[currency] || 1; return amount * rate; }
+window.convertToINR = convertToINR;
+function convertFromINR(amountInr, currency) { if (currency === 'INR') return amountInr; const rate = state.rates[currency] || DEFAULT_RATES[currency] || 1; return amountInr / rate; }
+window.convertFromINR = convertFromINR;
+function formatCurrency(amount, currency) { if (currency === 'INR') return `₹${amount.toLocaleString(undefined, {maximumFractionDigits: 2})}`; return `${amount.toLocaleString(undefined, {maximumFractionDigits: 2})} ${currency}`; }
+window.formatCurrency = formatCurrency;
+function formatInDisplayCurrency(amountInr) { const curr = state.displayCurrency || 'INR'; return formatCurrency(convertFromINR(amountInr, curr), curr); }
+window.formatInDisplayCurrency = formatInDisplayCurrency;
+function getPeople() { return (state.settings && state.settings.people) ? state.settings.people : []; }
+window.getPeople = getPeople;
+function getBankType1() { return (state.settings && state.settings.bankType1) ? state.settings.bankType1 : DEFAULT_BANK_TYPE1; }
+function getBankType2() { return (state.settings && state.settings.bankType2) ? state.settings.bankType2 : DEFAULT_BANK_TYPE2; }
+window.getBankType1 = getBankType1; window.getBankType2 = getBankType2;
+function getAllParticipants() { return [...getPeople(), ...(state.friends || []).map(f => f.name)]; }
+window.getAllParticipants = getAllParticipants;
+function convertGoldDate(dateStr) { if (!dateStr) return ''; const parts = dateStr.split('/'); if (parts.length === 3) { const [day, month, year] = parts; return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`; } return dateStr; }
+window.convertGoldDate = convertGoldDate;
+function currentMonthStr() { const now = new Date(); return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`; }
+window.currentMonthStr = currentMonthStr;
+function dateMonth(dateStr) { if (!dateStr) return ''; return dateStr.slice(0, 7); }
+window.dateMonth = dateMonth;
+
+window.showAuthScreen = function(screenId) {
+  document.querySelectorAll('.auth-screen').forEach(el => el.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+};
+
+window.handleLogin = async function(e) {
+  e.preventDefault();
+  const loginId = document.getElementById('loginId').value.trim();
+  const password = document.getElementById('loginPass').value;
+  if (!loginId || !password) { alert("Please enter your User ID and password."); return; }
+  try {
+    const snapshot = await get(ref(db, `users/${loginId}`));
+    let user = snapshot.val();
+    if (!user && loginId === 'US' && password === 'Juby@8055') {
+      // Bootstrap the admin account with the known credentials (data migration runs after login)
+      user = { name: 'Admin', loginId: loginId, password: encodePassword(password), role: 'admin', createdAt: new Date().toISOString() };
+      await set(ref(db, `users/${loginId}`), user);
+    }
+    if (!user) { alert("User ID not found. Please check your User ID or create a new account."); return; }
+    if (decodePassword(user.password) !== password) { alert("Incorrect password. Please try again."); return; }
+    if (!user.role) {
+      user.role = (loginId === 'US') ? 'admin' : 'user';
+      await set(ref(db, `users/${loginId}`), user).catch(() => {});
+    }
+
+    currentUser = { loginId: loginId, name: user.name, role: user.role || 'user' }; window.currentUser = currentUser;
+    if (document.getElementById('rememberMe').checked) { localStorage.setItem('fintrack_remember', JSON.stringify({ loginId, password })); } else { localStorage.removeItem('fintrack_remember'); }
+    document.getElementById('authContainer').classList.add('hidden');
+    document.getElementById('appContainer').classList.remove('hidden');
+    document.getElementById('welcomeUser').innerText = `Welcome, ${user.name}`;
+    initUserData(loginId);
+  } catch(err) { console.error("Login error:", err); alert("Login failed. Please check your connection and try again."); }
+};
+
+window.handleCreateAccount = async function(e) {
+  e.preventDefault();
+  const name = document.getElementById('createName').value.trim();
+  const loginId = document.getElementById('createLoginId').value.trim();
+  const password = document.getElementById('createPass').value;
+  const confirmPass = document.getElementById('createPassConfirm').value;
+  if (!name || !loginId || !password) { alert("All fields are required."); return; }
+  if (password !== confirmPass) { alert("Passwords do not match. Please re-enter."); return; }
+  if (password.length < 6) { alert("Password must be at least 6 characters long."); return; }
+  try {
+    const snapshot = await get(ref(db, `users/${loginId}`));
+    if (snapshot.exists()) { alert("This User ID is already taken. Please choose a different one."); return; }
+
+    // Admin-configured registration limit (Settings > Admin Controls)
+    try {
+      const cfgSnap = await get(ref(db, 'app_config'));
+      const cfg = cfgSnap.val() || {};
+      if (typeof cfg.maxUsers === 'number' && cfg.maxUsers > 0) {
+        const usersSnap = await get(ref(db, 'users'));
+        const count = usersSnap.exists() ? Object.keys(usersSnap.val()).length : 0;
+        if (count >= cfg.maxUsers) { alert(`Registration limit reached (${cfg.maxUsers} account(s) allowed by the admin). New accounts cannot be created.`); return; }
+      }
+    } catch(e) { console.warn("Could not read app config; proceeding with registration.", e); }
+
+    const userData = { name, loginId, password: encodePassword(password), role: 'user', createdAt: new Date().toISOString() };
+    await set(ref(db, `users/${loginId}`), userData);
+    const newUserState = {
+      rates: { ...DEFAULT_RATES }, displayCurrency: 'INR',
+      banks: [], debts: [], gold: [], sips: [],
+      expenses: {}, settlements: {}, transfers: [],
+      friends: [], friendSplits: {}, friendLedger: [],
+      settings: { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2 }
+    };
+    await set(ref(db, `userData/${loginId}`), newUserState);
+    alert("Account created successfully! Please add your monthly expense people in Settings. You can now log in.");
+    showAuthScreen('loginScreen');
+    document.getElementById('loginId').value = loginId;
+  } catch(err) { console.error("Create account error:", err); alert("Account creation failed. Please try again."); }
+};
+
+window.handleForgotStep1 = async function(e) {
+  e.preventDefault();
+  const loginId = document.getElementById('forgotLoginId').value.trim();
+  if (!loginId) { alert("Please enter your User ID."); return; }
+  try {
+    const snapshot = await get(ref(db, `users/${loginId}`));
+    if (!snapshot.exists()) { alert("User ID not found. Please check and enter the correct User ID."); return; }
+    forgotPasswordLoginId = loginId;
+    document.getElementById('otpForm').reset();
+    showAuthScreen('otpScreen');
+  } catch(err) { console.error("Forgot password error:", err); alert("Unable to verify User ID. Please try again."); }
+};
+
+window.handleOtpVerify = function(e) {
+  e.preventDefault();
+  const enteredOtp = document.getElementById('otpInput').value.trim();
+  if (enteredOtp !== FIXED_OTP) { alert("Incorrect OTP. Please enter the correct OTP shared with you on WhatsApp."); return; }
+  document.getElementById('resetForm').reset();
+  showAuthScreen('resetScreen');
+};
+
+window.handleResetPassword = async function(e) {
+  e.preventDefault();
+  const newPass = document.getElementById('newPass').value;
+  const confirmPass = document.getElementById('newPassConfirm').value;
+  if (newPass !== confirmPass) { alert("Passwords do not match. Please re-enter."); return; }
+  if (newPass.length < 6) { alert("Password must be at least 6 characters long."); return; }
+  if (!forgotPasswordLoginId) { alert("Session expired. Please start the password reset process again."); showAuthScreen('loginScreen'); return; }
+  try {
+    const snapshot = await get(ref(db, `users/${forgotPasswordLoginId}`));
+    const user = snapshot.val();
+    if (!user) { alert("User not found. Please start the password reset process again."); showAuthScreen('loginScreen'); return; }
+    user.password = encodePassword(newPass);
+    await set(ref(db, `users/${forgotPasswordLoginId}`), user);
+    alert("Password reset successful! Please log in with your new password.");
+    forgotPasswordLoginId = null;
+    document.getElementById('loginId').value = '';
+    document.getElementById('loginPass').value = '';
+    showAuthScreen('loginScreen');
+  } catch(err) { console.error("Reset password error:", err); alert("Password reset failed. Please try again."); }
+};
+
+window.handleLogout = function() {
+  if (dataUnsubscribe) { dataUnsubscribe(); dataUnsubscribe = null; }
+  currentUser = null; window.currentUser = null;
+  state.rates = { ...DEFAULT_RATES }; state.displayCurrency = 'INR';
+  state.banks = []; state.debts = []; state.gold = []; state.sips = [];
+  state.expenses = {}; state.settlements = {}; state.transfers = [];
+  state.friends = []; state.friendSplits = {}; state.friendLedger = [];
+  state.settings = { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2 };
+  document.getElementById('loginId').value = ''; document.getElementById('loginPass').value = '';
+  const remembered = localStorage.getItem('fintrack_remember');
+  if (remembered) { try { const creds = JSON.parse(remembered); document.getElementById('loginId').value = creds.loginId || ''; document.getElementById('loginPass').value = creds.password || ''; document.getElementById('rememberMe').checked = true; } catch(e) {} }
+  document.getElementById('appContainer').classList.add('hidden');
+  document.getElementById('authContainer').classList.remove('hidden');
+  showAuthScreen('loginScreen');
+};
+
+async function initUserData(loginId) {
+  if (dataUnsubscribe) dataUnsubscribe();
+  const userRef = ref(db, `userData/${loginId}`);
+  let isFirstLoad = true;
+  dataUnsubscribe = onValue(userRef, async (snapshot) => {
+    const val = snapshot.val();
+    if (val) { normalizeState(val); }
+    else {
+      if (loginId === 'US' && isFirstLoad) { await migrateExistingData(loginId); }
+      else {
+        Object.assign(state, {
+          rates: { ...DEFAULT_RATES }, displayCurrency: 'INR',
+          banks: [], debts: [], gold: [], sips: [],
+          expenses: {}, settlements: {}, transfers: [],
+          friends: [], friendSplits: {}, friendLedger: [],
+          settings: { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2 }
+        });
+        saveData();
+      }
+    }
+    isFirstLoad = false;
+    const liveRateInput = document.getElementById('liveRateInput');
+    if (liveRateInput) liveRateInput.value = (state.rates.SAR || DEFAULT_RATES.SAR).toFixed(2);
+    const displaySelect = document.getElementById('displayCurrencySelect');
+    if (displaySelect) displaySelect.value = state.displayCurrency || 'INR';
+    if (typeof window.setCommonGoldPurity === 'function') window.setCommonGoldPurity(activeCommonPurity);
+    const cm = currentMonthStr();
+    ['expenseMonthSelect','friendSplitMonthSelect','settlementMonthSelect','transferMonthSelect','bankMonthSelect','bankMonthSelect2','cashMonthSelect'].forEach(id => {
+      const el = document.getElementById(id); if (el && !el.value) el.value = cm;
+    });
+    if (typeof window.renderAll === 'function') window.renderAll();
+  });
+}
+
+async function migrateExistingData(loginId) {
+  try {
+    const snapshot = await get(ref(db, 'fintrack_data'));
+    const oldData = snapshot.val();
+    if (oldData) {
+      const migratedState = {
+        rates: { ...DEFAULT_RATES, ...(oldData.liveRate ? { SAR: oldData.liveRate } : {}), ...(oldData.rates || {}) },
+        displayCurrency: 'INR',
+        banks: Array.isArray(oldData.banks) ? oldData.banks : (oldData.banks ? Object.values(oldData.banks) : []),
+        debts: Array.isArray(oldData.debts) ? oldData.debts : (oldData.debts ? Object.values(oldData.debts) : []),
+        gold: Array.isArray(oldData.gold) ? oldData.gold : (oldData.gold ? Object.values(oldData.gold) : []),
+        sips: Array.isArray(oldData.sips) ? oldData.sips : (oldData.sips ? Object.values(oldData.sips) : []),
+        expenses: oldData.expenses || {},
+        settlements: oldData.settlements || {},
+        transfers: Array.isArray(oldData.transfers) ? oldData.transfers : (oldData.transfers ? Object.values(oldData.transfers) : []),
+        friends: [], friendSplits: {}, friendLedger: [],
+        settings: { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2 }
+      };
+      migratedState.banks.forEach(b => {
+        if (!b.country) b.country = b.currency === 'INR' ? 'India' : 'Saudi Arabia';
+        if (!b.date) b.date = '';
+        if (!b.bankType) b.bankType = (b.currency === 'INR') ? 1 : 2;
+      });
+      migratedState.gold.forEach(g => { if (g.date) g.date = convertGoldDate(g.date); });
+      migratedState.debts.forEach(d => { if (!d.payments) d.payments = []; else if (!Array.isArray(d.payments)) d.payments = Object.values(d.payments); });
+      await set(ref(db, `userData/${loginId}`), migratedState);
+      const userSnap = await get(ref(db, `users/${loginId}`));
+      if (!userSnap.exists()) { await set(ref(db, `users/${loginId}`), { name: 'Existing User', loginId, password: encodePassword('Juby@8055'), createdAt: new Date().toISOString() }); }
+      console.log("Migration complete: existing data moved to user-specific path.");
+    } else {
+      const userSnap = await get(ref(db, `users/${loginId}`));
+      if (!userSnap.exists()) { await set(ref(db, `users/${loginId}`), { name: 'Existing User', loginId, password: encodePassword('Juby@8055'), createdAt: new Date().toISOString() }); }
+    }
+  } catch(err) { console.error("Migration error:", err); }
+}
+
+function normalizeState(val) {
+  if (!val) return;
+  state.rates = val.rates || { ...DEFAULT_RATES };
+  state.displayCurrency = val.displayCurrency || 'INR';
+  state.banks = Array.isArray(val.banks) ? val.banks : (val.banks ? Object.values(val.banks) : []);
+  state.debts = Array.isArray(val.debts) ? val.debts : (val.debts ? Object.values(val.debts) : []);
+  state.gold = Array.isArray(val.gold) ? val.gold : (val.gold ? Object.values(val.gold) : []);
+  state.sips = Array.isArray(val.sips) ? val.sips : (val.sips ? Object.values(val.sips) : []);
+  state.transfers = Array.isArray(val.transfers) ? val.transfers : (val.transfers ? Object.values(val.transfers) : []);
+  state.expenses = val.expenses || {};
+  state.settlements = val.settlements || {};
+  state.friends = Array.isArray(val.friends) ? val.friends : (val.friends ? Object.values(val.friends) : []);
+  state.friendSplits = val.friendSplits || {};
+  state.friendLedger = Array.isArray(val.friendLedger) ? val.friendLedger : [];
+  state.settings = val.settings || { people: [] };
+  if (!state.settings.people) state.settings.people = [];
+  if (!state.settings.bankType1) state.settings.bankType1 = DEFAULT_BANK_TYPE1;
+  if (!state.settings.bankType2) state.settings.bankType2 = DEFAULT_BANK_TYPE2;
+  state.banks.forEach(b => {
+    if (!b.country) b.country = b.currency === 'INR' ? 'India' : 'Saudi Arabia';
+    if (!b.owner) b.owner = getPeople()[0] || '';
+    if (!b.bankType) b.bankType = (b.currency === 'INR') ? 1 : 2;
+    if (!b.date) b.date = '';
+  });
+  state.debts.forEach(d => { if (!d.payments) d.payments = []; else if (!Array.isArray(d.payments)) d.payments = Object.values(d.payments); });
+  if (state.settings.people.length === 0 && state.banks.length > 0) {
+    const owners = [];
+    state.banks.forEach(b => { if (b.owner && !owners.includes(b.owner)) owners.push(b.owner); });
+    if (owners.length > 0) { state.settings.people = owners; saveData(); }
+  }
+  if (typeof val.liveRate === 'number' && !state.rates.SAR) state.rates.SAR = val.liveRate;
+}
+
+window.saveData = function() {
+  if (typeof window.renderAll === 'function') window.renderAll();
+  if (currentUser) { set(ref(db, `userData/${currentUser.loginId}`), state).catch(err => console.error("Firebase sync error:", err)); }
+};
+
+window.updateExchangeRate = function(val) { state.rates.SAR = parseFloat(val) || DEFAULT_RATES.SAR; saveData(); };
+window.changeDisplayCurrency = function(curr) { state.displayCurrency = curr; saveData(); };
+window.fetchLiveRates = async function() {
+  try {
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/INR');
+    const data = await res.json();
+    if (data && data.rates) {
+      for (const curr of Object.keys(CURRENCIES)) {
+        if (curr === 'INR') { state.rates.INR = 1; continue; }
+        if (data.rates[curr]) state.rates[curr] = 1 / data.rates[curr];
+      }
+      const liveRateInput = document.getElementById('liveRateInput');
+      if (liveRateInput) liveRateInput.value = (state.rates.SAR || DEFAULT_RATES.SAR).toFixed(2);
+      saveData();
+      alert("Live rates fetched successfully!");
+    }
+  } catch(e) { console.warn("Live rate API error, retaining current rates.", e); alert("Unable to fetch live rates. You can enter rates manually in Settings."); }
+};
+
+window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('hidden'); };
+window.switchTab = function(tabId) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('#sidebar nav button').forEach(btn => { btn.className = "w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white flex items-center space-x-3 transition"; });
+  document.querySelectorAll('.topnav-btn').forEach(btn => { btn.className = "topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition"; });
+  const section = document.getElementById(`sec-${tabId}`); if (section) section.classList.remove('hidden');
+  const sideBtn = document.getElementById(`side-tab-${tabId}`); if (sideBtn) sideBtn.className = "w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold bg-indigo-600 text-white flex items-center space-x-3 transition";
+  const topBtn = document.getElementById(`top-tab-${tabId}`); if (topBtn) topBtn.className = "topnav-btn px-3 py-1.5 rounded text-xs font-bold bg-indigo-600 text-white transition";
+};
+
+window.openForm = function(modalId, formId, data = null) {
+  document.getElementById(formId).reset();
+  Array.from(document.getElementById(formId).elements).forEach(el => { if(el.type === 'hidden') el.value = ''; });
+  populateOwnerDropdowns();
+  if (data) {
+    for (const [key, value] of Object.entries(data)) {
+      const fieldId = formId.replace('Form', '') + key.charAt(0).toUpperCase() + key.slice(1);
+      const el = document.getElementById(fieldId); if (el) el.value = value;
+    }
+  } else {
+    const prefix = formId.replace('Form', '');
+    const dateEl = document.getElementById(prefix + 'Date');
+    if (dateEl && dateEl.type === 'date') dateEl.value = new Date().toISOString().split('T')[0];
+    if (formId === 'goldForm') document.getElementById('goldConvRate').value = (state.rates.SAR || DEFAULT_RATES.SAR).toFixed(2);
+  }
+  if (formId === 'bankForm') {
+    populateBankTypeSelect();
+    if (data && data.bankType) document.getElementById('bankType').value = data.bankType;
+    if (data && data.currency) document.getElementById('bankCurrency').value = data.currency;
+    if (data && data.name) document.getElementById('bankName').value = data.name;
+    onBankTypeChange();
+  }
+  document.getElementById(modalId).classList.remove('hidden');
+};
+window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); };
+
+function populateOwnerDropdowns() {
+  const people = getPeople();
+  ['bankOwner', 'expensePaidBy', 'stlPayer', 'stlPayee'].forEach(id => {
+    const sel = document.getElementById(id); if (sel) {
+      sel.innerHTML = '';
+      if (people.length === 0) { const opt = document.createElement('option'); opt.value = ''; opt.textContent = 'Add people in Settings first'; sel.appendChild(opt); }
+      else { people.forEach(p => { const opt = document.createElement('option'); opt.value = p; opt.textContent = p; sel.appendChild(opt); }); }
+    }
+  });
+}
+window.populateOwnerDropdowns = populateOwnerDropdowns;
+function populateBankTypeSelect() {
+  const sel = document.getElementById('bankType'); if (!sel) return; sel.innerHTML = '';
+  const t1 = document.createElement('option'); t1.value = '1'; t1.textContent = getBankType1(); sel.appendChild(t1);
+  const t2 = document.createElement('option'); t2.value = '2'; t2.textContent = getBankType2(); sel.appendChild(t2);
+}
+window.populateBankTypeSelect = populateBankTypeSelect;
+
+window.onBankTypeChange = function() {
+  const sel = document.getElementById('bankType'); if (!sel) return;
+  const idx = sel.value;
+  const name = (idx === '1' ? getBankType1() : getBankType2()).toLowerCase();
+  let suggested = '';
+  if (name.includes('india')) suggested = 'INR';
+  else if (name.includes('saudi') || name.includes('gcc')) suggested = 'SAR';
+  else if (name.includes('uae') || name.includes('emirate')) suggested = 'AED';
+  else if (name.includes('bahrain')) suggested = 'BHD';
+  else if (name.includes('oman')) suggested = 'OMR';
+  else if (name.includes('qatar')) suggested = 'QAR';
+  else if (name.includes('kuwait')) suggested = 'KWD';
+  if (suggested && !document.getElementById('bankId').value) document.getElementById('bankCurrency').value = suggested;
+};
+
+window.saveBankEntry = function(e) {
+  e.preventDefault();
+  const idStr = document.getElementById('bankId').value;
+  const id = idStr ? parseInt(idStr) : Date.now();
+  const bankData = {
+    id, owner: document.getElementById('bankOwner').value,
+    bankType: parseInt(document.getElementById('bankType').value) || 1,
+    country: document.getElementById('bankCurrency').value === 'INR' ? 'India' : 'Saudi Arabia',
+    currency: document.getElementById('bankCurrency').value,
+    name: document.getElementById('bankName').value,
+    balance: parseFloat(document.getElementById('bankBalance').value) || 0,
+    date: document.getElementById('bankDate').value || ''
+  };
+  if (!Array.isArray(state.banks)) state.banks = [];
+  if (idStr) { const idx = state.banks.findIndex(b => String(b.id) === String(id)); if (idx > -1) state.banks[idx] = bankData; else state.banks.push(bankData); }
+  else { state.banks.push(bankData); }
+  closeModal('modalBank'); saveData();
+};
+
+window.editEntry = function(collection, id) {
+  if (!Array.isArray(state[collection])) return;
+  const item = state[collection].find(i => String(i.id) === String(id)); if (!item) return;
+  if (collection === 'banks') openForm('modalBank', 'bankForm', item);
+  else if (collection === 'debts') openForm('modalDebt', 'debtForm', item);
+  else if (collection === 'gold') openForm('modalGold', 'goldForm', item);
+  else if (collection === 'sips') openForm('modalSip', 'sipForm', item);
+};
+
+window.saveDataEntry = function(e, collection) {
+  e.preventDefault();
+  const form = e.target; const prefix = form.id.replace('Form', '');
+  const idField = document.getElementById(prefix + 'Id');
+  const id = idField.value ? parseInt(idField.value) : Date.now();
+  if (!Array.isArray(state[collection])) state[collection] = [];
+  let entry = { id };
+  Array.from(form.elements).forEach(el => {
+    if (el.id && el.id.startsWith(prefix) && el.id !== prefix + 'Id') {
+      let key = el.id.replace(prefix, ''); key = key.charAt(0).toLowerCase() + key.slice(1);
+      entry[key] = (el.type === 'number') ? parseFloat(el.value) : el.value;
+    }
+  });
+  if (collection === 'debts' && !idField.value) entry.payments = [];
+  if (collection === 'debts' && idField.value) { const existing = state.debts.find(d => String(d.id) === String(id)); if (existing) entry.payments = existing.payments || []; }
+  if (idField.value) { const idx = state[collection].findIndex(item => String(item.id) === String(id)); if (idx > -1) state[collection][idx] = entry; else state[collection].push(entry); }
+  else { state[collection].push(entry); }
+  closeModal('modal' + prefix.charAt(0).toUpperCase() + prefix.slice(1)); saveData();
+};
+
+window.deleteEntry = function(collection, id) {
+  if (confirm('Are you sure you want to delete this record?')) {
+    if (!Array.isArray(state[collection])) state[collection] = [];
+    state[collection] = state[collection].filter(i => String(i.id) !== String(id));
+    saveData();
+  }
+};
+
+window.updateExpenseBankOptions = function() {
+  const payer = document.getElementById('expensePaidBy').value;
+  const currency = document.getElementById('expenseCurrency').value;
+  const bankSelect = document.getElementById('expenseDeductBankId');
+  const userBanks = (state.banks || []).filter(b => b.owner === payer && b.currency === currency);
+  bankSelect.innerHTML = '<option value="">-- Do Not Deduct From Bank/Cash --</option>';
+  userBanks.forEach(b => { const opt = document.createElement('option'); opt.value = b.id; opt.textContent = `${b.name} (Current: ${b.currency === 'INR' ? '₹' : ''}${b.balance.toLocaleString()}${b.currency !== 'INR' ? ' ' + b.currency : ''})`; bankSelect.appendChild(opt); });
+  handleTiqmoCashback();
+};
+
+window.handleTiqmoCashback = function() {
+  const deductBankId = document.getElementById('expenseDeductBankId').value;
+  const wrapper = document.getElementById('cashbackWrapper');
+  const cbInput = document.getElementById('expenseCashback');
+  const isManual = document.getElementById('cashbackManualEdit').value === 'true';
+  if (deductBankId) {
+    const bank = state.banks.find(b => String(b.id) === String(deductBankId));
+    if (bank && bank.name.toLowerCase().includes('tiqmo')) {
+      wrapper.classList.remove('hidden');
+      if (!isManual) { const amt = parseFloat(document.getElementById('expenseAmount').value) || 0; cbInput.value = (amt * 0.01).toFixed(2); }
+      return;
+    }
+  }
+  wrapper.classList.add('hidden'); cbInput.value = '0'; document.getElementById('cashbackManualEdit').value = 'false';
+};
+
+window.openNewExpenseModal = function() {
+  populateOwnerDropdowns();
+  document.getElementById('expenseForm').reset();
+  document.getElementById('expenseId').value = '';
+  document.getElementById('expenseDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('cashbackManualEdit').value = 'false';
+  document.getElementById('expenseCashback').value = '0';
+  document.getElementById('cashbackWrapper').classList.add('hidden');
+  updateExpenseBankOptions();
+  document.getElementById('modalExpense').classList.remove('hidden');
+};
+
+window.editExpense = function(month, id) {
+  if (!state.expenses[month]) return;
+  const exp = state.expenses[month].find(x => String(x.id) === String(id)); if (!exp) return;
+  populateOwnerDropdowns();
+  document.getElementById('expenseId').value = exp.id;
+  document.getElementById('expenseDate').value = exp.date;
+  document.getElementById('expensePaidBy').value = exp.paidBy;
+  document.getElementById('expenseDesc').value = exp.desc;
+  document.getElementById('expenseCurrency').value = exp.currency;
+  document.getElementById('expenseAmount').value = exp.amount;
+  document.getElementById('expenseCashback').value = exp.cashback || 0;
+  document.getElementById('cashbackManualEdit').value = exp.cashback !== undefined ? 'true' : 'false';
+  updateExpenseBankOptions();
+  if (exp.deductBankId) document.getElementById('expenseDeductBankId').value = exp.deductBankId;
+  document.getElementById('modalExpense').classList.remove('hidden');
+};
+
+window.saveExpense = function(e) {
+  e.preventDefault();
+  const month = document.getElementById('expenseMonthSelect').value;
+  if (!state.expenses[month]) state.expenses[month] = [];
+  const idStr = document.getElementById('expenseId').value;
+  const id = idStr ? parseInt(idStr) : Date.now();
+  const amount = parseFloat(document.getElementById('expenseAmount').value) || 0;
+  const deductBankId = document.getElementById('expenseDeductBankId').value;
+  const cashbackAmount = parseFloat(document.getElementById('expenseCashback').value) || 0;
+  const deductAmount = deductBankId ? Math.max(0, amount - cashbackAmount) : 0;
+  const item = {
+    id, date: document.getElementById('expenseDate').value,
+    desc: document.getElementById('expenseDesc').value,
+    paidBy: document.getElementById('expensePaidBy').value,
+    currency: document.getElementById('expenseCurrency').value,
+    amount, cashback: cashbackAmount,
+    deductBankId: deductBankId || '',
+    deductAmount: deductAmount
+  };
+  if (idStr) {
+    const idx = state.expenses[month].findIndex(x => String(x.id) === String(id));
+    if (idx > -1) {
+      const old = state.expenses[month][idx];
+      if (old.deductBankId && old.deductAmount) { const ob = state.banks.find(b => String(b.id) === String(old.deductBankId)); if (ob) ob.balance += old.deductAmount; }
+      if (deductBankId) { const bank = state.banks.find(b => String(b.id) === String(deductBankId)); if (bank) bank.balance = Math.max(0, bank.balance - deductAmount); }
+      state.expenses[month][idx] = item;
+    } else { state.expenses[month].push(item); }
+  } else {
+    if (deductBankId) { const bank = state.banks.find(b => String(b.id) === String(deductBankId)); if (bank) bank.balance = Math.max(0, bank.balance - deductAmount); }
+    state.expenses[month].push(item);
+  }
+  closeModal('modalExpense'); saveData();
+};
+
+window.deleteExpense = function(month, id) {
+  if (confirm('Are you sure you want to delete this expense? The deducted amount will be restored to its original account.')) {
+    if (!state.expenses[month]) state.expenses[month] = [];
+    const exp = state.expenses[month].find(x => String(x.id) === String(id));
+    if (exp && exp.deductBankId && exp.deductAmount) { const bank = state.banks.find(b => String(b.id) === String(exp.deductBankId)); if (bank) bank.balance += exp.deductAmount; }
+    state.expenses[month] = state.expenses[month].filter(x => String(x.id) !== String(id));
+    saveData();
+  }
+};
+
+window.updateSettlementBankOptions = function() {
+  const payer = document.getElementById('stlPayer').value;
+  const payee = document.getElementById('stlPayee').value;
+  const currency = document.getElementById('stlCurrency').value;
+  const payerBankSelect = document.getElementById('stlPayerBankId');
+  const payeeBankSelect = document.getElementById('stlPayeeBankId');
+  const payerBanks = (state.banks || []).filter(b => b.owner === payer && b.currency === currency);
+  const payeeBanks = (state.banks || []).filter(b => b.owner === payee && b.currency === currency);
+  payerBankSelect.innerHTML = '<option value="">-- Do Not Deduct --</option>';
+  payerBanks.forEach(b => { const opt = document.createElement('option'); opt.value = b.id; opt.textContent = `${b.name} (Bal: ${b.currency === 'INR' ? '₹' : ''}${b.balance.toLocaleString()}${b.currency !== 'INR' ? ' ' + b.currency : ''})`; payerBankSelect.appendChild(opt); });
+  payeeBankSelect.innerHTML = '<option value="">-- Do Not Add --</option>';
+  payeeBanks.forEach(b => { const opt = document.createElement('option'); opt.value = b.id; opt.textContent = `${b.name} (Bal: ${b.currency === 'INR' ? '₹' : ''}${b.balance.toLocaleString()}${b.currency !== 'INR' ? ' ' + b.currency : ''})`; payeeBankSelect.appendChild(opt); });
+};
+
+window.openSettlementForm = function(curr, sourceMonth) {
+  populateOwnerDropdowns();
+  document.getElementById('settlementForm').reset();
+  document.getElementById('stlCurrency').value = curr;
+  document.getElementById('stlMonth').value = sourceMonth || currentMonthStr();
+  document.getElementById('stlDate').value = new Date().toISOString().split('T')[0];
+  const people = getPeople();
+  if (people.length >= 2) { document.getElementById('stlPayer').value = people[0]; document.getElementById('stlPayee').value = people[1]; }
+  updateSettlementBankOptions();
+  document.getElementById('modalSettlement').classList.remove('hidden');
+};
+
+window.saveSettlement = function(e) {
+  e.preventDefault();
+  const month = document.getElementById('stlMonth').value || document.getElementById('expenseMonthSelect').value || currentMonthStr();
+  if (!state.settlements[month]) state.settlements[month] = [];
+  const amount = parseFloat(document.getElementById('stlAmount').value) || 0;
+  const payerBankId = document.getElementById('stlPayerBankId').value;
+  const payeeBankId = document.getElementById('stlPayeeBankId').value;
+  if (payerBankId) { const pBank = state.banks.find(b => String(b.id) === String(payerBankId)); if (pBank) pBank.balance = Math.max(0, pBank.balance - amount); }
+  if (payeeBankId) { const rBank = state.banks.find(b => String(b.id) === String(payeeBankId)); if (rBank) rBank.balance = rBank.balance + amount; }
+  state.settlements[month].push({ id: Date.now(), date: document.getElementById('stlDate').value, payer: document.getElementById('stlPayer').value, payee: document.getElementById('stlPayee').value, currency: document.getElementById('stlCurrency').value, amount });
+  closeModal('modalSettlement'); saveData();
+};
+
+window.deleteSettlement = function(month, id) {
+  if (confirm('Delete this settlement log?')) {
+    if (!state.settlements[month]) state.settlements[month] = [];
+    state.settlements[month] = state.settlements[month].filter(x => String(x.id) !== String(id));
+    saveData();
+  }
+};
+
+window.openPayDebtModal = function(debtId) {
+  document.getElementById('debtPayForm').reset();
+  document.getElementById('payParentId').value = debtId;
+  document.getElementById('payId').value = '';
+  document.getElementById('payDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('modalDebtPay').classList.remove('hidden');
+};
+window.editDebtPayment = function(debtId, payId) {
+  const debt = state.debts.find(d => String(d.id) === String(debtId)); if (!debt || !debt.payments) return;
+  const pay = debt.payments.find(p => String(p.id) === String(payId)); if (!pay) return;
+  document.getElementById('payParentId').value = debtId; document.getElementById('payId').value = payId;
+  document.getElementById('payDate').value = pay.date; document.getElementById('payAmount').value = pay.amount; document.getElementById('payNotes').value = pay.notes;
+  document.getElementById('modalDebtPay').classList.remove('hidden');
+};
+window.saveDebtPayment = function(e) {
+  e.preventDefault();
+  const debtId = parseInt(document.getElementById('payParentId').value);
+  const payIdStr = document.getElementById('payId').value;
+  const debt = state.debts.find(d => String(d.id) === String(debtId));
+  if (debt) {
+    if (!debt.payments) debt.payments = [];
+    const payData = { id: payIdStr ? parseInt(payIdStr) : Date.now(), date: document.getElementById('payDate').value, amount: parseFloat(document.getElementById('payAmount').value) || 0, notes: document.getElementById('payNotes').value };
+    if (payIdStr) { const idx = debt.payments.findIndex(p => String(p.id) === String(payData.id)); if (idx > -1) debt.payments[idx] = payData; }
+    else { debt.payments.push(payData); }
+  }
+  closeModal('modalDebtPay'); saveData();
+};
+window.deleteDebtPayment = function(debtId, payId) {
+  if (confirm('Delete this payment log?')) {
+    const debt = state.debts.find(d => String(d.id) === String(debtId));
+    if (debt && debt.payments) debt.payments = debt.payments.filter(p => String(p.id) !== String(payId));
+    saveData();
+  }
+};
+
+window.setCommonGoldPurity = function(purity) {
+  activeCommonPurity = purity; window.activeCommonPurity = purity;
+  ['24K', '22K', '18K'].forEach(p => {
+    const btn = document.getElementById(`commonPurity${p}`); if (btn) { btn.className = p === purity ? "px-3 py-1 text-xs font-bold rounded-md bg-amber-500 text-white transition" : "px-3 py-1 text-xs font-bold rounded-md text-amber-900 hover:bg-amber-100 transition"; }
+  });
+  const label = document.getElementById('currentCommonPurityLabel'); if (label) label.innerText = `(${purity})`;
+  const matchingGold = (state.gold || []).find(g => g.purity === purity);
+  const input = document.getElementById('commonTodayRateInput'); if (input) input.value = matchingGold ? matchingGold.todayRate : '';
+};
+window.applyCommonGoldRate = function() {
+  const rateInput = document.getElementById('commonTodayRateInput');
+  const newRate = parseFloat(rateInput.value);
+  if (isNaN(newRate)) { alert("Please enter a valid today's gold rate."); return; }
+  let updatedCount = 0;
+  (state.gold || []).forEach(g => { if (g.purity === activeCommonPurity) { g.todayRate = newRate; updatedCount++; } });
+  if (updatedCount === 0) alert(`No gold purchase entries found with purity ${activeCommonPurity}.`);
+  else alert(`Successfully updated today's rate to ₹${newRate.toLocaleString()} for ${updatedCount} entry/entries of purity ${activeCommonPurity}.`);
+  saveData();
+};
+
+window.openTransferModal = function() {
+  document.getElementById('transferForm').reset();
+  document.getElementById('transferId').value = '';
+  document.getElementById('transferDate').value = new Date().toISOString().split('T')[0];
+  updateTransferOptions();
+  document.getElementById('modalTransfer').classList.remove('hidden');
+};
+window.updateTransferOptions = function() {
+  const fromSelect = document.getElementById('transferFrom'); const toSelect = document.getElementById('transferTo');
+  let opts = '<option value="">-- Select Account --</option>';
+  (state.banks || []).forEach(b => { opts += `<option value="${b.id}">${b.owner} - ${b.name} (${b.currency} ${b.balance.toLocaleString()})</option>`; });
+  fromSelect.innerHTML = opts; toSelect.innerHTML = opts;
+};
+window.saveTransfer = function(e) {
+  e.preventDefault();
+  const idStr = document.getElementById('transferId').value;
+  const fromId = document.getElementById('transferFrom').value;
+  const toId = document.getElementById('transferTo').value;
+  const amount = parseFloat(document.getElementById('transferAmount').value) || 0;
+  if (!fromId || !toId || fromId === toId) { alert("Please select valid different accounts to transfer between."); return; }
+  const fromBank = state.banks.find(b => String(b.id) === String(fromId));
+  const toBank = state.banks.find(b => String(b.id) === String(toId));
+  if (!fromBank || !toBank) return;
+  if (fromBank.currency !== toBank.currency) { if (!confirm("Warning: You are transferring between accounts with different currencies. Ensure the amount is correct. Proceed?")) return; }
+  fromBank.balance -= amount; toBank.balance += amount;
+  const tData = { id: idStr ? parseInt(idStr) : Date.now(), date: document.getElementById('transferDate').value, fromId, toId, fromName: `${fromBank.owner} - ${fromBank.name} (${fromBank.currency})`, toName: `${toBank.owner} - ${toBank.name} (${toBank.currency})`, amount, notes: document.getElementById('transferNotes').value };
+  if (!state.transfers) state.transfers = [];
+  state.transfers.push(tData);
+  closeModal('modalTransfer'); saveData();
+};
+window.deleteTransfer = function(id) {
+  if (confirm('Delete this transfer log? (Note: This will not automatically revert the bank balances. You may need to manually adjust them.)')) {
+    if (!state.transfers) state.transfers = [];
+    state.transfers = state.transfers.filter(t => String(t.id) !== String(id));
+    saveData();
+  }
+};
+
+window.openFriendModal = function(data = null) {
+  document.getElementById('friendForm').reset();
+  document.getElementById('friendId').value = '';
+  if (data && data.id) { document.getElementById('friendId').value = data.id; document.getElementById('friendName').value = data.name; }
+  document.getElementById('modalFriend').classList.remove('hidden');
+};
+window.saveFriend = function(e) {
+  e.preventDefault();
+  const idStr = document.getElementById('friendId').value;
+  const id = idStr ? parseInt(idStr) : Date.now();
+  const name = document.getElementById('friendName').value.trim();
+  if (!Array.isArray(state.friends)) state.friends = [];
+  if (idStr) { const idx = state.friends.findIndex(f => String(f.id) === String(id)); if (idx > -1) state.friends[idx] = { id, name }; else state.friends.push({ id, name }); }
+  else { state.friends.push({ id, name }); }
+  closeModal('modalFriend'); saveData();
+};
+window.editFriend = function(id) { const friend = (state.friends || []).find(f => String(f.id) === String(id)); if (friend) openFriendModal(friend); };
+window.deleteFriend = function(id) { if (confirm('Delete this friend?')) { state.friends = (state.friends || []).filter(f => String(f.id) !== String(id)); saveData(); } };
+
+window.openFriendSplitModal = function(data = null) {
+  document.getElementById('friendSplitForm').reset();
+  document.getElementById('friendSplitId').value = '';
+  document.getElementById('friendSplitDate').value = new Date().toISOString().split('T')[0];
+  const allParticipants = getAllParticipants();
+  const paidBySelect = document.getElementById('friendSplitPaidBy'); paidBySelect.innerHTML = '';
+  allParticipants.forEach(p => { const opt = document.createElement('option'); opt.value = p; opt.textContent = p; paidBySelect.appendChild(opt); });
+  const participantsContainer = document.getElementById('friendSplitParticipants'); participantsContainer.innerHTML = '';
+  allParticipants.forEach(p => {
+    const isPerson = getPeople().includes(p);
+    const label = document.createElement('label');
+    label.className = 'flex items-center space-x-2 cursor-pointer hover:bg-slate-100 p-1 rounded';
+    label.innerHTML = `<input type="checkbox" value="${p}" class="friend-participant-checkbox rounded text-amber-600 focus:ring-amber-500" ${isPerson ? 'checked' : ''} onchange="updateSplitPreview()"><span class="text-xs font-medium ${isPerson ? 'text-indigo-700' : 'text-emerald-700'}">${p} ${isPerson ? '(Household)' : '(Friend)'}</span>`;
+    participantsContainer.appendChild(label);
+  });
+  if (data && data.id) {
+    document.getElementById('friendSplitId').value = data.id;
+    document.getElementById('friendSplitDate').value = data.date;
+    document.getElementById('friendSplitDesc').value = data.description;
+    document.getElementById('friendSplitAmount').value = data.amount;
+    document.getElementById('friendSplitCurrency').value = data.currency;
+    document.getElementById('friendSplitPaidBy').value = data.paidBy;
+    document.querySelectorAll('.friend-participant-checkbox').forEach(cb => { cb.checked = (data.participants || []).includes(cb.value); });
+  }
+  updateSplitPreview();
+  document.getElementById('modalFriendSplit').classList.remove('hidden');
+};
+window.updateSplitPreview = function() {
+  const amount = parseFloat(document.getElementById('friendSplitAmount').value) || 0;
+  const checked = document.querySelectorAll('.friend-participant-checkbox:checked');
+  const numParticipants = checked.length;
+  const preview = document.getElementById('splitPreview');
+  if (numParticipants === 0 || amount === 0) { preview.innerHTML = '<span class="text-slate-500">Enter amount and select participants to see split preview.</span>'; return; }
+  const share = amount / numParticipants;
+  const paidBy = document.getElementById('friendSplitPaidBy').value;
+  const curr = document.getElementById('friendSplitCurrency').value;
+  let html = `<div class="font-bold mb-1">Each person pays: ${share.toFixed(2)} ${curr}</div>`;
+  html += `<div class="text-[11px]">Paid by <b>${paidBy}</b>. `;
+  if (numParticipants > 1) html += `Others owe ${paidBy}: ${(share * (numParticipants - 1)).toFixed(2)} total.</div>`;
+  else html += `Sole participant.</div>`;
+  preview.innerHTML = html;
+};
+window.saveFriendSplit = function(e) {
+  e.preventDefault();
+  const month = document.getElementById('friendSplitMonthSelect').value;
+  if (!month) { alert("Please select a month."); return; }
+  if (!state.friendSplits[month]) state.friendSplits[month] = [];
+  const idStr = document.getElementById('friendSplitId').value;
+  const id = idStr ? parseInt(idStr) : Date.now();
+  const participants = Array.from(document.querySelectorAll('.friend-participant-checkbox:checked')).map(cb => cb.value);
+  if (participants.length === 0) { alert("Please select at least one participant."); return; }
+  const splitData = { id, date: document.getElementById('friendSplitDate').value, description: document.getElementById('friendSplitDesc').value, amount: parseFloat(document.getElementById('friendSplitAmount').value) || 0, currency: document.getElementById('friendSplitCurrency').value, paidBy: document.getElementById('friendSplitPaidBy').value, participants };
+  if (idStr) { const idx = state.friendSplits[month].findIndex(x => String(x.id) === String(id)); if (idx > -1) state.friendSplits[month][idx] = splitData; else state.friendSplits[month].push(splitData); }
+  else { state.friendSplits[month].push(splitData); }
+  closeModal('modalFriendSplit'); saveData();
+};
+window.editFriendSplit = function(month, id) { if (!state.friendSplits[month]) return; const fs = state.friendSplits[month].find(x => String(x.id) === String(id)); if (fs) openFriendSplitModal(fs); };
+window.deleteFriendSplit = function(month, id) { if (confirm('Delete this Friends Split transaction?')) { if (!state.friendSplits[month]) state.friendSplits[month] = []; state.friendSplits[month] = state.friendSplits[month].filter(x => String(x.id) !== String(id)); saveData(); } };
+
+window.openPersonModal = function(data = null) {
+  document.getElementById('personForm').reset();
+  document.getElementById('personId').value = '';
+  if (data && data.id !== undefined) { document.getElementById('personId').value = data.id; document.getElementById('personName').value = data.name; }
+  document.getElementById('modalPerson').classList.remove('hidden');
+};
+window.savePerson = function(e) {
+  e.preventDefault();
+  const idStr = document.getElementById('personId').value;
+  const name = document.getElementById('personName').value.trim();
+  if (!state.settings) state.settings = { people: [] };
+  if (!Array.isArray(state.settings.people)) state.settings.people = [];
+  if (idStr) { const idx = parseInt(idStr); if (idx >= 0 && idx < state.settings.people.length) { const oldName = state.settings.people[idx]; state.settings.people[idx] = name; updatePersonNameReferences(oldName, name); } }
+  else { state.settings.people.push(name); }
+  closeModal('modalPerson'); saveData();
+};
+function updatePersonNameReferences(oldName, newName) {
+  (state.banks || []).forEach(b => { if (b.owner === oldName) b.owner = newName; });
+  Object.keys(state.expenses || {}).forEach(month => { (state.expenses[month] || []).forEach(e => { if (e.paidBy === oldName) e.paidBy = newName; }); });
+  Object.keys(state.settlements || {}).forEach(month => { (state.settlements[month] || []).forEach(s => { if (s.payer === oldName) s.payer = newName; if (s.payee === oldName) s.payee = newName; }); });
+  Object.keys(state.friendSplits || {}).forEach(month => { (state.friendSplits[month] || []).forEach(fs => { if (fs.paidBy === oldName) fs.paidBy = newName; fs.participants = (fs.participants || []).map(p => p === oldName ? newName : p); }); });
+}
+window.updatePersonNameReferences = updatePersonNameReferences;
+window.editPerson = function(idx) { const people = getPeople(); if (idx >= 0 && idx < people.length) openPersonModal({ id: idx, name: people[idx] }); };
+window.deletePerson = function(idx) { const people = getPeople(); if (people.length <= 1) { alert("You must have at least one person configured."); return; } if (confirm('Delete this person? Expenses and settlements referencing this person will keep the old name.')) { state.settings.people.splice(idx, 1); saveData(); } };
+
+window.saveBankTypes = function() {
+  const t1 = document.getElementById('settingBankType1').value.trim();
+  const t2 = document.getElementById('settingBankType2').value.trim();
+  if (!t1 || !t2) { alert("Please enter both bank account type names."); return; }
+  if (t1 === t2) { alert("The two bank account types must be different."); return; }
+  if (!state.settings) state.settings = { people: [] };
+  state.settings.bankType1 = t1; state.settings.bankType2 = t2;
+  saveData();
+  alert("Bank account types saved. The Overview now uses your custom category names.");
+};
+window.editRate = function(currency) {
+  const newRate = prompt(`Enter new rate for ${currency} to INR:`, state.rates[currency] || DEFAULT_RATES[currency]);
+  if (newRate !== null) { const rate = parseFloat(newRate); if (!isNaN(rate) && rate > 0) { state.rates[currency] = rate; if (currency === 'SAR') { const liveRateInput = document.getElementById('liveRateInput'); if (liveRateInput) liveRateInput.value = rate.toFixed(2); } saveData(); } else { alert("Please enter a valid positive number."); } }
+};
+
+// ==================== FRIENDS SETTLEMENT LEDGER (cumulative running balance) ====================
+function friendBalance(friendId) {
+  return (state.friendLedger || []).filter(t => String(t.friendId) === String(friendId))
+    .reduce((s, t) => s + (t.type === 'they_owe' ? (t.amountInr || 0) : -(t.amountInr || 0)), 0);
+}
+window.friendBalance = friendBalance;
+
+function recomputeFriendLedgerBalances() {
+  const running = {};
+  (state.friendLedger || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date)) || a.id - b.id).forEach(t => {
+    const delta = (t.type === 'they_owe' ? (t.amountInr || 0) : -(t.amountInr || 0));
+    running[t.friendId] = (running[t.friendId] || 0) + delta;
+    t.prevBalance = running[t.friendId] - delta;
+    t.balanceAfter = running[t.friendId];
+  });
+}
+window.recomputeFriendLedgerBalances = recomputeFriendLedgerBalances;
+
+window.openFriendSettlementModal = function(friendId = '') {
+  const friends = state.friends || [];
+  if (friends.length === 0) { alert("No friends added yet. Please add friends in the Friends Split tab first."); return; }
+  document.getElementById('friendSettlementForm').reset();
+  document.getElementById('fsLedgerId').value = '';
+  document.getElementById('fsDate').value = new Date().toISOString().split('T')[0];
+  const friendSel = document.getElementById('fsFriend'); friendSel.innerHTML = '';
+  friends.forEach(f => { const opt = document.createElement('option'); opt.value = f.id; opt.textContent = f.name; friendSel.appendChild(opt); });
+  if (friendId !== '' && friendId !== null && friendId !== undefined) friendSel.value = String(friendId);
+  onFriendStlTypeChange();
+  document.getElementById('modalFriendSettlement').classList.remove('hidden');
+};
+
+window.onFriendStlTypeChange = function() {
+  const t = document.getElementById('fsType').value;
+  const isPayment = (t === 'they_paid' || t === 'i_paid');
+  document.getElementById('fsAccountWrap').classList.toggle('hidden', !isPayment);
+  document.getElementById('fsCurrencyWrap').classList.toggle('hidden', isPayment);
+  if (isPayment) {
+    document.getElementById('fsAccountLabel').innerText = t === 'they_paid' ? 'Received Into Account' : 'Paid From Account';
+    document.getElementById('fsAccountHint').innerText = t === 'they_paid' ? "The amount will automatically be added to this account's balance." : "The amount will automatically be reduced from this account's balance.";
+    const accSel = document.getElementById('fsAccount'); accSel.innerHTML = '<option value="">-- Select Account --</option>';
+    (state.banks || []).forEach(b => { const opt = document.createElement('option'); opt.value = b.id; opt.textContent = `${b.owner} - ${b.name} (${b.currency} ${b.balance.toLocaleString()})`; accSel.appendChild(opt); });
+  }
+  updateFsPreview();
+};
+
+window.updateFsPreview = function() {
+  const preview = document.getElementById('fsPreview'); if (!preview) return;
+  const friendSel = document.getElementById('fsFriend');
+  const friendName = friendSel.selectedIndex > -1 ? friendSel.options[friendSel.selectedIndex].textContent : '';
+  const t = document.getElementById('fsType').value;
+  const amount = parseFloat(document.getElementById('fsAmount').value) || 0;
+  if (!friendName || !amount) { preview.innerHTML = '<span class="text-slate-500">Select friend and enter amount to see the balance effect.</span>'; return; }
+  let currency;
+  if (t === 'they_paid' || t === 'i_paid') {
+    const acc = (state.banks || []).find(b => String(b.id) === String(document.getElementById('fsAccount').value));
+    currency = acc ? acc.currency : 'INR';
+  } else { currency = document.getElementById('fsCurrency').value; }
+  const amtInr = convertToINR(amount, currency);
+  const cur = friendBalance(friendSel.value);
+  const newBal = cur + (t === 'they_owe' ? amtInr : -amtInr);
+  let msg;
+  if (Math.abs(newBal) < 0.01) msg = `<b>${friendName}</b>: Settled ✓`;
+  else if (newBal > 0) msg = `<b>${friendName}</b> will owe you: <b class="money-income">${formatInDisplayCurrency(newBal)}</b>`;
+  else msg = `You will owe <b>${friendName}</b>: <b class="money-expense">${formatInDisplayCurrency(Math.abs(newBal))}</b>`;
+  preview.innerHTML = msg;
+};
+
+window.saveFriendSettlement = function(e) {
+  e.preventDefault();
+  const t = document.getElementById('fsType').value;
+  const friendSel = document.getElementById('fsFriend');
+  const friendId = friendSel.value;
+  const friend = (state.friends || []).find(f => String(f.id) === String(friendId));
+  if (!friend) { alert("Please select a friend."); return; }
+  const amount = parseFloat(document.getElementById('fsAmount').value) || 0;
+  if (amount <= 0) { alert("Please enter a valid amount."); return; }
+  const isPayment = (t === 'they_paid' || t === 'i_paid');
+  const accId = document.getElementById('fsAccount').value;
+  if (isPayment && !accId) { alert("Please select the exact account for this payment."); return; }
+  let currency = '', accountName = '';
+  if (isPayment) {
+    const acc = (state.banks || []).find(b => String(b.id) === String(accId));
+    if (!acc) { alert("Selected account not found."); return; }
+    currency = acc.currency;
+    accountName = `${acc.name} (${acc.currency})`;
+    if (t === 'they_paid') acc.balance += amount; else acc.balance -= amount;
+  } else { currency = document.getElementById('fsCurrency').value; }
+  const amtInr = convertToINR(amount, currency);
+  const prev = friendBalance(friendId);
+  const balanceAfter = prev + (t === 'they_owe' ? amtInr : -amtInr);
+  if (!Array.isArray(state.friendLedger)) state.friendLedger = [];
+  state.friendLedger.push({ id: Date.now(), date: document.getElementById('fsDate').value, friendId, friendName: friend.name, type: t, amount, currency, amountInr: amtInr, accountId: accId || '', accountName, notes: document.getElementById('fsNotes').value, prevBalance: prev, balanceAfter });
+  closeModal('modalFriendSettlement'); saveData();
+};
+
+window.deleteFriendLedgerEntry = function(id) {
+  if (!confirm('Delete this settlement record? Its account balance effect will be reversed and balances recalculated.')) return;
+  if (!Array.isArray(state.friendLedger)) state.friendLedger = [];
+  const idx = state.friendLedger.findIndex(t => String(t.id) === String(id));
+  if (idx === -1) return;
+  const entry = state.friendLedger[idx];
+  if (entry.accountId) {
+    const acc = (state.banks || []).find(b => String(b.id) === String(entry.accountId));
+    if (acc) { if (entry.type === 'they_paid') acc.balance -= entry.amount; else if (entry.type === 'i_paid') acc.balance += entry.amount; }
+  }
+  state.friendLedger.splice(idx, 1);
+  recomputeFriendLedgerBalances();
+  saveData();
+};
+
+function renderFriendLedger() {
+  const sumTbody = document.getElementById('friendLedgerSummaryTable'); if (!sumTbody) return;
+  sumTbody.innerHTML = '';
+  const friends = state.friends || [];
+  let totalOwe = 0, totalOwed = 0;
+  if (friends.length === 0) { sumTbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400 italic">No friends added yet. Add friends in the Friends Split tab.</td></tr>'; }
+  else {
+    friends.forEach(f => {
+      const bal = friendBalance(f.id);
+      if (bal > 0.01) totalOwed += bal; else if (bal < -0.01) totalOwe += Math.abs(bal);
+      let statusText, statusClass, outText, outClass;
+      if (Math.abs(bal) < 0.01) { statusText = 'Settled'; statusClass = 'bg-slate-100 text-slate-600'; outText = formatInDisplayCurrency(0); outClass = 'money-neutral'; }
+      else if (bal > 0) { statusText = 'They owe you'; statusClass = 'bg-emerald-100 text-emerald-700'; outText = formatInDisplayCurrency(bal); outClass = 'money-income'; }
+      else { statusText = 'You owe'; statusClass = 'bg-red-100 text-red-700'; outText = formatInDisplayCurrency(Math.abs(bal)); outClass = 'money-expense'; }
+      sumTbody.innerHTML += `<tr>
+        <td class="p-3 font-bold">${f.name}</td>
+        <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase tracking-wider ${statusClass}">${statusText}</span></td>
+        <td class="p-3 text-right font-black ${outClass}">${outText}</td>
+        <td class="p-3 text-center"><button onclick="openFriendSettlementModal('${f.id}')" class="px-2 py-1 bg-violet-600 hover:bg-violet-700 text-white rounded text-[10px] font-bold">+ Settlement</button></td>
+      </tr>`;
+    });
+  }
+  document.getElementById('fsTotalOwe').innerText = formatInDisplayCurrency(totalOwe);
+  document.getElementById('fsTotalOwed').innerText = formatInDisplayCurrency(totalOwed);
+  const net = totalOwed - totalOwe;
+  const netEl = document.getElementById('fsNetPosition');
+  netEl.innerText = `${formatInDisplayCurrency(Math.abs(net))} ${net >= 0 ? 'receivable' : 'payable'}`;
+  netEl.className = `text-lg font-black ${net >= 0 ? 'money-income' : 'money-expense'}`;
+  const hTbody = document.getElementById('friendLedgerHistoryTable'); hTbody.innerHTML = '';
+  const entries = (state.friendLedger || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)) || b.id - a.id);
+  if (entries.length === 0) { hTbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-400 italic">No friend settlement records yet.</td></tr>'; return; }
+  entries.forEach(t => {
+    let dirHtml;
+    if (t.type === 'they_paid') dirHtml = `<span class="font-bold text-emerald-700">${t.friendName} → You</span>`;
+    else if (t.type === 'i_paid') dirHtml = `<span class="font-bold text-red-700">You → ${t.friendName}</span>`;
+    else if (t.type === 'they_owe') dirHtml = `<span class="font-bold text-amber-700">${t.friendName} owes You</span>`;
+    else dirHtml = `<span class="font-bold text-violet-700">You owe ${t.friendName}</span>`;
+    hTbody.innerHTML += `<tr>
+      <td class="p-3">${t.date}</td>
+      <td class="p-3 font-bold">${t.friendName}</td>
+      <td class="p-3">${dirHtml}</td>
+      <td class="p-3 text-right font-bold money-neutral">${t.amount.toLocaleString()} ${t.currency}</td>
+      <td class="p-3 text-[11px] text-slate-500">${t.accountName || '-'}</td>
+      <td class="p-3 text-slate-500">${t.notes || '-'}</td>
+      <td class="p-3 text-right text-slate-500">${formatInDisplayCurrency(t.prevBalance || 0)}</td>
+      <td class="p-3 text-right font-bold ${(t.balanceAfter || 0) >= 0 ? 'money-income' : 'money-expense'}">${formatInDisplayCurrency(t.balanceAfter || 0)}</td>
+      <td class="p-3 text-center text-slate-400"><button onclick="deleteFriendLedgerEntry(${t.id})" class="hover:text-red-600"><i class="fa-solid fa-trash"></i></button></td>
+    </tr>`;
+  });
+}
+window.renderFriendLedger = renderFriendLedger;
+
+// ==================== ADMIN CONTROLS ====================
+window.saveMaxUsers = async function() {
+  const max = parseInt(document.getElementById('maxUsersInput').value);
+  if (isNaN(max) || max < 1) { alert("Enter a valid number (1 or more). Use 1 for admin-only access."); return; }
+  try {
+    await set(ref(db, 'app_config'), { maxUsers: max, updatedBy: currentUser ? currentUser.loginId : '', updatedAt: new Date().toISOString() });
+    alert(`Saved. A maximum of ${max} account(s) can exist in this application. New registrations are blocked beyond this limit.`);
+  } catch(err) { console.error(err); alert("Could not save the limit. Please try again."); }
+};
+
+async function loadAdminInfo() {
+  try {
+    const cfgSnap = await get(ref(db, 'app_config'));
+    const cfg = cfgSnap.val() || {};
+    const inp = document.getElementById('maxUsersInput');
+    if (inp && typeof cfg.maxUsers === 'number') inp.value = cfg.maxUsers;
+  } catch(e) {}
+  try {
+    const usersSnap = await get(ref(db, 'users'));
+    const count = usersSnap.exists() ? Object.keys(usersSnap.val()).length : 0;
+    const el = document.getElementById('adminUserCount');
+    if (el) el.innerText = `${count} account(s) currently registered`;
+  } catch(e) {
+    const el = document.getElementById('adminUserCount');
+    if (el) el.innerText = 'Unable to read registered accounts.';
+  }
+}
+window.loadAdminInfo = loadAdminInfo;
+
+window.addEventListener('DOMContentLoaded', () => {
+  const remembered = localStorage.getItem('fintrack_remember');
+  if (remembered) {
+    try {
+      const creds = JSON.parse(remembered);
+      document.getElementById('loginId').value = creds.loginId || '';
+      document.getElementById('loginPass').value = creds.password || '';
+      document.getElementById('rememberMe').checked = true;
+      if (creds.loginId && creds.password) { document.getElementById('loginForm').dispatchEvent(new Event('submit', { cancelable: true })); }
+    } catch(e) {}
+  }
+  document.getElementById('authContainer').classList.remove('hidden');
+});
+
+window.renderAll = function() {
+  renderOverview(); renderExpenses(); renderFriendsSplit(); renderSettlements(); renderDebts(); renderGoldAndSip(); renderTransfers(); renderSettings(); renderFriendLedger();
+};
+// ==================== RENDER: OVERVIEW ====================
+function renderOverview() {
+  let totINR = 0;
+  const t1Body = document.getElementById('bankType1Table'); t1Body.innerHTML = '';
+  const t2Body = document.getElementById('bankType2Table'); t2Body.innerHTML = '';
+  const cashTbody = document.getElementById('cashTable'); cashTbody.innerHTML = '';
+  const t1Title = document.getElementById('bankType1Title');
+  const t2Title = document.getElementById('bankType2Title');
+  if (t1Title) t1Title.innerHTML = `<i class="fa-solid fa-building-columns text-indigo-600 mr-2"></i> ${getBankType1()}`;
+  if (t2Title) t2Title.innerHTML = `<i class="fa-solid fa-vault text-amber-600 mr-2"></i> ${getBankType2()}`;
+  const people = window.getPeople();
+  const personColors = ['indigo', 'teal', 'rose', 'amber', 'purple', 'cyan'];
+  function getColor(owner) { const idx = people.indexOf(owner); return idx >= 0 && idx < personColors.length ? personColors[idx] : 'slate'; }
+  const bankMonth = document.getElementById('bankMonthSelect') ? document.getElementById('bankMonthSelect').value : '';
+  const bankMonth2 = document.getElementById('bankMonthSelect2') ? document.getElementById('bankMonthSelect2').value : '';
+  const cashMonth = document.getElementById('cashMonthSelect') ? document.getElementById('cashMonthSelect').value : '';
+  function inMonth(dateStr, month) { if (!dateStr) return true; return dateMonth(dateStr) === month; }
+  const banksType1 = (window.state.banks || []).filter(b => b.bankType === 1 && b.name !== 'Cash in Hand' && inMonth(b.date, bankMonth));
+  const banksType2 = (window.state.banks || []).filter(b => b.bankType === 2 && b.name !== 'Cash in Hand' && inMonth(b.date, bankMonth2));
+  const legacyBanks = (window.state.banks || []).filter(b => !b.bankType && b.name !== 'Cash in Hand');
+  legacyBanks.forEach(b => { (b.currency === 'INR' ? banksType1 : banksType2).push(b); });
+  const cashBalances = (window.state.banks || []).filter(b => b.name === 'Cash in Hand' && inMonth(b.date, cashMonth));
+  function bankRow(b, colorClass) {
+    const inrEq = Math.round(window.convertToINR(b.balance, b.currency));
+    return `<tr>
+      <td class="py-2"><span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase bg-${colorClass}-100 text-${colorClass}-700">${b.owner || ''}</span></td>
+      <td class="py-2 font-semibold">${b.name}</td>
+      <td class="py-2 text-right font-bold money-neutral">${b.balance.toLocaleString()} ${b.currency}</td>
+      <td class="py-2 text-right text-slate-500">₹${inrEq.toLocaleString()}</td>
+      <td class="py-2 text-center text-slate-400">
+        <button onclick="editEntry('banks', ${b.id})" class="hover:text-indigo-600 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button onclick="deleteEntry('banks', ${b.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button>
+      </td></tr>`;
+  }
+  if (banksType1.length === 0) { t1Body.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-slate-400 italic">No accounts for ${getBankType1()}.</td></tr>`; }
+  else { banksType1.forEach(b => { totINR += window.convertToINR(b.balance, b.currency); t1Body.innerHTML += bankRow(b, getColor(b.owner)); }); }
+  if (banksType2.length === 0) { t2Body.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-slate-400 italic">No accounts for ${getBankType2()}.</td></tr>`; }
+  else { banksType2.forEach(b => { totINR += window.convertToINR(b.balance, b.currency); t2Body.innerHTML += bankRow(b, getColor(b.owner)); }); }
+  if (cashBalances.length === 0) { cashTbody.innerHTML = `<tr><td colspan="5" class="py-3 text-center text-slate-400 italic">No cash in hand logged.</td></tr>`; }
+  else {
+    cashBalances.forEach(b => {
+      totINR += window.convertToINR(b.balance, b.currency);
+      const color = getColor(b.owner);
+      let balText = b.currency === 'INR' ? `₹${b.balance.toLocaleString()}` : `${b.balance.toLocaleString()} ${b.currency}`;
+      let inrText = `₹${Math.round(window.convertToINR(b.balance, b.currency)).toLocaleString()}`;
+      cashTbody.innerHTML += `<tr>
+        <td class="py-2"><span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase bg-${color}-100 text-${color}-700">${b.owner || ''}</span></td>
+        <td class="py-2 font-semibold text-slate-500">${b.currency}</td>
+        <td class="py-2 text-right font-bold money-neutral">${balText}</td>
+        <td class="py-2 text-right text-slate-500">${inrText}</td>
+        <td class="py-2 text-center text-slate-400">
+          <button onclick="editEntry('banks', ${b.id})" class="hover:text-emerald-600 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button onclick="deleteEntry('banks', ${b.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button>
+        </td></tr>`;
+    });
+  }
+  let totalDebtRemaining = (window.state.debts || []).reduce(function(sum, d) { return sum + Math.max(0, d.total - (d.payments || []).reduce(function(s, p) { return s + p.amount; }, 0)); }, 0);
+  let goldValue = (window.state.gold || []).reduce(function(s, g) { var grams = (parseFloat(g.grams24) || 0) + (parseFloat(g.grams22) || 0); return s + ((g.todayRate || 0) * grams); }, 0);
+  let sipValue = (window.state.sips || []).reduce(function(s, sp) { return s + (sp.value || 0); }, 0);
+  let totalGoldSip = sipValue + goldValue;
+  const displayCurr = window.state.displayCurrency || 'INR';
+  const netInr = totINR + totalGoldSip - totalDebtRemaining;
+  document.getElementById('sumBankBalance').innerText = window.formatInDisplayCurrency(totINR);
+  document.getElementById('sumBankBalanceSub').innerText = `All Accounts Combined (${displayCurr})`;
+  document.getElementById('sumTotalDebts').innerText = window.formatInDisplayCurrency(totalDebtRemaining);
+  document.getElementById('sumGoldSip').innerText = window.formatInDisplayCurrency(totalGoldSip);
+  const netEl = document.getElementById('sumNetPosition');
+  netEl.innerText = window.formatInDisplayCurrency(netInr);
+  netEl.className = `text-2xl font-black mt-2 ${netInr >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
+  renderIndividualSummary();
+}
+
+function renderIndividualSummary() {
+  const container = document.getElementById('individualSummaryContainer'); container.innerHTML = '';
+  const people = window.getPeople();
+  if (people.length === 0) { container.innerHTML = `<div class="col-span-2 text-center text-slate-400 italic py-4">No people configured. Add people in Settings.</div>`; return; }
+  people.forEach(person => {
+    const userBanks = (window.state.banks || []).filter(b => b.owner === person);
+    let userInrTotal = 0; let perCurrencyTotals = {}; let bankItemsHtml = '';
+    if (userBanks.length === 0) { bankItemsHtml = `<p class="text-xs text-slate-400 italic">No accounts added for ${person}.</p>`; }
+    else {
+      userBanks.forEach(b => {
+        const inrEq = Math.round(window.convertToINR(b.balance, b.currency));
+        userInrTotal += inrEq;
+        perCurrencyTotals[b.currency] = (perCurrencyTotals[b.currency] || 0) + b.balance;
+        bankItemsHtml += `<div class="flex justify-between items-center text-xs py-1 border-b border-slate-800">
+          <span class="text-slate-300 font-medium">${b.name} <span class="text-[10px] text-slate-400">(${b.currency})</span></span>
+          <span class="font-bold text-white">${b.currency === 'INR' ? '₹' : ''}${b.balance.toLocaleString()}${b.currency !== 'INR' ? ' ' + b.currency : ''} <span class="text-[10px] text-slate-400">(≈ ₹${inrEq.toLocaleString()})</span></span>
+        </div>`;
+      });
+    }
+    const grandUserTotalInr = Math.round(userInrTotal);
+    let currencyBreakdown = '';
+    Object.keys(perCurrencyTotals).forEach(curr => { currencyBreakdown += `<span>${curr}: ${curr === 'INR' ? '₹' : ''}${perCurrencyTotals[curr].toLocaleString()}${curr !== 'INR' ? ' ' + curr : ''}</span>`; if (Object.keys(perCurrencyTotals).indexOf(curr) < Object.keys(perCurrencyTotals).length - 1) currencyBreakdown += ' · '; });
+    container.innerHTML += `<div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700/80 space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+        <span class="font-black text-sm text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-user-circle mr-1.5"></i> ${person}'s Accounts</span>
+        <span class="text-xs font-black text-emerald-400">Total: ${window.formatInDisplayCurrency(grandUserTotalInr)}</span>
+      </div>
+      <div class="space-y-1">${bankItemsHtml}</div>
+      <div class="pt-2 flex justify-between text-[11px] font-bold text-slate-400 border-t border-slate-700/60"><span>${currencyBreakdown || 'No accounts'}</span></div>
+    </div>`;
+  });
+}
+
+// ==================== RENDER: MONTHLY EXPENSES ====================
+window.renderExpenses = function() {
+  const month = document.getElementById('expenseMonthSelect').value;
+  if (!month) return;
+  if (!window.state.expenses[month]) window.state.expenses[month] = [];
+  if (!window.state.settlements[month]) window.state.settlements[month] = [];
+  const people = window.getPeople();
+  const tbody = document.getElementById('expensesTable'); tbody.innerHTML = '';
+  let paidByPersonCurrency = {}; let totalByCurrency = {};
+  people.forEach(p => { paidByPersonCurrency[p] = {}; });
+  if (window.state.expenses[month].length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">No expenses logged for this month yet.</td></tr>`; }
+  else {
+    window.state.expenses[month].forEach(item => {
+      if (!paidByPersonCurrency[item.paidBy]) paidByPersonCurrency[item.paidBy] = {};
+      paidByPersonCurrency[item.paidBy][item.currency] = (paidByPersonCurrency[item.paidBy][item.currency] || 0) + item.amount;
+      totalByCurrency[item.currency] = (totalByCurrency[item.currency] || 0) + item.amount;
+      const personIdx = people.indexOf(item.paidBy);
+      const color = personIdx >= 0 && personIdx < 6 ? ['indigo', 'teal', 'rose', 'amber', 'purple', 'cyan'][personIdx] : 'slate';
+      const bankName = item.deductBankId ? ((window.state.banks.find(b => String(b.id) === String(item.deductBankId)) || {}).name || '-') : '-';
+      tbody.innerHTML += `<tr>
+        <td class="p-3">${item.date}</td>
+        <td class="p-3 font-semibold">${item.desc}</td>
+        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase tracking-wider bg-${color}-100 text-${color}-700">${item.paidBy}</span></td>
+        <td class="p-3 text-center text-[11px] text-slate-500">${bankName}</td>
+        <td class="p-3 text-right font-bold money-expense">-${item.amount.toLocaleString()} ${item.currency}</td>
+        <td class="p-3 text-center text-slate-400">
+          <button onclick="editExpense('${month}', ${item.id})" class="hover:text-indigo-600 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button onclick="deleteExpense('${month}', ${item.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button>
+        </td></tr>`;
+    });
+  }
+  const summaryContainer = document.getElementById('expenseSummaryContainer'); summaryContainer.innerHTML = '';
+  const currenciesUsed = Object.keys(totalByCurrency);
+  if (currenciesUsed.length === 0) currenciesUsed.push('SAR', 'INR');
+  currenciesUsed.forEach(curr => {
+    const total = totalByCurrency[curr] || 0;
+    const colorClass = curr === 'SAR' ? 'amber' : (curr === 'INR' ? 'indigo' : 'purple');
+    let paidBreakdown = '';
+    people.forEach(p => { const paid = (paidByPersonCurrency[p] && paidByPersonCurrency[p][curr]) || 0; paidBreakdown += `<span>${p} paid: <b>${paid.toLocaleString()}</b></span>`; if (people.indexOf(p) < people.length - 1) paidBreakdown += ' · '; });
+    const balanceInfo = calculateMonthlyBalance(month, curr, people, paidByPersonCurrency, total);
+    summaryContainer.innerHTML += `<div class="bg-${colorClass}-50 p-4 rounded-xl border border-${colorClass}-200">
+      <div class="flex justify-between border-b border-${colorClass}-200 pb-2 mb-2">
+        <span class="text-xs font-bold text-${colorClass}-800">${curr} Expenses Logged:</span>
+        <span class="text-xs font-black money-expense">${total.toLocaleString()} ${curr}</span>
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs text-${colorClass}-700 mb-4">${paidBreakdown}</div>
+      <div class="flex justify-between items-center">
+        <p class="text-xs font-bold text-slate-500 uppercase">${curr} Settlement Due</p>
+        <button onclick="openSettlementForm('${curr}', document.getElementById('expenseMonthSelect').value)" class="px-3 py-1 bg-${colorClass}-500 text-white text-[10px] font-bold rounded shadow hover:bg-${colorClass}-600">Log ${curr} Payment</button>
+      </div>
+      <h4 class="text-lg font-black text-${colorClass}-700 mt-1">${balanceInfo.statusText}</h4>
+      ${balanceInfo.friendsSplitNote ? `<p class="text-[10px] text-slate-500 mt-1"><i class="fa-solid fa-circle-info mr-1"></i>${balanceInfo.friendsSplitNote}</p>` : ''}
+    </div>`;
+  });
+  const sBody = document.getElementById('settlementsTable'); sBody.innerHTML = '';
+  if (window.state.settlements[month].length === 0) { sBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-400 italic">No settlements logged yet.</td></tr>`; }
+  else {
+    window.state.settlements[month].forEach(s => {
+      sBody.innerHTML += `<tr>
+        <td class="p-2">${s.date}</td>
+        <td class="p-2 font-bold">${s.payer} &rarr; ${s.payee}</td>
+        <td class="p-2 text-right font-bold money-income">${s.amount} ${s.currency}</td>
+        <td class="p-2 text-center text-slate-400"><button onclick="deleteSettlement('${month}', ${s.id})" class="hover:text-red-600"><i class="fa-solid fa-trash"></i></button></td>
+      </tr>`;
+    });
+  }
+};
+
+function calculateMonthlyBalance(month, currency, people, paidByPersonCurrency, totalExpenses) {
+  const numPeople = people.length;
+  if (numPeople === 0) return { statusText: 'No people configured', friendsSplitNote: '' };
+  let settledByPayer = {}; let settledByPayee = {};
+  people.forEach(p => { settledByPayer[p] = 0; settledByPayee[p] = 0; });
+  (window.state.settlements[month] || []).forEach(s => { if (s.currency === currency) { if (settledByPayer[s.payer] !== undefined) settledByPayer[s.payer] += s.amount; if (settledByPayee[s.payee] !== undefined) settledByPayee[s.payee] += s.amount; } });
+  let friendsSplitAdjustment = {}; people.forEach(p => { friendsSplitAdjustment[p] = 0; });
+  let friendsSplitNote = ''; let totalFriendsSplitAdj = 0;
+  (window.state.friendSplits[month] || []).forEach(fs => {
+    if (fs.currency !== currency) return;
+    const participants = fs.participants || [];
+    const householdParticipants = participants.filter(p => people.includes(p));
+    if (householdParticipants.length < 2) return;
+    if (!people.includes(fs.paidBy)) return;
+    const payer = fs.paidBy; const share = fs.amount / participants.length;
+    householdParticipants.forEach(hp => { if (hp !== payer) { friendsSplitAdjustment[payer] += share; friendsSplitAdjustment[hp] -= share; totalFriendsSplitAdj += share; } });
+  });
+  if (Math.abs(totalFriendsSplitAdj) > 0.01) { friendsSplitNote = `Includes ${totalFriendsSplitAdj.toFixed(2)} ${currency} from Friends Split inter-household adjustments.`; }
+  if (numPeople === 2) {
+    const p1 = people[0], p2 = people[1];
+    const p1Paid = (paidByPersonCurrency[p1] && paidByPersonCurrency[p1][currency]) || 0;
+    const p2Paid = (paidByPersonCurrency[p2] && paidByPersonCurrency[p2][currency]) || 0;
+    const target = (p1Paid + p2Paid) / 2;
+    let balance = (p1Paid - target) - settledByPayer[p2] + settledByPayer[p1] + friendsSplitAdjustment[p1];
+    let statusText;
+    if (Math.abs(balance) < 0.1) statusText = "All Settled Up ✓";
+    else if (balance > 0) statusText = `${p2} owes ${p1}: ${balance.toFixed(2)} ${currency}`;
+    else statusText = `${p1} owes ${p2}: ${Math.abs(balance).toFixed(2)} ${currency}`;
+    return { statusText, friendsSplitNote };
+  } else {
+    let balances = {};
+    people.forEach(p => { const paid = (paidByPersonCurrency[p] && paidByPersonCurrency[p][currency]) || 0; balances[p] = paid - (totalExpenses / numPeople) + settledByPayee[p] - settledByPayer[p] + friendsSplitAdjustment[p]; });
+    let creditors = people.filter(p => balances[p] > 0.1).map(p => ({ name: p, amt: balances[p] }));
+    let debtors = people.filter(p => balances[p] < -0.1).map(p => ({ name: p, amt: -balances[p] }));
+    let statusText;
+    if (creditors.length === 0 && debtors.length === 0) { statusText = "All Settled Up ✓"; }
+    else {
+      let parts = [];
+      creditors.forEach(c => { debtors.forEach(d => { const settleAmt = Math.min(c.amt, d.amt); if (settleAmt > 0.01) { parts.push(`${d.name}→${c.name}: ${settleAmt.toFixed(2)}`); c.amt -= settleAmt; d.amt -= settleAmt; } }); });
+      statusText = parts.join(' | ') || 'All Settled Up ✓';
+    }
+    return { statusText, friendsSplitNote };
+  }
+}
+
+// ==================== RENDER: FRIENDS SPLIT ====================
+window.renderFriendsSplit = function() {
+  const month = document.getElementById('friendSplitMonthSelect').value;
+  if (!month) return;
+  if (!window.state.friendSplits[month]) window.state.friendSplits[month] = [];
+  const friendsContainer = document.getElementById('friendsListContainer'); friendsContainer.innerHTML = '';
+  if (!window.state.friends || window.state.friends.length === 0) { friendsContainer.innerHTML = '<p class="text-xs text-slate-400 italic">No friends added yet. Click "Add Friend" to start.</p>'; }
+  else {
+    window.state.friends.forEach(f => {
+      friendsContainer.innerHTML += `<div class="flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg">
+        <i class="fa-solid fa-user text-emerald-600 text-xs"></i>
+        <span class="text-xs font-bold text-emerald-800">${f.name}</span>
+        <button onclick="editFriend(${f.id})" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-pen text-[10px]"></i></button>
+        <button onclick="deleteFriend(${f.id})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash text-[10px]"></i></button>
+      </div>`;
+    });
+  }
+  const rpContainer = document.getElementById('receivablePayableContainer'); rpContainer.innerHTML = '';
+  const people = window.getPeople();
+  if (people.length === 0) { rpContainer.innerHTML = '<div class="col-span-2 text-center text-slate-400 italic py-4">No people configured. Add people in Settings.</div>'; }
+  else {
+    people.forEach(person => {
+      let receivable = 0, payable = 0; let receivableCurrency = {}, payableCurrency = {};
+      (window.state.friendSplits[month] || []).forEach(fs => {
+        const participants = fs.participants || []; if (!participants.includes(person)) return;
+        const share = fs.amount / participants.length;
+        if (fs.paidBy === person) { const othersOwed = share * (participants.length - 1); receivable += window.convertToINR(othersOwed, fs.currency); receivableCurrency[fs.currency] = (receivableCurrency[fs.currency] || 0) + othersOwed; }
+        else { payable += window.convertToINR(share, fs.currency); payableCurrency[fs.currency] = (payableCurrency[fs.currency] || 0) + share; }
+      });
+      const net = receivable - payable;
+      let detailHtml = '';
+      Object.keys(receivableCurrency).forEach(curr => { detailHtml += `<div class="text-[10px] money-income">Receivable: ${receivableCurrency[curr].toFixed(2)} ${curr}</div>`; });
+      Object.keys(payableCurrency).forEach(curr => { detailHtml += `<div class="text-[10px] money-expense">Payable: ${payableCurrency[curr].toFixed(2)} ${curr}</div>`; });
+      rpContainer.innerHTML += `<div class="border rounded-xl p-4 space-y-2 ${net >= 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}">
+        <div class="flex items-center justify-between border-b pb-2"><span class="font-bold text-sm text-slate-800"><i class="fa-solid fa-user mr-1"></i> ${person}</span></div>
+        <div class="space-y-1">
+          <div class="flex justify-between text-xs"><span class="text-emerald-700 font-bold">Receivable (Green):</span><span class="font-black money-income">${window.formatInDisplayCurrency(receivable)}</span></div>
+          <div class="flex justify-between text-xs"><span class="text-red-700 font-bold">Payable (Red):</span><span class="font-black money-expense">${window.formatInDisplayCurrency(payable)}</span></div>
+          <div class="flex justify-between text-xs border-t pt-1 mt-1"><span class="font-bold text-slate-600">Net:</span><span class="font-black ${net >= 0 ? 'money-income' : 'money-expense'}">${window.formatInDisplayCurrency(Math.abs(net))} ${net >= 0 ? '(Receive)' : '(Pay)'}</span></div>
+          ${detailHtml}
+        </div>
+      </div>`;
+    });
+  }
+  const fsTable = document.getElementById('friendSplitsTable'); fsTable.innerHTML = '';
+  if ((window.state.friendSplits[month] || []).length === 0) { fsTable.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400 italic">No Friends Split transactions for this month yet.</td></tr>`; }
+  else {
+    (window.state.friendSplits[month] || []).forEach(fs => {
+      const share = fs.amount / (fs.participants || []).length;
+      const participantsHtml = (fs.participants || []).map(p => { const isPerson = window.getPeople().includes(p); return `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${isPerson ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'}">${p}</span>`; }).join(' ');
+      fsTable.innerHTML += `<tr>
+        <td class="p-3">${fs.date}</td>
+        <td class="p-3 font-semibold">${fs.description}</td>
+        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase bg-amber-100 text-amber-700">${fs.paidBy}</span></td>
+        <td class="p-3 text-right font-bold money-expense">${fs.amount.toLocaleString()} ${fs.currency}</td>
+        <td class="p-3 text-center">${participantsHtml}</td>
+        <td class="p-3 text-center font-bold money-neutral">${share.toFixed(2)} ${fs.currency}</td>
+        <td class="p-3 text-center text-slate-400">
+          <button onclick="editFriendSplit('${month}', ${fs.id})" class="hover:text-indigo-600 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button onclick="deleteFriendSplit('${month}', ${fs.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button>
+        </td></tr>`;
+    });
+  }
+};
+
+// ==================== RENDER: SETTLEMENTS ====================
+window.renderSettlements = function() {
+  const month = document.getElementById('settlementMonthSelect').value;
+  if (!month) return;
+  if (!window.state.settlements[month]) window.state.settlements[month] = [];
+  const tbody = document.getElementById('settlementsMainTable'); tbody.innerHTML = '';
+  if (window.state.settlements[month].length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400 italic">No settlements logged for this month yet.</td></tr>`; }
+  else {
+    window.state.settlements[month].forEach(s => {
+      tbody.innerHTML += `<tr>
+        <td class="p-3">${s.date}</td>
+        <td class="p-3 font-semibold">${s.payer}</td>
+        <td class="p-3 font-semibold">${s.payee}</td>
+        <td class="p-3 text-right font-bold money-income">${s.amount.toLocaleString()} ${s.currency}</td>
+        <td class="p-3 text-center text-slate-400"><button onclick="deleteSettlement('${month}', ${s.id})" class="hover:text-red-600"><i class="fa-solid fa-trash"></i></button></td>
+      </tr>`;
+    });
+  }
+};
+
+// ==================== RENDER: DEBTS ====================
+function renderDebts() {
+  const container = document.getElementById('debtsContainer'); container.innerHTML = '';
+  if (!window.state.debts || window.state.debts.length === 0) { container.innerHTML = `<div class="p-6 text-center text-slate-400 italic col-span-2">No liabilities or debts logged.</div>`; return; }
+  window.state.debts.forEach(d => {
+    const payments = d.payments || [];
+    const paidTotal = payments.reduce((s, p) => s + p.amount, 0);
+    const remaining = d.total - paidTotal;
+    const isClosed = remaining <= 0;
+    let paymentsHtml = '';
+    payments.forEach(p => {
+      paymentsHtml += `<div class="flex justify-between items-center text-xs border-b border-slate-100 py-1.5">
+        <div><span class="font-bold">${p.date}</span> <span class="text-slate-500">- ${p.notes}</span></div>
+        <div class="flex items-center space-x-2">
+          <span class="font-bold money-income">-₹${p.amount.toLocaleString()}</span>
+          <button onclick="editDebtPayment(${d.id}, ${p.id})" class="text-slate-400 hover:text-indigo-600"><i class="fa-solid fa-pen"></i></button>
+          <button onclick="deleteDebtPayment(${d.id}, ${p.id})" class="text-slate-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`;
+    });
+    container.innerHTML += `<div class="border rounded-xl p-5 ${isClosed ? 'bg-emerald-50 border-emerald-300' : 'bg-red-50/50 border-red-200'} space-y-3 relative">
+      <div class="absolute top-3 right-3 text-slate-400">
+        <button onclick="editEntry('debts', ${d.id})" class="hover:text-indigo-600 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button onclick="deleteEntry('debts', ${d.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <div>
+        <h4 class="font-extrabold text-base text-slate-800 pr-12">${d.name}</h4>
+        <p class="text-xs text-slate-500">Initial Principal: ₹${d.total.toLocaleString()}${d.date ? ' · Date: ' + d.date : ''}</p>
+      </div>
+      <div class="font-black text-xl ${isClosed ? 'money-income' : 'money-expense'}">${isClosed ? 'CLOSED' : '₹' + Math.max(0, remaining).toLocaleString() + ' Remaining'}</div>
+      <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+        <p class="text-[10px] font-bold text-slate-400 uppercase border-b pb-1 mb-1">Payment Logs</p>
+        ${paymentsHtml || '<p class="text-xs text-slate-400 italic">No payment logs yet.</p>'}
+      </div>
+      <button onclick="openPayDebtModal(${d.id})" ${isClosed ? 'disabled class="hidden"' : 'class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow mt-2"'}>+ Log Payment</button>
+    </div>`;
+  });
+}
+
+// ==================== RENDER: GOLD & SIP ====================
+function renderGoldAndSip() {
+  const gTbody = document.getElementById('goldTable'); gTbody.innerHTML = '';
+  let sumSarInvested = 0, sumPurchaseDayInr = 0, sumTodayConvInr = 0, sumTodayGoldVal = 0;
+  if (!window.state.gold || window.state.gold.length === 0) { gTbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-slate-400 italic">No gold purchases logged yet.</td></tr>`; }
+  else {
+    window.state.gold.forEach(g => {
+      const totalGrams = (parseFloat(g.grams24) || 0) + (parseFloat(g.grams22) || 0);
+      const purchaseDayInr = Math.round((g.sar || 0) * (g.convRate || 0));
+      const todayConvInr = Math.round((g.sar || 0) * (window.state.rates.SAR || window.DEFAULT_RATES.SAR));
+      const todayGoldTotal = Math.round((g.todayRate || 0) * totalGrams);
+      const profitVsPurchase = todayGoldTotal - purchaseDayInr;
+      sumSarInvested += g.sar || 0; sumPurchaseDayInr += purchaseDayInr; sumTodayConvInr += todayConvInr; sumTodayGoldVal += todayGoldTotal;
+      gTbody.innerHTML += `<tr>
+        <td class="p-2.5 font-bold">${g.date}</td>
+        <td class="p-2.5 text-center font-bold text-amber-700">${totalGrams}g <span class="text-[10px] text-slate-500">(${g.purity || '24K'})</span></td>
+        <td class="p-2.5 text-right font-semibold">${(g.sar || 0).toLocaleString()} SAR</td>
+        <td class="p-2.5 text-right text-slate-500">${g.convRate || 0}</td>
+        <td class="p-2.5 text-right font-bold bg-amber-50/50 border-l border-amber-100">₹${purchaseDayInr.toLocaleString()}</td>
+        <td class="p-2.5 text-right font-bold text-indigo-700 bg-indigo-50/30 border-l border-indigo-100">₹${todayConvInr.toLocaleString()}</td>
+        <td class="p-2.5 text-right text-slate-500">₹${(g.todayRate || 0).toLocaleString()}</td>
+        <td class="p-2.5 text-right font-black text-amber-900 bg-amber-100/50 border-l border-amber-200">₹${todayGoldTotal.toLocaleString()}</td>
+        <td class="p-2.5 text-right font-bold ${profitVsPurchase >= 0 ? 'money-income' : 'money-expense'} border-l border-slate-100">${profitVsPurchase >= 0 ? '+' : ''}₹${profitVsPurchase.toLocaleString()}</td>
+        <td class="p-2.5 text-center text-slate-400">
+          <button onclick="editEntry('gold', ${g.id})" class="hover:text-indigo-600 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button onclick="deleteEntry('gold', ${g.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button>
+        </td></tr>`;
+    });
+  }
+  document.getElementById('goldSummarySar').innerText = `${sumSarInvested.toLocaleString()} SAR`;
+  document.getElementById('goldSummaryPurchaseInr').innerText = `₹${sumPurchaseDayInr.toLocaleString()}`;
+  document.getElementById('goldSummaryTodayInr').innerText = `₹${sumTodayConvInr.toLocaleString()}`;
+  document.getElementById('goldSummaryValue').innerText = `₹${sumTodayGoldVal.toLocaleString()}`;
+  const netProfitVsPurchase = sumTodayGoldVal - sumPurchaseDayInr;
+  const netProfitVsTodayRemit = sumTodayGoldVal - sumTodayConvInr;
+  const profitEl = document.getElementById('goldSummaryProfit');
+  profitEl.innerText = `${netProfitVsPurchase >= 0 ? '+' : ''}₹${netProfitVsPurchase.toLocaleString()}`;
+  profitEl.className = `text-base md:text-lg font-black ${netProfitVsPurchase >= 0 ? 'money-income' : 'money-expense'}`;
+  document.getElementById('goldSummaryProfitSub').innerText = `vs Remit Today: ${netProfitVsTodayRemit >= 0 ? '+' : ''}₹${netProfitVsTodayRemit.toLocaleString()}`;
+  const sTbody = document.getElementById('sipTable'); sTbody.innerHTML = '';
+  if (!window.state.sips || window.state.sips.length === 0) { sTbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">No SIP investments logged yet.</td></tr>`; }
+  else {
+    window.state.sips.forEach(s => {
+      sTbody.innerHTML += `<tr>
+        <td class="p-3">${s.date || '-'}</td>
+        <td class="p-3 font-bold text-indigo-900">${s.name}</td>
+        <td class="p-3 text-slate-500">${s.category}</td>
+        <td class="p-3 text-right font-bold money-neutral">₹${(s.monthly || 0).toLocaleString()}</td>
+        <td class="p-3 text-right font-black money-income">₹${(s.value || 0).toLocaleString()}</td>
+        <td class="p-3 text-center text-slate-400">
+          <button onclick="editEntry('sips', ${s.id})" class="hover:text-indigo-600 mx-1"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button onclick="deleteEntry('sips', ${s.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button>
+        </td></tr>`;
+    });
+  }
+}
+
+// ==================== RENDER: TRANSFERS ====================
+function renderTransfers() {
+  const tbody = document.getElementById('transfersTable'); tbody.innerHTML = '';
+  const month = document.getElementById('transferMonthSelect') ? document.getElementById('transferMonthSelect').value : '';
+  const transfers = (window.state.transfers || []).filter(t => !t.date || dateMonth(t.date) === month);
+  if (transfers.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">No transfers logged for this month yet.</td></tr>`; return; }
+  transfers.forEach(t => {
+    tbody.innerHTML += `<tr>
+      <td class="p-3">${t.date}</td>
+      <td class="p-3 font-semibold money-expense">${t.fromName}</td>
+      <td class="p-3 font-semibold money-income">${t.toName}</td>
+      <td class="p-3 text-right font-bold money-transfer">${t.amount.toLocaleString()}</td>
+      <td class="p-3 text-slate-500">${t.notes || '-'}</td>
+      <td class="p-3 text-center text-slate-400"><button onclick="deleteTransfer(${t.id})" class="hover:text-red-600 mx-1"><i class="fa-solid fa-trash"></i></button></td>
+    </tr>`;
+  });
+}
+
+// ==================== RENDER: SETTINGS ====================
+function renderSettings() {
+  const peopleContainer = document.getElementById('peopleListContainer'); peopleContainer.innerHTML = '';
+  const people = window.getPeople();
+  if (people.length === 0) { peopleContainer.innerHTML = '<p class="text-xs text-slate-400 italic">No people configured. Add people for monthly expense splitting.</p>'; }
+  else {
+    people.forEach((p, idx) => {
+      peopleContainer.innerHTML += `<div class="flex items-center space-x-2 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-lg">
+        <i class="fa-solid fa-user text-indigo-600 text-xs"></i>
+        <span class="text-xs font-bold text-indigo-800">${p}</span>
+        <button onclick="editPerson(${idx})" class="text-indigo-500 hover:text-indigo-700"><i class="fa-solid fa-pen text-[10px]"></i></button>
+        <button onclick="deletePerson(${idx})" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-trash text-[10px]"></i></button>
+      </div>`;
+    });
+  }
+  const t1Input = document.getElementById('settingBankType1');
+  const t2Input = document.getElementById('settingBankType2');
+  if (t1Input) t1Input.value = getBankType1();
+  if (t2Input) t2Input.value = getBankType2();
+  const ratesTbody = document.getElementById('ratesTable'); ratesTbody.innerHTML = '';
+  Object.keys(window.CURRENCIES).forEach(curr => {
+    const c = window.CURRENCIES[curr];
+    const rate = window.state.rates[curr] || window.DEFAULT_RATES[curr] || 1;
+    ratesTbody.innerHTML += `<tr>
+      <td class="p-3 font-bold">${curr}</td>
+      <td class="p-3 text-slate-500">${c.country}</td>
+      <td class="p-3 text-right font-bold">${curr === 'INR' ? '1.00 (Base)' : rate.toFixed(2)}</td>
+      <td class="p-3 text-center text-slate-400">${curr === 'INR' ? '' : `<button onclick="editRate('${curr}')" class="hover:text-indigo-600"><i class="fa-solid fa-pen-to-square"></i></button>`}</td>
+    </tr>`;
+  });
+  const adminCard = document.getElementById('adminControlsCard');
+  const isAdminUser = window.currentUser && (window.currentUser.loginId === 'US' || window.currentUser.role === 'admin');
+  if (adminCard) adminCard.classList.toggle('hidden', !isAdminUser);
+  if (isAdminUser && typeof window.loadAdminInfo === 'function') window.loadAdminInfo();
+  const accountInfo = document.getElementById('accountInfoContainer');
+  if (window.currentUser) {
+    accountInfo.innerHTML = `
+      <div class="flex justify-between border-b pb-2"><span class="text-slate-500 font-bold">Name:</span><span class="font-bold text-slate-800">${window.currentUser.name}</span></div>
+      <div class="flex justify-between border-b pb-2"><span class="text-slate-500 font-bold">User ID:</span><span class="font-bold text-slate-800">${window.currentUser.loginId}</span></div>
+      <div class="flex justify-between"><span class="text-slate-500 font-bold">Display Currency:</span><span class="font-bold text-slate-800">${window.state.displayCurrency || 'INR'}</span></div>`;
+  } else { accountInfo.innerHTML = '<p class="text-slate-400 text-xs">Not logged in.</p>'; }
+}
+  </script>
+</body>
+</html>
