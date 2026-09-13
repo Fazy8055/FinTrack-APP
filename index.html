@@ -343,6 +343,10 @@
                 <p class="text-[10px] text-slate-500">Accounts currently registered in the application.</p>
               </div>
             </div>
+            <div class="border-t border-amber-200 pt-4">
+              <h4 class="font-bold text-slate-800 text-sm mb-2"><i class="fa-solid fa-users mr-1 text-amber-600"></i> Registered Accounts</h4>
+              <div class="overflow-x-auto border rounded-lg border-amber-200"><table class="w-full text-left text-xs"><thead><tr class="bg-amber-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Name</th><th class="p-3">Login ID</th><th class="p-3">Status</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="adminUsersTable" class="divide-y divide-amber-100 font-medium text-slate-700"></tbody></table></div>
+            </div>
             <div class="flex justify-end"><button onclick="saveMaxUsers()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg shadow">Save Limit</button></div>
           </div>
           <div class="pastel-slate p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
@@ -368,7 +372,7 @@
   <!-- MODALS -->
   <div id="modalBank" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Account Entry</h3><form id="bankForm" onsubmit="saveBankEntry(event)" class="space-y-3 text-xs"><input type="hidden" id="bankId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Account Owner</label><select id="bankOwner" class="w-full p-2 border rounded-lg font-bold"></select></div><div><label class="block font-bold text-slate-600 mb-1">Bank Account Type</label><select id="bankType" onchange="onBankTypeChange()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="bankCurrency" class="w-full p-2 border rounded-lg font-bold"><option value="INR">INR (₹)</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="bankDate" class="w-full p-2 border rounded-lg font-bold"></div></div><div><label class="block font-bold text-slate-600 mb-1">Bank / Cash Name (enter manually)</label><input type="text" id="bankName" required placeholder="Enter bank or cash name" class="w-full p-2 border rounded-lg font-bold text-indigo-900"></div><div><label class="block font-bold text-slate-600 mb-1">Current Balance</label><input type="number" step="0.01" id="bankBalance" required class="w-full p-2 border rounded-lg font-bold"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalBank')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">Save Account</button></div></form></div></div>
 
-  <div id="modalExpense" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Expense Entry</h3><form id="expenseForm" onsubmit="saveExpense(event)" class="space-y-3 text-xs"><input type="hidden" id="expenseId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="expenseDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="expensePaidBy" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description</label><input type="text" id="expenseDesc" required class="w-full p-2 border rounded-lg"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="expenseCurrency" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="expenseAmount" required class="w-full p-2 border rounded-lg" oninput="document.getElementById('cashbackManualEdit').value='false'; handleTiqmoCashback();"></div></div><div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg space-y-1"><label class="block font-bold text-indigo-900">Deduct from Bank/Cash Account?</label><select id="expenseDeductBankId" class="w-full p-2 border rounded-lg text-xs bg-white" onchange="handleTiqmoCashback()"></select><p class="text-[10px] text-indigo-600">Selecting an account will directly reduce the amount from its balance. Deleting this expense later will restore the exact amount to the same account.</p></div><div id="cashbackWrapper" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg space-y-1"><label class="block font-bold text-amber-900">Tiqmo 1% Cashback (Auto-calc)</label><input type="number" step="0.01" id="expenseCashback" class="w-full p-2 border border-amber-300 rounded-lg text-xs font-bold" oninput="document.getElementById('cashbackManualEdit').value = 'true'"><input type="hidden" id="cashbackManualEdit" value="false"><p class="text-[10px] text-amber-700">This amount reduces the net deduction. Edit manually if shop didn't give full cashback.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalExpense')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Expense</button></div></form></div></div>
+  <div id="modalExpense" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Expense Entry</h3><form id="expenseForm" onsubmit="saveExpense(event)" class="space-y-3 text-xs"><input type="hidden" id="expenseId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="expenseDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="expensePaidBy" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description</label><input type="text" id="expenseDesc" required class="w-full p-2 border rounded-lg"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="expenseCurrency" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="expenseAmount" required class="w-full p-2 border rounded-lg" oninput="document.getElementById('cashbackManualEdit').value='false'; handleTiqmoCashback();"></div></div><div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg space-y-1"><label class="block font-bold text-indigo-900">Deduct from Bank/Cash Account?</label><select id="expenseDeductBankId" class="w-full p-2 border rounded-lg text-xs bg-white" onchange="handleTiqmoCashback()"></select><p class="text-[10px] text-indigo-600">Selecting an account will directly reduce the amount from its balance. Deleting this expense later will restore the exact amount to the same account.</p></div><div id="cashbackWrapper" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg space-y-1"><label class="block font-bold text-amber-900">Tiqmo 0.1% Cashback (Auto-calc)</label><input type="number" step="0.01" id="expenseCashback" class="w-full p-2 border border-amber-300 rounded-lg text-xs font-bold" oninput="document.getElementById('cashbackManualEdit').value = 'true'"><input type="hidden" id="cashbackManualEdit" value="false"><p class="text-[10px] text-amber-700">This amount reduces the net deduction. Edit manually if shop didn't give full cashback.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalExpense')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Expense</button></div></form></div></div>
 
   <div id="modalTransfer" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Transfer Money</h3><form id="transferForm" onsubmit="saveTransfer(event)" class="space-y-3 text-xs"><input type="hidden" id="transferId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="transferDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">From Account (Deduct)</label><select id="transferFrom" required class="w-full p-2 border rounded-lg font-bold bg-red-50 text-red-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">To Account (Add)</label><select id="transferTo" required class="w-full p-2 border rounded-lg font-bold bg-emerald-50 text-emerald-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">Transfer Amount</label><input type="number" step="0.01" id="transferAmount" required class="w-full p-2 border rounded-lg font-bold"></div><div><label class="block font-bold text-slate-600 mb-1">Notes / Reference</label><input type="text" id="transferNotes" class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalTransfer')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-lg">Execute Transfer</button></div></form></div></div>
 
@@ -496,6 +500,7 @@ window.handleLogin = async function(e) {
     }
     if (!user) { alert("User ID not found. Please check your User ID or create a new account."); return; }
     if (decodePassword(user.password) !== password) { alert("Incorrect password. Please try again."); return; }
+    if (user.blocked) { alert("This account has been blocked by the admin. You cannot log in."); return; }
     if (!user.role) {
       user.role = (loginId === 'US') ? 'admin' : 'user';
       await set(ref(db, `users/${loginId}`), user).catch(() => {});
@@ -879,7 +884,7 @@ window.handleTiqmoCashback = function() {
     const bank = state.banks.find(b => String(b.id) === String(deductBankId));
     if (bank && bank.name.toLowerCase().includes('tiqmo')) {
       wrapper.classList.remove('hidden');
-      if (!isManual) { const amt = parseFloat(document.getElementById('expenseAmount').value) || 0; cbInput.value = (amt * 0.01).toFixed(2); }
+      if (!isManual) { const amt = parseFloat(document.getElementById('expenseAmount').value) || 0; cbInput.value = (amt * 0.001).toFixed(2); }
       return;
     }
   }
@@ -1399,15 +1404,51 @@ async function loadAdminInfo() {
   } catch(e) {}
   try {
     const usersSnap = await get(ref(db, 'users'));
-    const count = usersSnap.exists() ? Object.keys(usersSnap.val()).length : 0;
+    const users = usersSnap.exists() ? usersSnap.val() : {};
+    const entries = Object.entries(users);
     const el = document.getElementById('adminUserCount');
-    if (el) el.innerText = `${count} account(s) currently registered`;
+    if (el) el.innerText = `${entries.length} account(s) currently registered`;
+    const tbody = document.getElementById('adminUsersTable');
+    if (tbody) {
+      tbody.innerHTML = '';
+      entries.forEach(([loginId, u]) => {
+        const isSelf = currentUser && loginId === currentUser.loginId;
+        const blocked = !!u.blocked;
+        tbody.innerHTML += `<tr>
+          <td class="p-3 font-bold">${u.name || '-'}</td>
+          <td class="p-3">${loginId}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase ${blocked ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">${blocked ? 'Blocked' : 'Active'}</span></td>
+          <td class="p-3 text-center">${isSelf ? '<span class="text-[10px] text-slate-400 italic">Admin (this account)</span>' : `<button onclick="toggleUserBlocked('${loginId}', ${blocked})" class="px-2 py-1 bg-slate-600 hover:bg-slate-700 text-white rounded text-[10px] font-bold">${blocked ? 'Unblock' : 'Block'}</button> <button onclick="deleteUserAccount('${loginId}')" class="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold">Delete</button>`}</td>
+        </tr>`;
+      });
+      if (entries.length === 0) tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400 italic">No registered accounts.</td></tr>';
+    }
   } catch(e) {
     const el = document.getElementById('adminUserCount');
     if (el) el.innerText = 'Unable to read registered accounts.';
   }
 }
 window.loadAdminInfo = loadAdminInfo;
+
+window.toggleUserBlocked = async function(loginId, blocked) {
+  try {
+    const snap = await get(ref(db, `users/${loginId}`));
+    if (!snap.exists()) { alert("Account not found."); return; }
+    const user = snap.val();
+    user.blocked = !blocked;
+    await set(ref(db, `users/${loginId}`), user);
+    loadAdminInfo();
+  } catch(err) { console.error(err); alert("Could not update this account. Please try again."); }
+};
+
+window.deleteUserAccount = async function(loginId) {
+  if (!confirm(`Permanently delete account "${loginId}" and ALL of its data? This cannot be undone.`)) return;
+  try {
+    await remove(ref(db, `users/${loginId}`));
+    await remove(ref(db, `userData/${loginId}`));
+    loadAdminInfo();
+  } catch(err) { console.error(err); alert("Could not delete this account. Please try again."); }
+};
 
 window.addEventListener('DOMContentLoaded', () => {
   const remembered = localStorage.getItem('fintrack_remember');
