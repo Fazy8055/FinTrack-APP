@@ -27,6 +27,7 @@
     .money-income { color: #059669; }
     .money-neutral { color: #475569; }
     .money-transfer { color: #0284C7; }
+    .fintrack-field { width: 100%; min-width: 0; box-sizing: border-box; }
   </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 min-h-screen flex flex-col">
@@ -130,7 +131,7 @@
             <button onclick="switchTab('settings')" id="top-tab-settings" class="topnav-btn px-3 py-1.5 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition">Settings</button>
           </nav>
         </div>
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-3 flex-wrap gap-y-2 justify-end">
           <div class="flex items-center bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 space-x-2">
             <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
             <span class="text-xs font-semibold text-slate-300 hidden md:inline">Display:</span>
@@ -177,7 +178,7 @@
             <div class="pastel-indigo p-5 rounded-2xl border border-indigo-200 shadow-sm space-y-4">
               <div class="flex items-center justify-between border-b border-indigo-200 pb-3">
                 <h3 class="font-bold text-slate-800 flex items-center" id="bankType1Title"><i class="fa-solid fa-building-columns text-indigo-600 mr-2"></i> Bank Account 1</h3>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
                   <input type="month" id="bankMonthSelect" onchange="renderOverview()" class="bg-white/70 border border-indigo-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none">
                   <button onclick="openForm('modalBank', 'bankForm', {bankType: 1})" class="px-3 py-1 bg-indigo-600 text-white hover:bg-indigo-700 font-bold text-xs rounded-lg transition">+ Add Bank</button>
                 </div>
@@ -187,7 +188,7 @@
             <div class="pastel-amber p-5 rounded-2xl border border-amber-200 shadow-sm space-y-4">
               <div class="flex items-center justify-between border-b border-amber-200 pb-3">
                 <h3 class="font-bold text-slate-800 flex items-center" id="bankType2Title"><i class="fa-solid fa-vault text-amber-600 mr-2"></i> Bank Account 2</h3>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
                   <input type="month" id="bankMonthSelect2" onchange="renderOverview()" class="bg-white/70 border border-amber-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none">
                   <button onclick="openForm('modalBank', 'bankForm', {bankType: 2})" class="px-3 py-1 bg-amber-600 text-white hover:bg-amber-700 font-bold text-xs rounded-lg transition">+ Add Bank</button>
                 </div>
@@ -196,7 +197,7 @@
             </div>
           </div>
           <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 flex items-center"><i class="fa-solid fa-wallet text-emerald-600 mr-2"></i> Cash in Hand Balances</h3><div class="flex items-center gap-2"><input type="month" id="cashMonthSelect" onchange="renderOverview()" class="bg-white/70 border border-emerald-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none"><button onclick="openForm('modalBank', 'bankForm', {name: 'Cash in Hand', bankType: 1})" class="px-3 py-1 bg-emerald-600 text-white hover:bg-emerald-700 font-bold text-xs rounded-lg transition">+ Add Cash</button></div></div>
+            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 flex items-center"><i class="fa-solid fa-wallet text-emerald-600 mr-2"></i> Cash in Hand Balances</h3><div class="flex items-center gap-2 flex-wrap"><input type="month" id="cashMonthSelect" onchange="renderOverview()" class="bg-white/70 border border-emerald-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none"><button onclick="openForm('modalBank', 'bankForm', {name: 'Cash in Hand', bankType: 1})" class="px-3 py-1 bg-emerald-600 text-white hover:bg-emerald-700 font-bold text-xs rounded-lg transition">+ Add Cash</button></div></div>
             <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="text-slate-400 border-b"><th class="pb-2">Owner</th><th class="pb-2">Currency</th><th class="pb-2 text-right">Balance</th><th class="pb-2 text-right">In INR (₹)</th><th class="pb-2 text-center">Action</th></tr></thead><tbody id="cashTable" class="divide-y divide-emerald-100 font-medium text-slate-700"></tbody></table></div>
           </div>
           <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-md border border-slate-800 space-y-4">
@@ -210,7 +211,7 @@
           <div class="pastel-rose p-5 rounded-2xl border border-rose-200 shadow-sm space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-rose-200 pb-4">
               <div><h3 class="font-bold text-slate-800 text-base">Monthly Shared Expense Tracker</h3><p class="text-xs text-slate-500">Real-time tracker. Logs update instantly upon saving.</p></div>
-              <div class="flex items-center space-x-3"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="expenseMonthSelect" onchange="renderExpenses()" class="bg-white/70 border border-rose-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"><button onclick="openNewExpenseModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow">+ Add Expense</button></div>
+              <div class="flex items-center space-x-3 flex-wrap gap-y-2"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="expenseMonthSelect" onchange="renderExpenses()" class="bg-white/70 border border-rose-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"><button onclick="openNewExpenseModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow">+ Add Expense</button></div>
             </div>
             <div id="expenseSummaryContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             <div class="overflow-x-auto border rounded-lg border-rose-200"><table class="w-full text-left text-xs"><thead><tr class="bg-rose-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">Description</th><th class="p-3 text-center">Paid By</th><th class="p-3 text-center">Account</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="expensesTable" class="divide-y divide-rose-100 font-medium text-slate-700"></tbody></table></div>
@@ -221,15 +222,15 @@
         <!-- FRIENDS SPLIT -->
         <section id="sec-friends" class="tab-content hidden space-y-6">
           <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-scale-balanced text-emerald-600 mr-2"></i> Receivable & Payable Summary</h3><div class="flex items-center space-x-3"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="friendSplitMonthSelect" onchange="renderFriendsSplit()" class="bg-white/70 border border-emerald-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"></div></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-scale-balanced text-emerald-600 mr-2"></i> Receivable & Payable Summary</h3><div class="flex items-center space-x-3 flex-wrap gap-y-2"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="friendSplitMonthSelect" onchange="renderFriendsSplit()" class="bg-white/70 border border-emerald-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"></div></div>
             <div id="receivablePayableContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
           </div>
           <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-user-group text-emerald-600 mr-2"></i> Friends List</h3><button onclick="openFriendModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow">+ Add Friend</button></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-user-group text-emerald-600 mr-2"></i> Friends List</h3><button onclick="openFriendModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow">+ Add Friend</button></div>
             <div id="friendsListContainer" class="flex flex-wrap gap-2"></div>
           </div>
           <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-receipt text-amber-600 mr-2"></i> Friends Split Transactions</h3><button onclick="openFriendSplitModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg shadow">+ Add Split Expense</button></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-200 pb-3"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-receipt text-amber-600 mr-2"></i> Friends Split Transactions</h3><button onclick="openFriendSplitModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg shadow">+ Add Split Expense</button></div>
             <div class="overflow-x-auto border rounded-lg border-emerald-200"><table class="w-full text-left text-xs"><thead><tr class="bg-emerald-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">Description</th><th class="p-3 text-center">Paid By</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Participants</th><th class="p-3 text-center">Share / Person</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="friendSplitsTable" class="divide-y divide-emerald-100 font-medium text-slate-700"></tbody></table></div>
           </div>
         </section>
@@ -238,8 +239,8 @@
         <section id="sec-settlements" class="tab-content hidden space-y-6">
           <div class="pastel-violet p-5 rounded-2xl border border-violet-200 shadow-sm space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-violet-200 pb-4">
-              <div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-handshake text-violet-600 mr-2"></i> Settlements & Friend Split Settlement</h3><p class="text-xs text-slate-500">Settlements are normally completed at the end of each month. Select a month to view or log settlements.</p></div>
-              <div class="flex items-center space-x-3">
+              <div class="min-w-0"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-handshake text-violet-600 mr-2"></i> Settlements & Friend Split Settlement</h3><p class="text-xs text-slate-500">Settlements are normally completed at the end of each month. Select a month to view or log settlements.</p></div>
+              <div class="flex items-center gap-2 flex-wrap">
                 <label class="text-xs font-bold text-slate-600 uppercase">Month:</label>
                 <input type="month" id="settlementMonthSelect" onchange="renderSettlements()" class="bg-white/70 border border-violet-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none">
                 <select id="settlementCurrencySelect" class="bg-white/70 border border-violet-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none">
@@ -252,13 +253,13 @@
           </div>
           <div class="pastel-violet p-5 rounded-2xl border border-violet-200 shadow-sm space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-violet-200 pb-4">
-              <div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-user-group text-violet-600 mr-2"></i> Friends Settlement Ledger</h3><p class="text-xs text-slate-500">Running balance with each friend — automatically carries forward across months. The balance is calculated only from settlement transactions; there is no manual balance entry.</p></div>
+              <div class="min-w-0"><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-user-group text-violet-600 mr-2"></i> Friends Settlement Ledger</h3><p class="text-xs text-slate-500">Running balance with each friend — automatically carries forward across months. Outstanding balances are calculated automatically from Friends Split entries plus any recorded settlements. There is no manual balance entry.</p></div>
               <button onclick="openFriendSettlementModal()" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs rounded-lg shadow">+ Record Friend Settlement</button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="bg-red-50 border border-red-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-red-600 uppercase">Total You Need To Pay</p><h4 class="text-lg font-black money-expense" id="fsTotalOwe">₹0</h4></div>
-              <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-emerald-700 uppercase">Total Friends Owe You</p><h4 class="text-lg font-black money-income" id="fsTotalOwed">₹0</h4></div>
-              <div class="bg-white/70 border border-slate-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-slate-600 uppercase">Net Settlement Position</p><h4 class="text-lg font-black money-neutral" id="fsNetPosition">₹0</h4></div>
+              <div class="bg-red-50 border border-red-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-red-600 uppercase">Total You Need To Pay</p><h4 class="text-base font-black money-expense break-words" id="fsTotalOwe">₹0</h4></div>
+              <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-emerald-700 uppercase">Total Friends Owe You</p><h4 class="text-base font-black money-income break-words" id="fsTotalOwed">₹0</h4></div>
+              <div class="bg-white/70 border border-slate-200 p-4 rounded-xl"><p class="text-[10px] font-bold text-slate-600 uppercase">Net Settlement Position</p><h4 class="text-base font-black money-neutral break-words" id="fsNetPosition">₹0</h4></div>
             </div>
             <div class="overflow-x-auto border rounded-lg border-violet-200"><table class="w-full text-left text-xs"><thead><tr class="bg-violet-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Friend</th><th class="p-3">Status</th><th class="p-3 text-right">Outstanding</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="friendLedgerSummaryTable" class="divide-y divide-violet-100 font-medium text-slate-700"></tbody></table></div>
             <h4 class="font-bold text-slate-800 text-sm border-t border-violet-200 pt-4"><i class="fa-solid fa-clock-rotate-left mr-1 text-slate-400"></i> Friend Settlement History (all months — never overwritten)</h4>
@@ -269,7 +270,7 @@
         <!-- LIABILITIES -->
         <section id="sec-liabilities" class="tab-content hidden space-y-6">
           <div class="pastel-red p-5 rounded-2xl border border-red-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-red-200 pb-4"><div><h3 class="font-bold text-slate-800 text-base">Liabilities & Debt Management</h3><p class="text-xs text-slate-500">Track loan payments with exact dates, logs, and closing status.</p></div><button onclick="openForm('modalDebt', 'debtForm')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg shadow">+ Add New Debt</button></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-red-200 pb-4"><div><h3 class="font-bold text-slate-800 text-base">Liabilities & Debt Management</h3><p class="text-xs text-slate-500">Track loan payments with exact dates, logs, and closing status.</p></div><button onclick="openForm('modalDebt', 'debtForm')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg shadow">+ Add New Debt</button></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="debtsContainer"></div>
           </div>
         </section>
@@ -289,7 +290,7 @@
             <div class="overflow-x-auto bg-white rounded-lg border border-amber-200"><table class="w-full text-left text-xs"><thead><tr class="bg-amber-100/60 text-amber-950 font-bold border-b border-amber-200 uppercase"><th class="p-2.5">Date</th><th class="p-2.5 text-center">Grams</th><th class="p-2.5 text-right">Bought (SAR)</th><th class="p-2.5 text-right">Day Rate</th><th class="p-2.5 text-right bg-amber-50/50">Purchase Day Conv. (₹)</th><th class="p-2.5 text-right bg-indigo-50/30">Converted Today (₹)</th><th class="p-2.5 text-right">Today Rate</th><th class="p-2.5 text-right bg-amber-100/40">Today Gold Value (₹)</th><th class="p-2.5 text-right">Profit vs Purchase (₹)</th><th class="p-2.5 text-center">Actions</th></tr></thead><tbody id="goldTable" class="divide-y divide-amber-100 font-medium text-slate-700"></tbody></table></div>
           </div>
           <div class="pastel-indigo p-5 rounded-2xl border border-indigo-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-indigo-200 pb-4"><h3 class="font-bold text-slate-800 text-base">SIP & Money Investments</h3><button onclick="openForm('modalSip', 'sipForm')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow">+ Add SIP</button></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-indigo-200 pb-4"><h3 class="font-bold text-slate-800 text-base">SIP & Money Investments</h3><button onclick="openForm('modalSip', 'sipForm')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow">+ Add SIP</button></div>
             <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-indigo-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">SIP Name</th><th class="p-3">Category</th><th class="p-3 text-right">Monthly (₹)</th><th class="p-3 text-right">Current Value (₹)</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="sipTable" class="divide-y divide-indigo-100 font-medium text-slate-700"></tbody></table></div>
           </div>
         </section>
@@ -297,7 +298,7 @@
         <!-- TRANSFERS -->
         <section id="sec-transfers" class="tab-content hidden space-y-6">
           <div class="pastel-sky p-5 rounded-2xl border border-sky-200 shadow-sm space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-sky-200 pb-4"><div><h3 class="font-bold text-slate-800 text-base">Bank & Cash Transfers</h3><p class="text-xs text-slate-500">Record transfers between your accounts or cash in hand balances.</p></div><div class="flex items-center space-x-3"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="transferMonthSelect" onchange="renderTransfers()" class="bg-white/70 border border-sky-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"><button onclick="openTransferModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg shadow">+ New Transfer</button></div></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-sky-200 pb-4"><div><h3 class="font-bold text-slate-800 text-base">Bank & Cash Transfers</h3><p class="text-xs text-slate-500">Record transfers between your accounts or cash in hand balances.</p></div><div class="flex items-center space-x-3 flex-wrap gap-y-2"><label class="text-xs font-bold text-slate-600 uppercase">Month:</label><input type="month" id="transferMonthSelect" onchange="renderTransfers()" class="bg-white/70 border border-sky-200 rounded-lg px-3 py-1.5 font-bold text-xs text-slate-700 outline-none"><button onclick="openTransferModal()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg shadow">+ New Transfer</button></div></div>
             <div class="overflow-x-auto border rounded-lg border-sky-200"><table class="w-full text-left text-xs"><thead><tr class="bg-sky-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Date</th><th class="p-3">From Account</th><th class="p-3">To Account</th><th class="p-3 text-right">Amount</th><th class="p-3">Notes</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="transfersTable" class="divide-y divide-sky-100 font-medium text-slate-700"></tbody></table></div>
           </div>
         </section>
@@ -322,11 +323,11 @@
             <div class="bg-slate-50 rounded-lg p-3 text-xs text-slate-600"><i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Suggestions: Indian Bank Account, GCC Saudi Bank Account, UAE Bank Account, Bahrain Bank Account — or enter any custom name you prefer.</div>
           </div>
           <div class="pastel-rose p-5 rounded-2xl border border-rose-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-rose-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-users text-rose-600 mr-2"></i> Monthly Expense People</h3><p class="text-xs text-slate-500">Configure the people used for monthly expense splitting. These are your household members.</p></div><button onclick="openPersonModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow">+ Add Person</button></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-rose-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-users text-rose-600 mr-2"></i> Monthly Expense People</h3><p class="text-xs text-slate-500">Configure the people used for monthly expense splitting. These are your household members.</p></div><button onclick="openPersonModal()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow">+ Add Person</button></div>
             <div id="peopleListContainer" class="flex flex-wrap gap-2"></div>
           </div>
           <div class="pastel-emerald p-5 rounded-2xl border border-emerald-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-emerald-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-globe text-emerald-600 mr-2"></i> Exchange Rate Management</h3><p class="text-xs text-slate-500">Manage conversion rates to INR. Edit manually or fetch live rates online.</p></div><button onclick="fetchLiveRates()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow"><i class="fa-solid fa-rotate mr-1"></i> Fetch Live Rates</button></div>
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-emerald-200 pb-3"><div><h3 class="font-bold text-slate-800 text-base flex items-center"><i class="fa-solid fa-globe text-emerald-600 mr-2"></i> Exchange Rate Management</h3><p class="text-xs text-slate-500">Manage conversion rates to INR. Edit manually or fetch live rates online.</p></div><button onclick="fetchLiveRates()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow"><i class="fa-solid fa-rotate mr-1"></i> Fetch Live Rates</button></div>
             <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="bg-emerald-50 text-slate-600 uppercase font-bold border-b"><th class="p-3">Currency</th><th class="p-3">Country</th><th class="p-3 text-right">Rate to INR</th><th class="p-3 text-center">Action</th></tr></thead><tbody id="ratesTable" class="divide-y divide-emerald-100 font-medium text-slate-700"></tbody></table></div>
           </div>
           <div id="adminControlsCard" class="pastel-amber p-5 rounded-2xl border border-amber-200 shadow-sm space-y-4 hidden">
@@ -365,41 +366,41 @@
         <span class="hidden md:inline text-slate-600">|</span>
         <span class="flex items-center text-amber-400 font-bold tracking-wider uppercase text-[10px]"><i class="fa-solid fa-rotate mr-2"></i> Live Synchronization Active</span>
       </div>
-      <p class="text-[10px] text-slate-500 mt-2">&copy; 2026 ATMOS Digital Solutions. All Rights Reserved. FinTrack Financial Suite v3.1 Multi-User.</p>
+      <p class="text-[10px] text-slate-500 mt-2">&copy; 2026 ATMOS DIGITAL SOLUTIONS. All Rights Reserved. FinTrack Financial Suite v3.1 Multi-User.</p>
     </footer>
   </div>
 
   <!-- MODALS -->
-  <div id="modalBank" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Account Entry</h3><form id="bankForm" onsubmit="saveBankEntry(event)" class="space-y-3 text-xs"><input type="hidden" id="bankId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Account Owner</label><select id="bankOwner" class="w-full p-2 border rounded-lg font-bold"></select></div><div><label class="block font-bold text-slate-600 mb-1">Bank Account Type</label><select id="bankType" onchange="onBankTypeChange()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="bankCurrency" class="w-full p-2 border rounded-lg font-bold"><option value="INR">INR (₹)</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="bankDate" class="w-full p-2 border rounded-lg font-bold"></div></div><div><label class="block font-bold text-slate-600 mb-1">Bank / Cash Name (enter manually)</label><input type="text" id="bankName" required placeholder="Enter bank or cash name" class="w-full p-2 border rounded-lg font-bold text-indigo-900"></div><div><label class="block font-bold text-slate-600 mb-1">Current Balance</label><input type="number" step="0.01" id="bankBalance" required class="w-full p-2 border rounded-lg font-bold"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalBank')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">Save Account</button></div></form></div></div>
+  <div id="modalBank" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Account Entry</h3><form id="bankForm" onsubmit="saveBankEntry(event)" class="space-y-3 text-xs"><input type="hidden" id="bankId"><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Account Owner</label><select id="bankOwner" class="fintrack-field p-2 border rounded-lg font-bold"></select></div><div><label class="block font-bold text-slate-600 mb-1">Bank Account Type</label><select id="bankType" onchange="onBankTypeChange()" class="fintrack-field p-2 border rounded-lg font-bold"></select></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="bankCurrency" class="fintrack-field p-2 border rounded-lg font-bold"><option value="INR">INR (₹)</option><option value="SAR">SAR</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="bankDate" class="fintrack-field p-2 border rounded-lg font-bold"></div></div><div><label class="block font-bold text-slate-600 mb-1">Bank / Cash Name (enter manually)</label><input type="text" id="bankName" required placeholder="Enter bank or cash name" class="fintrack-field p-2 border rounded-lg font-bold text-indigo-900"></div><div><label class="block font-bold text-slate-600 mb-1">Current Balance</label><input type="number" step="0.01" id="bankBalance" required class="fintrack-field p-2 border rounded-lg font-bold"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalBank')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">Save Account</button></div></form></div></div>
 
-  <div id="modalExpense" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Expense Entry</h3><form id="expenseForm" onsubmit="saveExpense(event)" class="space-y-3 text-xs"><input type="hidden" id="expenseId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="expenseDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="expensePaidBy" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description</label><input type="text" id="expenseDesc" required class="w-full p-2 border rounded-lg"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="expenseCurrency" onchange="updateExpenseBankOptions()" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="expenseAmount" required class="w-full p-2 border rounded-lg" oninput="document.getElementById('cashbackManualEdit').value='false'; handleTiqmoCashback();"></div></div><div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg space-y-1"><label class="block font-bold text-indigo-900">Deduct from Bank/Cash Account?</label><select id="expenseDeductBankId" class="w-full p-2 border rounded-lg text-xs bg-white" onchange="handleTiqmoCashback()"></select><p class="text-[10px] text-indigo-600">Selecting an account will directly reduce the amount from its balance. Deleting this expense later will restore the exact amount to the same account.</p></div><div id="cashbackWrapper" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg space-y-1"><label class="block font-bold text-amber-900">Tiqmo 0.1% Cashback (Auto-calc)</label><input type="number" step="0.01" id="expenseCashback" class="w-full p-2 border border-amber-300 rounded-lg text-xs font-bold" oninput="document.getElementById('cashbackManualEdit').value = 'true'"><input type="hidden" id="cashbackManualEdit" value="false"><p class="text-[10px] text-amber-700">This amount reduces the net deduction. Edit manually if shop didn't give full cashback.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalExpense')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Expense</button></div></form></div></div>
+  <div id="modalExpense" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Expense Entry</h3><form id="expenseForm" onsubmit="saveExpense(event)" class="space-y-3 text-xs"><input type="hidden" id="expenseId"><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="expenseDate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="expensePaidBy" onchange="updateExpenseBankOptions()" class="fintrack-field p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description</label><input type="text" id="expenseDesc" required class="fintrack-field p-2 border rounded-lg"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="expenseCurrency" onchange="updateExpenseBankOptions()" class="fintrack-field p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="expenseAmount" required class="fintrack-field p-2 border rounded-lg" oninput="document.getElementById('cashbackManualEdit').value='false'; handleTiqmoCashback();"></div></div><div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg space-y-1"><label class="block font-bold text-indigo-900">Deduct from Bank/Cash Account?</label><select id="expenseDeductBankId" class="fintrack-field p-2 border rounded-lg text-xs bg-white" onchange="handleTiqmoCashback()"></select><p class="text-[10px] text-indigo-600">Selecting an account will directly reduce the amount from its balance. Deleting this expense later will restore the exact amount to the same account.</p></div><div id="cashbackWrapper" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg space-y-1"><label class="block font-bold text-amber-900">Tiqmo 0.1% Cashback (Auto-calc)</label><input type="number" step="0.01" id="expenseCashback" class="fintrack-field p-2 border border-amber-300 rounded-lg text-xs font-bold" oninput="document.getElementById('cashbackManualEdit').value = 'true'"><input type="hidden" id="cashbackManualEdit" value="false"><p class="text-[10px] text-amber-700">This amount reduces the net deduction. Edit manually if shop didn't give full cashback.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalExpense')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Expense</button></div></form></div></div>
 
-  <div id="modalTransfer" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Transfer Money</h3><form id="transferForm" onsubmit="saveTransfer(event)" class="space-y-3 text-xs"><input type="hidden" id="transferId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="transferDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">From Account (Deduct)</label><select id="transferFrom" required class="w-full p-2 border rounded-lg font-bold bg-red-50 text-red-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">To Account (Add)</label><select id="transferTo" required class="w-full p-2 border rounded-lg font-bold bg-emerald-50 text-emerald-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">Transfer Amount</label><input type="number" step="0.01" id="transferAmount" required class="w-full p-2 border rounded-lg font-bold"></div><div><label class="block font-bold text-slate-600 mb-1">Notes / Reference</label><input type="text" id="transferNotes" class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalTransfer')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-lg">Execute Transfer</button></div></form></div></div>
+  <div id="modalTransfer" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Transfer Money</h3><form id="transferForm" onsubmit="saveTransfer(event)" class="space-y-3 text-xs"><input type="hidden" id="transferId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="transferDate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">From Account (Deduct)</label><select id="transferFrom" required class="fintrack-field p-2 border rounded-lg font-bold bg-red-50 text-red-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">To Account (Add)</label><select id="transferTo" required class="fintrack-field p-2 border rounded-lg font-bold bg-emerald-50 text-emerald-900"></select></div><div><label class="block font-bold text-slate-600 mb-1">Transfer Amount</label><input type="number" step="0.01" id="transferAmount" required class="fintrack-field p-2 border rounded-lg font-bold"></div><div><label class="block font-bold text-slate-600 mb-1">Notes / Reference</label><input type="text" id="transferNotes" class="fintrack-field p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalTransfer')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-lg">Execute Transfer</button></div></form></div></div>
 
-  <div id="modalSettlement" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Log Settlement Payment</h3><form id="settlementForm" onsubmit="saveSettlement(event)" class="space-y-3 text-xs"><input type="hidden" id="stlCurrency"><input type="hidden" id="stlMonth"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="stlDate" required class="w-full p-2 border rounded-lg"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Who Paid?</label><select id="stlPayer" onchange="updateSettlementBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div><div><label class="block font-bold text-slate-600 mb-1">To Whom?</label><select id="stlPayee" onchange="updateSettlementBankOptions()" class="w-full p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Amount Paid</label><input type="number" step="0.01" id="stlAmount" required class="w-full p-2 border rounded-lg font-bold"></div><div class="p-3 bg-emerald-50 border border-emerald-100 rounded-lg space-y-2"><div><label class="block font-bold text-emerald-900">Deduct from Payer's Account:</label><select id="stlPayerBankId" class="w-full p-2 border rounded-lg bg-white"></select></div><div><label class="block font-bold text-emerald-900">Add to Payee's Account:</label><select id="stlPayeeBankId" class="w-full p-2 border rounded-lg bg-white"></select></div><p class="text-[10px] text-emerald-700">Settlement will automatically adjust balances in the selected accounts.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalSettlement')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-violet-600 text-white font-bold rounded-lg">Save Log & Update Banks</button></div></form></div></div>
+  <div id="modalSettlement" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Log Settlement Payment</h3><form id="settlementForm" onsubmit="saveSettlement(event)" class="space-y-3 text-xs"><input type="hidden" id="stlCurrency"><input type="hidden" id="stlMonth"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="stlDate" required class="fintrack-field p-2 border rounded-lg"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Who Paid?</label><select id="stlPayer" onchange="updateSettlementBankOptions()" class="fintrack-field p-2 border rounded-lg font-bold"></select></div><div><label class="block font-bold text-slate-600 mb-1">To Whom?</label><select id="stlPayee" onchange="updateSettlementBankOptions()" class="fintrack-field p-2 border rounded-lg font-bold"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Amount Paid</label><input type="number" step="0.01" id="stlAmount" required class="fintrack-field p-2 border rounded-lg font-bold"></div><div class="p-3 bg-emerald-50 border border-emerald-100 rounded-lg space-y-2"><div><label class="block font-bold text-emerald-900">Deduct from Payer's Account:</label><select id="stlPayerBankId" class="fintrack-field p-2 border rounded-lg bg-white"></select></div><div><label class="block font-bold text-emerald-900">Add to Payee's Account:</label><select id="stlPayeeBankId" class="fintrack-field p-2 border rounded-lg bg-white"></select></div><p class="text-[10px] text-emerald-700">Settlement will automatically adjust balances in the selected accounts.</p></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalSettlement')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-violet-600 text-white font-bold rounded-lg">Save Log & Update Banks</button></div></form></div></div>
 
-  <div id="modalDebt" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Liability / Debt</h3><form id="debtForm" onsubmit="saveDataEntry(event, 'debts')" class="space-y-3 text-xs"><input type="hidden" id="debtId"><div><label class="block font-bold text-slate-600 mb-1">Debt Name</label><input type="text" id="debtName" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Total Principal Amount (INR ₹)</label><input type="number" id="debtTotal" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Date Taken</label><input type="date" id="debtDate" class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalDebt')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg">Save</button></div></form></div></div>
+  <div id="modalDebt" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Liability / Debt</h3><form id="debtForm" onsubmit="saveDataEntry(event, 'debts')" class="space-y-3 text-xs"><input type="hidden" id="debtId"><div><label class="block font-bold text-slate-600 mb-1">Debt Name</label><input type="text" id="debtName" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Total Principal Amount (INR ₹)</label><input type="number" id="debtTotal" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Date Taken</label><input type="date" id="debtDate" class="fintrack-field p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalDebt')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg">Save</button></div></form></div></div>
 
-  <div id="modalDebtPay" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Debt Payment Log</h3><form id="debtPayForm" onsubmit="saveDebtPayment(event)" class="space-y-3 text-xs"><input type="hidden" id="payParentId"><input type="hidden" id="payId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="payDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Amount Paid (INR ₹)</label><input type="number" id="payAmount" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Description / Note</label><input type="text" id="payNotes" required class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalDebtPay')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg">Save Log</button></div></form></div></div>
+  <div id="modalDebtPay" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Debt Payment Log</h3><form id="debtPayForm" onsubmit="saveDebtPayment(event)" class="space-y-3 text-xs"><input type="hidden" id="payParentId"><input type="hidden" id="payId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="payDate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Amount Paid (INR ₹)</label><input type="number" id="payAmount" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Description / Note</label><input type="text" id="payNotes" required class="fintrack-field p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalDebtPay')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg">Save Log</button></div></form></div></div>
 
-  <div id="modalGold" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6"><h3 class="font-bold text-base mb-4">Gold Purchase Entry</h3><form id="goldForm" onsubmit="saveDataEntry(event, 'gold')" class="space-y-3 text-xs"><input type="hidden" id="goldId"><div class="grid grid-cols-2 gap-3"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="goldDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Purity</label><select id="goldPurity" class="w-full p-2 border rounded-lg"><option value="24K">24 K</option><option value="22K">22 K</option><option value="18K">18 K</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Grams (24K)</label><input type="number" step="0.1" id="goldGrams24" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Grams (22K)</label><input type="number" step="0.1" id="goldGrams22" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Purchase SAR</label><input type="number" id="goldSar" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Conv. Rate on Purchase Day</label><input type="number" step="0.01" id="goldConvRate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Day Kerala Rate</label><input type="number" id="goldKeralaRate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Today Market Rate</label><input type="number" id="goldTodayRate" required class="w-full p-2 border rounded-lg"></div></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalGold')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-amber-500 text-white font-bold rounded-lg">Save</button></div></form></div></div>
+  <div id="modalGold" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6"><h3 class="font-bold text-base mb-4">Gold Purchase Entry</h3><form id="goldForm" onsubmit="saveDataEntry(event, 'gold')" class="space-y-3 text-xs"><input type="hidden" id="goldId"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="goldDate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Purity</label><select id="goldPurity" class="fintrack-field p-2 border rounded-lg"><option value="24K">24 K</option><option value="22K">22 K</option><option value="18K">18 K</option></select></div><div><label class="block font-bold text-slate-600 mb-1">Grams (24K)</label><input type="number" step="0.1" id="goldGrams24" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Grams (22K)</label><input type="number" step="0.1" id="goldGrams22" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Purchase SAR</label><input type="number" id="goldSar" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Conv. Rate on Purchase Day</label><input type="number" step="0.01" id="goldConvRate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Day Kerala Rate</label><input type="number" id="goldKeralaRate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Today Market Rate</label><input type="number" id="goldTodayRate" required class="fintrack-field p-2 border rounded-lg"></div></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalGold')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-amber-500 text-white font-bold rounded-lg">Save</button></div></form></div></div>
 
-  <div id="modalSip" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">SIP / Investment</h3><form id="sipForm" onsubmit="saveDataEntry(event, 'sips')" class="space-y-3 text-xs"><input type="hidden" id="sipId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="sipDate" class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Name</label><input type="text" id="sipName" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Category</label><input type="text" id="sipCategory" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Monthly SIP (₹)</label><input type="number" id="sipMonthly" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Current Value (₹)</label><input type="number" id="sipValue" required class="w-full p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalSip')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">Save</button></div></form></div></div>
+  <div id="modalSip" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">SIP / Investment</h3><form id="sipForm" onsubmit="saveDataEntry(event, 'sips')" class="space-y-3 text-xs"><input type="hidden" id="sipId"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="sipDate" class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Name</label><input type="text" id="sipName" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Category</label><input type="text" id="sipCategory" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Monthly SIP (₹)</label><input type="number" id="sipMonthly" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Current Value (₹)</label><input type="number" id="sipValue" required class="fintrack-field p-2 border rounded-lg"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalSip')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">Save</button></div></form></div></div>
 
-  <div id="modalFriend" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Friend Entry</h3><form id="friendForm" onsubmit="saveFriend(event)" class="space-y-3 text-xs"><input type="hidden" id="friendId"><div><label class="block font-bold text-slate-600 mb-1">Friend Name</label><input type="text" id="friendName" required class="w-full p-2 border rounded-lg font-bold" placeholder="Enter friend's name"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriend')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg">Save Friend</button></div></form></div></div>
+  <div id="modalFriend" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Friend Entry</h3><form id="friendForm" onsubmit="saveFriend(event)" class="space-y-3 text-xs"><input type="hidden" id="friendId"><div><label class="block font-bold text-slate-600 mb-1">Friend Name</label><input type="text" id="friendName" required class="fintrack-field p-2 border rounded-lg font-bold" placeholder="Enter friend's name"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriend')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg">Save Friend</button></div></form></div></div>
 
-  <div id="modalFriendSplit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Friends Split Expense</h3><form id="friendSplitForm" onsubmit="saveFriendSplit(event)" class="space-y-3 text-xs"><input type="hidden" id="friendSplitId"><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="friendSplitDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="friendSplitCurrency" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description / Reason</label><input type="text" id="friendSplitDesc" required class="w-full p-2 border rounded-lg" placeholder="e.g. Dinner, Movie, Trip"></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="friendSplitAmount" required class="w-full p-2 border rounded-lg" oninput="updateSplitPreview()"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="friendSplitPaidBy" class="w-full p-2 border rounded-lg font-bold" onchange="updateSplitPreview()"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Participants (select who shared this expense)</label><div id="friendSplitParticipants" class="border rounded-lg p-3 bg-slate-50 space-y-1 max-h-40 overflow-y-auto"></div></div><div id="splitPreview" class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-800 font-medium"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriendSplit')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-amber-600 text-white font-bold rounded-lg">Save Split</button></div></form></div></div>
+  <div id="modalFriendSplit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Friends Split Expense</h3><form id="friendSplitForm" onsubmit="saveFriendSplit(event)" class="space-y-3 text-xs"><input type="hidden" id="friendSplitId"><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="friendSplitDate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="friendSplitCurrency" class="fintrack-field p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Description / Reason</label><input type="text" id="friendSplitDesc" required class="fintrack-field p-2 border rounded-lg" placeholder="e.g. Dinner, Movie, Trip"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="friendSplitAmount" required class="fintrack-field p-2 border rounded-lg" oninput="updateSplitPreview()"></div><div><label class="block font-bold text-slate-600 mb-1">Paid By</label><select id="friendSplitPaidBy" class="fintrack-field p-2 border rounded-lg font-bold" onchange="updateSplitPreview()"></select></div></div><div><label class="block font-bold text-slate-600 mb-1">Participants (select who shared this expense)</label><div id="friendSplitParticipants" class="border rounded-lg p-3 bg-slate-50 space-y-1 max-h-40 overflow-y-auto"></div></div><div id="splitPreview" class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-800 font-medium"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriendSplit')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-amber-600 text-white font-bold rounded-lg">Save Split</button></div></form></div></div>
 
-  <div id="modalPerson" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Person Entry</h3><form id="personForm" onsubmit="savePerson(event)" class="space-y-3 text-xs"><input type="hidden" id="personId"><div><label class="block font-bold text-slate-600 mb-1">Person Name</label><input type="text" id="personName" required class="w-full p-2 border rounded-lg font-bold" placeholder="Enter person name"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalPerson')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Person</button></div></form></div></div>
+  <div id="modalPerson" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"><h3 class="font-bold text-base mb-4">Person Entry</h3><form id="personForm" onsubmit="savePerson(event)" class="space-y-3 text-xs"><input type="hidden" id="personId"><div><label class="block font-bold text-slate-600 mb-1">Person Name</label><input type="text" id="personName" required class="fintrack-field p-2 border rounded-lg font-bold" placeholder="Enter person name"></div><div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalPerson')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white font-bold rounded-lg">Save Person</button></div></form></div></div>
 
   <div id="modalFriendSettlement" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h3 class="font-bold text-base mb-4">Record Friend Settlement</h3><form id="friendSettlementForm" onsubmit="saveFriendSettlement(event)" class="space-y-3 text-xs">
 <input type="hidden" id="fsLedgerId">
-<div><label class="block font-bold text-slate-600 mb-1">Friend</label><select id="fsFriend" required onchange="updateFsPreview()" class="w-full p-2 border rounded-lg font-bold"></select></div>
-<div><label class="block font-bold text-slate-600 mb-1">Type / Direction</label><select id="fsType" onchange="onFriendStlTypeChange()" class="w-full p-2 border rounded-lg font-bold"><option value="they_owe">They owe you (expense/amount assigned to friend)</option><option value="i_owe">You owe them (collection/amount assigned to you)</option><option value="they_paid">They paid you (money received)</option><option value="i_paid">You paid them (money paid to friend)</option></select></div>
-<div class="grid grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="fsDate" required class="w-full p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="fsAmount" required class="w-full p-2 border rounded-lg" oninput="updateFsPreview()"></div></div>
-<div id="fsCurrencyWrap"><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="fsCurrency" onchange="updateFsPreview()" class="w-full p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div>
-<div id="fsAccountWrap" class="hidden p-3 bg-emerald-50 border border-emerald-100 rounded-lg space-y-1"><label class="block font-bold text-emerald-900" id="fsAccountLabel">Received Into Account</label><select id="fsAccount" onchange="updateFsPreview()" class="w-full p-2 border rounded-lg bg-white"></select><p class="text-[10px] text-emerald-700" id="fsAccountHint">The amount will automatically be added to this account's balance.</p></div>
-<div><label class="block font-bold text-slate-600 mb-1">Notes / Description</label><input type="text" id="fsNotes" class="w-full p-2 border rounded-lg"></div>
+<div><label class="block font-bold text-slate-600 mb-1">Friend</label><select id="fsFriend" required onchange="updateFsPreview()" class="fintrack-field p-2 border rounded-lg font-bold"></select></div>
+<div><label class="block font-bold text-slate-600 mb-1">Type / Direction</label><select id="fsType" onchange="onFriendStlTypeChange()" class="fintrack-field p-2 border rounded-lg font-bold"><option value="they_owe">They owe you (expense/amount assigned to friend)</option><option value="i_owe">You owe them (collection/amount assigned to you)</option><option value="they_paid">They paid you (money received)</option><option value="i_paid">You paid them (money paid to friend)</option></select></div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><label class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="fsDate" required class="fintrack-field p-2 border rounded-lg"></div><div><label class="block font-bold text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="fsAmount" required class="fintrack-field p-2 border rounded-lg" oninput="updateFsPreview()"></div></div>
+<div id="fsCurrencyWrap"><label class="block font-bold text-slate-600 mb-1">Currency</label><select id="fsCurrency" onchange="updateFsPreview()" class="fintrack-field p-2 border rounded-lg font-bold"><option value="SAR">SAR</option><option value="INR">INR (₹)</option><option value="AED">AED</option><option value="OMR">OMR</option><option value="QAR">QAR</option><option value="BHD">BHD</option><option value="KWD">KWD</option></select></div>
+<div id="fsAccountWrap" class="hidden p-3 bg-emerald-50 border border-emerald-100 rounded-lg space-y-2"><label class="block font-bold text-emerald-900" id="fsAccountLabel">Received Into Account</label><select id="fsAccount" onchange="updateFsPreview()" class="fintrack-field p-2 border rounded-lg bg-white"></select><p class="text-[10px] text-emerald-700" id="fsAccountHint">The amount will automatically be added to this account's balance.</p></div>
+<div><label class="block font-bold text-slate-600 mb-1">Notes / Description</label><input type="text" id="fsNotes" class="fintrack-field p-2 border rounded-lg"></div>
 <div id="fsPreview" class="p-3 bg-violet-50 border border-violet-100 rounded-lg text-xs text-slate-700 font-medium"></div>
 <div class="flex justify-end space-x-2 pt-2"><button type="button" onclick="closeModal('modalFriendSettlement')" class="px-4 py-2 bg-slate-200 font-bold rounded-lg">Cancel</button><button type="submit" class="px-4 py-2 bg-violet-600 text-white font-bold rounded-lg">Save Settlement</button></div>
 </form></div></div>
@@ -466,6 +467,9 @@ function formatCurrency(amount, currency) { if (currency === 'INR') return `₹$
 window.formatCurrency = formatCurrency;
 function formatInDisplayCurrency(amountInr) { const curr = state.displayCurrency || 'INR'; return formatCurrency(convertFromINR(amountInr, curr), curr); }
 window.formatInDisplayCurrency = formatInDisplayCurrency;
+// Format a per-currency balance map, preserving each original currency (no conversion).
+function formatMultiCurrency(m){m=m||{};const c=Object.keys(m).filter(k=>Math.abs(m[k])>0.001);return c.length?c.map(k=>formatCurrency(m[k],k)).join(' · '):formatCurrency(0,state.displayCurrency||'INR');}
+window.formatMultiCurrency = formatMultiCurrency;
 function getPeople() { return (state.settings && state.settings.people) ? state.settings.people : []; }
 window.getPeople = getPeople;
 function getBankType1() { return (state.settings && state.settings.bankType1) ? state.settings.bankType1 : DEFAULT_BANK_TYPE1; }
@@ -479,6 +483,14 @@ function currentMonthStr() { const now = new Date(); return `${now.getFullYear()
 window.currentMonthStr = currentMonthStr;
 function dateMonth(dateStr) { if (!dateStr) return ''; return dateStr.slice(0, 7); }
 window.dateMonth = dateMonth;
+function sortByDateDesc(arr) {
+  return (arr || []).slice().sort((a, b) => {
+    const da = String(a && a.date || ''), db = String(b && b.date || '');
+    if (db !== da) return db.localeCompare(da);
+    return (Number(b && b.id) || 0) - (Number(a && a.id) || 0);
+  });
+}
+window.sortByDateDesc = sortByDateDesc;
 
 window.showAuthScreen = function(screenId) {
   document.querySelectorAll('.auth-screen').forEach(el => el.classList.remove('active'));
@@ -494,7 +506,6 @@ window.handleLogin = async function(e) {
     const snapshot = await get(ref(db, `users/${loginId}`));
     let user = snapshot.val();
     if (!user && loginId === 'US' && password === 'Juby@8055') {
-      // Bootstrap the admin account with the known credentials (data migration runs after login)
       user = { name: 'Admin', loginId: loginId, password: encodePassword(password), role: 'admin', createdAt: new Date().toISOString() };
       await set(ref(db, `users/${loginId}`), user);
     }
@@ -505,7 +516,6 @@ window.handleLogin = async function(e) {
       user.role = (loginId === 'US') ? 'admin' : 'user';
       await set(ref(db, `users/${loginId}`), user).catch(() => {});
     }
-
     currentUser = { loginId: loginId, name: user.name, role: user.role || 'user' }; window.currentUser = currentUser;
     if (document.getElementById('rememberMe').checked) { localStorage.setItem('fintrack_remember', JSON.stringify({ loginId, password })); } else { localStorage.removeItem('fintrack_remember'); }
     document.getElementById('authContainer').classList.add('hidden');
@@ -527,8 +537,6 @@ window.handleCreateAccount = async function(e) {
   try {
     const snapshot = await get(ref(db, `users/${loginId}`));
     if (snapshot.exists()) { alert("This User ID is already taken. Please choose a different one."); return; }
-
-    // Admin-configured registration limit (Settings > Admin Controls)
     try {
       const cfgSnap = await get(ref(db, 'app_config'));
       const cfg = cfgSnap.val() || {};
@@ -538,7 +546,6 @@ window.handleCreateAccount = async function(e) {
         if (count >= cfg.maxUsers) { alert(`Registration limit reached (${cfg.maxUsers} account(s) allowed by the admin). New accounts cannot be created.`); return; }
       }
     } catch(e) { console.warn("Could not read app config; proceeding with registration.", e); }
-
     const userData = { name, loginId, password: encodePassword(password), role: 'user', createdAt: new Date().toISOString() };
     await set(ref(db, `users/${loginId}`), userData);
     const newUserState = {
@@ -1224,21 +1231,45 @@ window.editRate = function(currency) {
 };
 
 // ==================== FRIENDS SETTLEMENT LEDGER (cumulative running balance) ====================
-function friendBalance(friendId) {
-  return (state.friendLedger || []).filter(t => String(t.friendId) === String(friendId))
-    .reduce((s, t) => s + (t.type === 'they_owe' ? (t.amountInr || 0) : -(t.amountInr || 0)), 0);
-}
-window.friendBalance = friendBalance;
-
-function recomputeFriendLedgerBalances() {
-  const running = {};
-  (state.friendLedger || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date)) || a.id - b.id).forEach(t => {
-    const delta = (t.type === 'they_owe' ? (t.amountInr || 0) : -(t.amountInr || 0));
-    running[t.friendId] = (running[t.friendId] || 0) + delta;
-    t.prevBalance = running[t.friendId] - delta;
-    t.balanceAfter = running[t.friendId];
+// friendSplitBalance: INR-converted outstanding (kept for status determination). Unchanged.
+function friendSplitBalance(friendId) {
+  const friend = (state.friends || []).find(f => String(f.id) === String(friendId));
+  if (!friend) return 0;
+  const friendName = friend.name, people = getPeople();
+  let balance = 0;
+  Object.keys(state.friendSplits || {}).forEach(month => {
+    (state.friendSplits[month] || []).forEach(fs => {
+      const participants = fs.participants || [];
+      if (!participants.includes(friendName)) return;
+      const share = fs.amount / participants.length;
+      const shareInr = convertToINR(share, fs.currency);
+      if (people.includes(fs.paidBy)) { balance += shareInr; }
+      else if (fs.paidBy === friendName) { const householdCount = participants.filter(p => people.includes(p)).length; balance -= shareInr * householdCount; }
+    });
   });
+  return balance;
 }
+window.friendSplitBalance = friendSplitBalance;
+// Per-currency version: preserves each Friends Split entry's original currency (no INR conversion).
+function friendSplitBalanceByCurrency(fid){const fr=(state.friends||[]).find(f=>String(f.id)===String(fid));if(!fr)return{};const fn=fr.name,pl=getPeople(),b={};Object.keys(state.friendSplits||{}).forEach(m=>(state.friendSplits[m]||[]).forEach(fs=>{const p=fs.participants||[];if(!p.includes(fn))return;const s=fs.amount/p.length,c=fs.currency||'INR';if(!b[c])b[c]=0;if(pl.includes(fs.paidBy))b[c]+=s;else if(fs.paidBy===fn)b[c]-=s*p.filter(x=>pl.includes(x)).length;}));return b;}
+window.friendSplitBalanceByCurrency = friendSplitBalanceByCurrency;
+
+function friendLedgerBalance(friendId) {
+  return (state.friendLedger || []).filter(t => String(t.friendId) === String(friendId))
+    .reduce((s, t) => s + ((t.type === 'they_owe' || t.type === 'i_paid') ? (t.amountInr || 0) : -(t.amountInr || 0)), 0);
+}
+window.friendLedgerBalance = friendLedgerBalance;
+// Per-currency version: uses each ledger entry's original currency (t.amount + t.currency).
+function friendLedgerBalanceByCurrency(fid){const b={};(state.friendLedger||[]).filter(t=>String(t.friendId)===String(fid)).forEach(t=>{const c=t.currency||'INR';if(!b[c])b[c]=0;b[c]+=(t.type==='they_owe'||t.type==='i_paid')?(t.amount||0):-(t.amount||0);});return b;}
+window.friendLedgerBalanceByCurrency = friendLedgerBalanceByCurrency;
+
+function friendBalance(friendId) { return friendSplitBalance(friendId) + friendLedgerBalance(friendId); }
+window.friendBalance = friendBalance;
+// Per-currency outstanding, preserving each transaction's original currency.
+function friendBalanceByCurrency(fid){const s=friendSplitBalanceByCurrency(fid),l=friendLedgerBalanceByCurrency(fid),r={};new Set([...Object.keys(s),...Object.keys(l)]).forEach(c=>{const v=(s[c]||0)+(l[c]||0);if(Math.abs(v)>0.001)r[c]=v;});return r;}
+window.friendBalanceByCurrency = friendBalanceByCurrency;
+
+function recomputeFriendLedgerBalances(){const r={},rb={};(state.friends||[]).forEach(f=>{r[f.id]=friendSplitBalance(f.id);rb[f.id]=friendSplitBalanceByCurrency(f.id);});(state.friendLedger||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))||a.id-b.id).forEach(t=>{const di=(t.type==='they_owe'||t.type==='i_paid')?(t.amountInr||0):-(t.amountInr||0),c=t.currency||'INR',dc=(t.type==='they_owe'||t.type==='i_paid')?(t.amount||0):-(t.amount||0),pv=r[t.friendId]||0,pb={...(rb[t.friendId]||{})};r[t.friendId]=pv+di;if(!rb[t.friendId])rb[t.friendId]={};rb[t.friendId][c]=(rb[t.friendId][c]||0)+dc;t.prevBalance=pv;t.balanceAfter=r[t.friendId];t.prevBalanceByCurr=pb;t.balanceAfterByCurr={...rb[t.friendId]};});}
 window.recomputeFriendLedgerBalances = recomputeFriendLedgerBalances;
 
 window.openFriendSettlementModal = function(friendId = '') {
@@ -1280,13 +1311,20 @@ window.updateFsPreview = function() {
     const acc = (state.banks || []).find(b => String(b.id) === String(document.getElementById('fsAccount').value));
     currency = acc ? acc.currency : 'INR';
   } else { currency = document.getElementById('fsCurrency').value; }
-  const amtInr = convertToINR(amount, currency);
-  const cur = friendBalance(friendSel.value);
-  const newBal = cur + (t === 'they_owe' ? amtInr : -amtInr);
+  const projected = { ...friendBalanceByCurrency(friendSel.value) };
+  const delta = (t === 'they_owe' || t === 'i_paid') ? amount : -amount;
+  projected[currency] = (projected[currency] || 0) + delta;
+  const allSettled = Object.keys(projected).every(c => Math.abs(projected[c]) < 0.01);
   let msg;
-  if (Math.abs(newBal) < 0.01) msg = `<b>${friendName}</b>: Settled ✓`;
-  else if (newBal > 0) msg = `<b>${friendName}</b> will owe you: <b class="money-income">${formatInDisplayCurrency(newBal)}</b>`;
-  else msg = `You will owe <b>${friendName}</b>: <b class="money-expense">${formatInDisplayCurrency(Math.abs(newBal))}</b>`;
+  if (allSettled) { msg = `<b>${friendName}</b>: Settled ✓`; }
+  else {
+    const rec = {}, pay = {};
+    Object.keys(projected).forEach(c => { if (projected[c] > 0.01) rec[c] = projected[c]; else if (projected[c] < -0.01) pay[c] = Math.abs(projected[c]); });
+    const parts = [];
+    if (Object.keys(rec).length) parts.push(`${friendName} will owe you: <b class="money-income">${formatMultiCurrency(rec)}</b>`);
+    if (Object.keys(pay).length) parts.push(`You will owe ${friendName}: <b class="money-expense">${formatMultiCurrency(pay)}</b>`);
+    msg = parts.join('<br>') || `<b>${friendName}</b>: Settled ✓`;
+  }
   preview.innerHTML = msg;
 };
 
@@ -1312,7 +1350,7 @@ window.saveFriendSettlement = function(e) {
   } else { currency = document.getElementById('fsCurrency').value; }
   const amtInr = convertToINR(amount, currency);
   const prev = friendBalance(friendId);
-  const balanceAfter = prev + (t === 'they_owe' ? amtInr : -amtInr);
+  const balanceAfter = prev + ((t === 'they_owe' || t === 'i_paid') ? amtInr : -amtInr);
   if (!Array.isArray(state.friendLedger)) state.friendLedger = [];
   state.friendLedger.push({ id: Date.now(), date: document.getElementById('fsDate').value, friendId, friendName: friend.name, type: t, amount, currency, amountInr: amtInr, accountId: accId || '', accountName, notes: document.getElementById('fsNotes').value, prevBalance: prev, balanceAfter });
   closeModal('modalFriendSettlement'); saveData();
@@ -1334,35 +1372,41 @@ window.deleteFriendLedgerEntry = function(id) {
 };
 
 function renderFriendLedger() {
+  recomputeFriendLedgerBalances();
   const sumTbody = document.getElementById('friendLedgerSummaryTable'); if (!sumTbody) return;
   sumTbody.innerHTML = '';
   const friends = state.friends || [];
-  let totalOwe = 0, totalOwed = 0;
+  let totalOweInr = 0, totalOwedInr = 0;
+  const totalOweByCurr = {}, totalOwedByCurr = {};
   if (friends.length === 0) { sumTbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400 italic">No friends added yet. Add friends in the Friends Split tab.</td></tr>'; }
   else {
     friends.forEach(f => {
       const bal = friendBalance(f.id);
-      if (bal > 0.01) totalOwed += bal; else if (bal < -0.01) totalOwe += Math.abs(bal);
-      let statusText, statusClass, outText, outClass;
-      if (Math.abs(bal) < 0.01) { statusText = 'Settled'; statusClass = 'bg-slate-100 text-slate-600'; outText = formatInDisplayCurrency(0); outClass = 'money-neutral'; }
-      else if (bal > 0) { statusText = 'They owe you'; statusClass = 'bg-emerald-100 text-emerald-700'; outText = formatInDisplayCurrency(bal); outClass = 'money-income'; }
-      else { statusText = 'You owe'; statusClass = 'bg-red-100 text-red-700'; outText = formatInDisplayCurrency(Math.abs(bal)); outClass = 'money-expense'; }
+      const balByCurr = friendBalanceByCurrency(f.id);
+      if (bal > 0.01) totalOwedInr += bal; else if (bal < -0.01) totalOweInr += Math.abs(bal);
+      Object.keys(balByCurr).forEach(c => { const v = balByCurr[c]; if (v > 0.01) totalOwedByCurr[c] = (totalOwedByCurr[c] || 0) + v; else if (v < -0.01) totalOweByCurr[c] = (totalOweByCurr[c] || 0) + Math.abs(v); });
+      let statusText, statusClass, outText;
+      if (Math.abs(bal) < 0.01) { statusText = 'Settled'; statusClass = 'bg-slate-100 text-slate-600'; outText = formatMultiCurrency({}); }
+      else if (bal > 0) { statusText = 'They owe you'; statusClass = 'bg-emerald-100 text-emerald-700'; outText = `<span class="money-income">${formatMultiCurrency(balByCurr)}</span>`; }
+      else { statusText = 'You owe'; statusClass = 'bg-red-100 text-red-700'; outText = `<span class="money-expense">${formatMultiCurrency(balByCurr)}</span>`; }
       sumTbody.innerHTML += `<tr>
         <td class="p-3 font-bold">${f.name}</td>
         <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase tracking-wider ${statusClass}">${statusText}</span></td>
-        <td class="p-3 text-right font-black ${outClass}">${outText}</td>
+        <td class="p-3 text-right font-black">${outText}</td>
         <td class="p-3 text-center"><button onclick="openFriendSettlementModal('${f.id}')" class="px-2 py-1 bg-violet-600 hover:bg-violet-700 text-white rounded text-[10px] font-bold">+ Settlement</button></td>
       </tr>`;
     });
   }
-  document.getElementById('fsTotalOwe').innerText = formatInDisplayCurrency(totalOwe);
-  document.getElementById('fsTotalOwed').innerText = formatInDisplayCurrency(totalOwed);
-  const net = totalOwed - totalOwe;
+  document.getElementById('fsTotalOwe').innerText = formatMultiCurrency(totalOweByCurr);
+  document.getElementById('fsTotalOwed').innerText = formatMultiCurrency(totalOwedByCurr);
+  const netByCurr = {};
+  new Set([...Object.keys(totalOwedByCurr), ...Object.keys(totalOweByCurr)]).forEach(c => { const v = (totalOwedByCurr[c] || 0) - (totalOweByCurr[c] || 0); if (Math.abs(v) > 0.001) netByCurr[c] = v; });
+  const netInr = totalOwedInr - totalOweInr;
   const netEl = document.getElementById('fsNetPosition');
-  netEl.innerText = `${formatInDisplayCurrency(Math.abs(net))} ${net >= 0 ? 'receivable' : 'payable'}`;
-  netEl.className = `text-lg font-black ${net >= 0 ? 'money-income' : 'money-expense'}`;
+  netEl.innerText = `${formatMultiCurrency(netByCurr)} ${netInr >= 0 ? 'receivable' : 'payable'}`;
+  netEl.className = `text-base font-black ${netInr >= 0 ? 'money-income' : 'money-expense'}`;
   const hTbody = document.getElementById('friendLedgerHistoryTable'); hTbody.innerHTML = '';
-  const entries = (state.friendLedger || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)) || b.id - a.id);
+  const entries = sortByDateDesc(state.friendLedger || []);
   if (entries.length === 0) { hTbody.innerHTML = '<tr><td colspan="9" class="p-4 text-center text-slate-400 italic">No friend settlement records yet.</td></tr>'; return; }
   entries.forEach(t => {
     let dirHtml;
@@ -1370,6 +1414,7 @@ function renderFriendLedger() {
     else if (t.type === 'i_paid') dirHtml = `<span class="font-bold text-red-700">You → ${t.friendName}</span>`;
     else if (t.type === 'they_owe') dirHtml = `<span class="font-bold text-amber-700">${t.friendName} owes You</span>`;
     else dirHtml = `<span class="font-bold text-violet-700">You owe ${t.friendName}</span>`;
+    const balAfterInr = (t.balanceAfter || 0);
     hTbody.innerHTML += `<tr>
       <td class="p-3">${t.date}</td>
       <td class="p-3 font-bold">${t.friendName}</td>
@@ -1377,8 +1422,8 @@ function renderFriendLedger() {
       <td class="p-3 text-right font-bold money-neutral">${t.amount.toLocaleString()} ${t.currency}</td>
       <td class="p-3 text-[11px] text-slate-500">${t.accountName || '-'}</td>
       <td class="p-3 text-slate-500">${t.notes || '-'}</td>
-      <td class="p-3 text-right text-slate-500">${formatInDisplayCurrency(t.prevBalance || 0)}</td>
-      <td class="p-3 text-right font-bold ${(t.balanceAfter || 0) >= 0 ? 'money-income' : 'money-expense'}">${formatInDisplayCurrency(t.balanceAfter || 0)}</td>
+      <td class="p-3 text-right text-slate-500">${formatMultiCurrency(t.prevBalanceByCurr || {})}</td>
+      <td class="p-3 text-right font-bold ${balAfterInr >= 0 ? 'money-income' : 'money-expense'}">${formatMultiCurrency(t.balanceAfterByCurr || {})}</td>
       <td class="p-3 text-center text-slate-400"><button onclick="deleteFriendLedgerEntry(${t.id})" class="hover:text-red-600"><i class="fa-solid fa-trash"></i></button></td>
     </tr>`;
   });
@@ -1584,7 +1629,7 @@ window.renderExpenses = function() {
   people.forEach(p => { paidByPersonCurrency[p] = {}; });
   if (window.state.expenses[month].length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">No expenses logged for this month yet.</td></tr>`; }
   else {
-    window.state.expenses[month].forEach(item => {
+    sortByDateDesc(window.state.expenses[month]).forEach(item => {
       if (!paidByPersonCurrency[item.paidBy]) paidByPersonCurrency[item.paidBy] = {};
       paidByPersonCurrency[item.paidBy][item.currency] = (paidByPersonCurrency[item.paidBy][item.currency] || 0) + item.amount;
       totalByCurrency[item.currency] = (totalByCurrency[item.currency] || 0) + item.amount;
@@ -1629,7 +1674,7 @@ window.renderExpenses = function() {
   const sBody = document.getElementById('settlementsTable'); sBody.innerHTML = '';
   if (window.state.settlements[month].length === 0) { sBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-400 italic">No settlements logged yet.</td></tr>`; }
   else {
-    window.state.settlements[month].forEach(s => {
+    sortByDateDesc(window.state.settlements[month]).forEach(s => {
       sBody.innerHTML += `<tr>
         <td class="p-2">${s.date}</td>
         <td class="p-2 font-bold">${s.payer} &rarr; ${s.payee}</td>
@@ -1732,7 +1777,7 @@ window.renderFriendsSplit = function() {
   const fsTable = document.getElementById('friendSplitsTable'); fsTable.innerHTML = '';
   if ((window.state.friendSplits[month] || []).length === 0) { fsTable.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400 italic">No Friends Split transactions for this month yet.</td></tr>`; }
   else {
-    (window.state.friendSplits[month] || []).forEach(fs => {
+    sortByDateDesc(window.state.friendSplits[month] || []).forEach(fs => {
       const share = fs.amount / (fs.participants || []).length;
       const participantsHtml = (fs.participants || []).map(p => { const isPerson = window.getPeople().includes(p); return `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${isPerson ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'}">${p}</span>`; }).join(' ');
       fsTable.innerHTML += `<tr>
@@ -1758,7 +1803,7 @@ window.renderSettlements = function() {
   const tbody = document.getElementById('settlementsMainTable'); tbody.innerHTML = '';
   if (window.state.settlements[month].length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400 italic">No settlements logged for this month yet.</td></tr>`; }
   else {
-    window.state.settlements[month].forEach(s => {
+    sortByDateDesc(window.state.settlements[month]).forEach(s => {
       tbody.innerHTML += `<tr>
         <td class="p-3">${s.date}</td>
         <td class="p-3 font-semibold">${s.payer}</td>
@@ -1775,8 +1820,8 @@ function renderDebts() {
   const container = document.getElementById('debtsContainer'); container.innerHTML = '';
   if (!window.state.debts || window.state.debts.length === 0) { container.innerHTML = `<div class="p-6 text-center text-slate-400 italic col-span-2">No liabilities or debts logged.</div>`; return; }
   window.state.debts.forEach(d => {
-    const payments = d.payments || [];
-    const paidTotal = payments.reduce((s, p) => s + p.amount, 0);
+    const payments = sortByDateDesc(d.payments || []);
+    const paidTotal = (d.payments || []).reduce((s, p) => s + p.amount, 0);
     const remaining = d.total - paidTotal;
     const isClosed = remaining <= 0;
     let paymentsHtml = '';
@@ -1815,7 +1860,7 @@ function renderGoldAndSip() {
   let sumSarInvested = 0, sumPurchaseDayInr = 0, sumTodayConvInr = 0, sumTodayGoldVal = 0;
   if (!window.state.gold || window.state.gold.length === 0) { gTbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-slate-400 italic">No gold purchases logged yet.</td></tr>`; }
   else {
-    window.state.gold.forEach(g => {
+    sortByDateDesc(window.state.gold).forEach(g => {
       const totalGrams = (parseFloat(g.grams24) || 0) + (parseFloat(g.grams22) || 0);
       const purchaseDayInr = Math.round((g.sar || 0) * (g.convRate || 0));
       const todayConvInr = Math.round((g.sar || 0) * (window.state.rates.SAR || window.DEFAULT_RATES.SAR));
@@ -1851,7 +1896,7 @@ function renderGoldAndSip() {
   const sTbody = document.getElementById('sipTable'); sTbody.innerHTML = '';
   if (!window.state.sips || window.state.sips.length === 0) { sTbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">No SIP investments logged yet.</td></tr>`; }
   else {
-    window.state.sips.forEach(s => {
+    sortByDateDesc(window.state.sips).forEach(s => {
       sTbody.innerHTML += `<tr>
         <td class="p-3">${s.date || '-'}</td>
         <td class="p-3 font-bold text-indigo-900">${s.name}</td>
@@ -1872,7 +1917,7 @@ function renderTransfers() {
   const month = document.getElementById('transferMonthSelect') ? document.getElementById('transferMonthSelect').value : '';
   const transfers = (window.state.transfers || []).filter(t => !t.date || dateMonth(t.date) === month);
   if (transfers.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400 italic">No transfers logged for this month yet.</td></tr>`; return; }
-  transfers.forEach(t => {
+  sortByDateDesc(transfers).forEach(t => {
     tbody.innerHTML += `<tr>
       <td class="p-3">${t.date}</td>
       <td class="p-3 font-semibold money-expense">${t.fromName}</td>
