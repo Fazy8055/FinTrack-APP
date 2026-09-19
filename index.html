@@ -163,11 +163,13 @@
             <div class="gold-card p-5 rounded-2xl border shadow-sm"><p class="text-xs font-bold gold-text uppercase tracking-wider">Total Savings & Gold</p><h3 class="text-2xl font-black text-amber-600 mt-2" id="sumGoldSip">0</h3><p class="text-xs text-amber-700/80 mt-1">Gold Today's Value + SIP</p></div>
             <div class="profit-card p-5 rounded-2xl border shadow-sm"><p class="text-xs font-bold text-emerald-700 uppercase tracking-wider">Net Financial Balance</p><h3 class="text-2xl font-black text-emerald-600 mt-2" id="sumNetPosition">0</h3><p class="text-xs text-emerald-700/80 mt-1">Liquid Accounts + Savings - Debt</p></div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="accountSpendSummary">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="accountSpendSummary">
             <div class="pastel-indigo p-4 rounded-2xl border border-indigo-200 shadow-sm"><p class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Primary Account Spend</p><h3 class="text-xl font-black text-indigo-700 mt-1" id="sumPrimarySpend">0</h3><p class="text-[10px] text-indigo-500 mt-1" id="primarySpendMonth"></p></div>
             <div class="pastel-amber p-4 rounded-2xl border border-amber-200 shadow-sm secondary-spend-card"><p class="text-xs font-bold text-amber-600 uppercase tracking-wider">Secondary Account Spend</p><h3 class="text-xl font-black text-amber-700 mt-1" id="sumSecondarySpend">0</h3><p class="text-[10px] text-amber-500 mt-1" id="secondarySpendMonth"></p></div>
             <div id="creditCardSpendCard" class="pastel-rose p-4 rounded-2xl border border-rose-200 shadow-sm"><p class="text-xs font-bold text-rose-600 uppercase tracking-wider">Credit Card Spend</p><h3 class="text-xl font-black text-rose-700 mt-1" id="sumCreditCardSpend">0</h3><p class="text-[10px] text-rose-500 mt-1" id="creditCardSpendMonth"></p></div>
+            <div class="pastel-slate p-4 rounded-2xl border border-slate-200 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Not Linked to an Account</p><h3 class="text-xl font-black text-slate-700 mt-1" id="sumUnassignedSpend">0</h3><p class="text-[10px] text-slate-400 mt-1" id="unassignedSpendMonth"></p></div>
           </div>
+          <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-md border border-slate-800 space-y-4"><div class="border-b border-slate-800 pb-3 flex items-center justify-between"><h3 class="font-extrabold text-sm uppercase tracking-wider text-amber-400 flex items-center"><i class="fa-solid fa-handshake text-emerald-400 mr-2"></i> Pending Payments — Who Owes Whom</h3><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded">Live</span></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700/80"><p class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Owed To You</p><h4 class="text-lg font-black text-emerald-400 mt-1" id="sumOwedToYou">0</h4><p class="text-[10px] text-slate-400 mt-1">Friends who still owe you</p></div><div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700/80"><p class="text-[10px] font-bold text-rose-400 uppercase tracking-wider">You Owe</p><h4 class="text-lg font-black text-rose-400 mt-1" id="sumYouOwe">0</h4><p class="text-[10px] text-slate-400 mt-1">Friends you still owe</p></div><div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700/80"><p class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Household Settlement Due</p><h4 class="text-lg font-black text-amber-400 mt-1" id="sumHouseholdDue">0</h4><p class="text-[10px] text-slate-400 mt-1">Unsettled share for the selected month</p></div></div></div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="pastel-indigo p-5 rounded-2xl border border-indigo-200 shadow-sm space-y-4"><div class="flex items-center justify-between border-b border-indigo-200 pb-3"><h3 class="font-bold text-slate-800 flex items-center" id="bankType1Title"><i class="fa-solid fa-building-columns text-indigo-600 mr-2"></i> Bank Account 1</h3><div class="flex items-center gap-2 flex-wrap"><input type="month" id="bankMonthSelect" onchange="renderOverview()" class="bg-white/70 border border-indigo-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none"><button onclick="openForm('modalBank', 'bankForm', {bankType: 1})" class="px-3 py-1 bg-indigo-600 text-white hover:bg-indigo-700 font-bold text-xs rounded-lg transition">+ Add Bank</button></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="text-slate-400 border-b"><th class="pb-2">Owner</th><th class="pb-2">Bank Name</th><th class="pb-2 text-right">Balance</th><th class="pb-2 text-right">In INR</th><th class="pb-2 text-center">Action</th></tr></thead><tbody id="bankType1Table" class="divide-y divide-indigo-100 font-medium text-slate-700"></tbody></table></div></div>
             <div id="secondaryAccountBlock" class="pastel-amber p-5 rounded-2xl border border-amber-200 shadow-sm space-y-4"><div class="flex items-center justify-between border-b border-amber-200 pb-3"><h3 class="font-bold text-slate-800 flex items-center" id="bankType2Title"><i class="fa-solid fa-vault text-amber-600 mr-2"></i> Bank Account 2</h3><div class="flex items-center gap-2 flex-wrap"><input type="month" id="bankMonthSelect2" onchange="renderOverview()" class="bg-white/70 border border-amber-200 rounded-lg px-2 py-1 font-bold text-xs text-slate-700 outline-none"><button onclick="openForm('modalBank', 'bankForm', {bankType: 2})" class="px-3 py-1 bg-amber-600 text-white hover:bg-amber-700 font-bold text-xs rounded-lg transition">+ Add Bank</button></div></div><div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead><tr class="text-slate-400 border-b"><th class="pb-2">Owner</th><th class="pb-2">Bank Name</th><th class="pb-2 text-right">Balance</th><th class="pb-2 text-right">In INR</th><th class="pb-2 text-center">Action</th></tr></thead><tbody id="bankType2Table" class="divide-y divide-amber-100 font-medium text-slate-700"></tbody></table></div></div>
@@ -283,6 +285,7 @@ window.handleLogin = async function(e) {
       const profSnap = await get(ref(db, 'users/' + fbUser.uid));
       const prof = profSnap.val() || {};
       if (!prof.email) { alert('Account setup incomplete. Please contact admin.'); await signOut(auth); return; }
+      if (prof.blocked) { alert('This account has been blocked by the admin. You cannot log in.'); await signOut(auth); return; }
       const dataKey = prof.legacyLoginId || fbUser.uid;
       currentUser = { loginId: dataKey, uid: fbUser.uid, name: prof.name || fbUser.email, role: prof.role || 'user' };
       window.currentUser = currentUser;
@@ -303,6 +306,7 @@ window.handleLogin = async function(e) {
     if (legacyUser.migrated) { alert('This account has been upgraded. Please log in using your Email ID and password.'); return; }
     if (legacyUser.password && decodePassword(legacyUser.password) !== password) { alert('Incorrect password. Please try again.'); return; }
     if (legacyUser.blocked) { alert('This account has been blocked by the admin. You cannot log in.'); return; }
+    set(ref(db, 'users/' + loginId + '/lastLogin'), new Date().toISOString()).catch(() => {});
     pendingLegacyUser = { loginId: loginId, name: legacyUser.name, role: legacyUser.role || (loginId === 'US' ? 'admin' : 'user') };
     window.pendingLegacyUser = pendingLegacyUser;
     openProfileUpdatePopup();
@@ -558,7 +562,7 @@ onAuthStateChanged(auth, async (fbUser) => {
   }
 });
 
-async function initUserData(loginId) { if (dataUnsubscribe) dataUnsubscribe(); dataLoaded = false; const userRef = ref(db, `userData/${loginId}`); let isFirstLoad = true; dataUnsubscribe = onValue(userRef, async (snapshot) => { dataLoaded = true; const val = snapshot.val(); if (val) { normalizeState(val); } else { if (loginId === 'US' && isFirstLoad) { await migrateExistingData(loginId); } else { Object.assign(state, { rates: { ...DEFAULT_RATES }, displayCurrency: 'INR', banks: [], debts: [], gold: [], sips: [], expenses: {}, settlements: {}, transfers: [], friends: [], friendSplits: {}, friendLedger: [], settings: { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2, showSecondaryAccount: true, showLiabilities: true, showGoldSip: true, showTransfers: true, adminLogo: '', adminTagline: 'Financial Planning & Portfolio' } }); } } isFirstLoad = false; const liveRateInput = document.getElementById('liveRateInput'); if (liveRateInput) liveRateInput.value = (state.rates.SAR || DEFAULT_RATES.SAR).toFixed(2); const displaySelect = document.getElementById('displayCurrencySelect'); if (displaySelect) displaySelect.value = state.displayCurrency || 'INR'; if (typeof window.setCommonGoldPurity === 'function') window.setCommonGoldPurity(activeCommonPurity); const cm = currentMonthStr(); ['expenseMonthSelect','friendSplitMonthSelect','settlementMonthSelect','transferMonthSelect','bankMonthSelect','bankMonthSelect2','cashMonthSelect','creditCardMonthSelect'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = cm; }); applyVisibilitySettings(); applyAdminBranding(); if (typeof window.renderAll === 'function') window.renderAll(); renderCreditCardReminders(); }, (error) => { console.error('Data load error:', error); alert('Could not load your saved data from the server (' + (error && error.message ? error.message : 'permission denied') + '). Your data has NOT been changed.'); }); }
+async function initUserData(loginId) { if (dataUnsubscribe) dataUnsubscribe(); dataLoaded = false; const userRef = ref(db, `userData/${loginId}`); let isFirstLoad = true; dataUnsubscribe = onValue(userRef, async (snapshot) => { dataLoaded = true; const val = snapshot.val(); if (val) { normalizeState(val); } else { if (loginId === 'US' && isFirstLoad) { await migrateExistingData(loginId); } else { Object.assign(state, { rates: { ...DEFAULT_RATES }, displayCurrency: 'INR', banks: [], debts: [], gold: [], sips: [], expenses: {}, settlements: {}, transfers: [], friends: [], friendSplits: {}, friendLedger: [], settings: { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2, showSecondaryAccount: true, showLiabilities: true, showGoldSip: true, showTransfers: true, adminLogo: '', adminTagline: 'Financial Planning & Portfolio' } }); } } isFirstLoad = false; const liveRateInput = document.getElementById('liveRateInput'); if (liveRateInput) liveRateInput.value = (state.rates.SAR || DEFAULT_RATES.SAR).toFixed(2); const displaySelect = document.getElementById('displayCurrencySelect'); if (displaySelect) displaySelect.value = state.displayCurrency || 'INR'; if (typeof window.setCommonGoldPurity === 'function') window.setCommonGoldPurity(activeCommonPurity); const cm = currentMonthStr(); ['expenseMonthSelect','friendSplitMonthSelect','settlementMonthSelect','transferMonthSelect','bankMonthSelect','bankMonthSelect2','cashMonthSelect','creditCardMonthSelect'].forEach(id => { const el = document.getElementById(id); if (el) el.value = cm; }); applyVisibilitySettings(); applyAdminBranding(); if (typeof window.renderAll === 'function') window.renderAll(); renderCreditCardReminders(); }, (error) => { console.error('Data load error:', error); alert('Could not load your saved data from the server (' + (error && error.message ? error.message : 'permission denied') + '). Your data has NOT been changed.'); }); }
 async function migrateExistingData(loginId) { try { const snapshot = await get(ref(db, 'fintrack_data')); const oldData = snapshot.val(); if (oldData) { const migratedState = { rates: { ...DEFAULT_RATES, ...(oldData.liveRate ? { SAR: oldData.liveRate } : {}), ...(oldData.rates || {}) }, displayCurrency: 'INR', banks: Array.isArray(oldData.banks) ? oldData.banks : (oldData.banks ? Object.values(oldData.banks) : []), debts: Array.isArray(oldData.debts) ? oldData.debts : (oldData.debts ? Object.values(oldData.debts) : []), gold: Array.isArray(oldData.gold) ? oldData.gold : (oldData.gold ? Object.values(oldData.gold) : []), sips: Array.isArray(oldData.sips) ? oldData.sips : (oldData.sips ? Object.values(oldData.sips) : []), expenses: oldData.expenses || {}, settlements: oldData.settlements || {}, transfers: Array.isArray(oldData.transfers) ? oldData.transfers : (oldData.transfers ? Object.values(oldData.transfers) : []), friends: [], friendSplits: {}, friendLedger: [], settings: { people: [], bankType1: DEFAULT_BANK_TYPE1, bankType2: DEFAULT_BANK_TYPE2, showSecondaryAccount: true, showLiabilities: true, showGoldSip: true, showTransfers: true, adminLogo: '', adminTagline: 'Financial Planning & Portfolio' } }; migratedState.banks.forEach(b => { if (!b.country) b.country = b.currency === 'INR' ? 'India' : 'Saudi Arabia'; if (!b.date) b.date = ''; if (!b.bankType) b.bankType = (b.currency === 'INR') ? 1 : 2; }); migratedState.gold.forEach(g => { if (g.date) g.date = convertGoldDate(g.date); }); migratedState.debts.forEach(d => { if (!d.payments) d.payments = []; else if (!Array.isArray(d.payments)) d.payments = Object.values(d.payments); }); await set(ref(db, `userData/${loginId}`), migratedState); const userSnap = await get(ref(db, `users/${loginId}`)); if (!userSnap.exists()) { await set(ref(db, `users/${loginId}`), { name: 'Existing User', loginId, password: encodePassword('Juby@8055'), createdAt: new Date().toISOString() }); } console.log("Migration complete: existing data moved to user-specific path."); } else { const userSnap = await get(ref(db, `users/${loginId}`)); if (!userSnap.exists()) { await set(ref(db, `users/${loginId}`), { name: 'Existing User', loginId, password: encodePassword('Juby@8055'), createdAt: new Date().toISOString() }); } } } catch(err) { console.error("Migration error:", err); } }
 function normalizeState(val) { if (!val) return; state.rates = val.rates || { ...DEFAULT_RATES }; state.displayCurrency = val.displayCurrency || 'INR'; state.banks = Array.isArray(val.banks) ? val.banks : (val.banks ? Object.values(val.banks) : []); state.debts = Array.isArray(val.debts) ? val.debts : (val.debts ? Object.values(val.debts) : []); state.gold = Array.isArray(val.gold) ? val.gold : (val.gold ? Object.values(val.gold) : []); state.sips = Array.isArray(val.sips) ? val.sips : (val.sips ? Object.values(val.sips) : []); state.transfers = Array.isArray(val.transfers) ? val.transfers : (val.transfers ? Object.values(val.transfers) : []); state.expenses = val.expenses || {}; state.settlements = val.settlements || {}; state.friends = Array.isArray(val.friends) ? val.friends : (val.friends ? Object.values(val.friends) : []); state.friendSplits = val.friendSplits || {}; state.friendLedger = Array.isArray(val.friendLedger) ? val.friendLedger : []; state.settings = val.settings || { people: [] }; if (!state.settings.people) state.settings.people = []; if (!state.settings.bankType1) state.settings.bankType1 = DEFAULT_BANK_TYPE1; if (!state.settings.bankType2) state.settings.bankType2 = DEFAULT_BANK_TYPE2; if (state.settings.showSecondaryAccount === undefined) state.settings.showSecondaryAccount = true; if (state.settings.showLiabilities === undefined) state.settings.showLiabilities = true; if (state.settings.showGoldSip === undefined) state.settings.showGoldSip = true; if (state.settings.showTransfers === undefined) state.settings.showTransfers = true; if (state.settings.adminLogo === undefined) state.settings.adminLogo = ''; if (state.settings.adminTagline === undefined) state.settings.adminTagline = 'Financial Planning & Portfolio'; state.banks.forEach(b => { if (!b.country) b.country = b.currency === 'INR' ? 'India' : 'Saudi Arabia'; if (!b.owner) b.owner = getPeople()[0] || ''; if (!b.bankType) b.bankType = (b.currency === 'INR') ? 1 : 2; if (!b.date) b.date = ''; }); state.debts.forEach(d => { if (!d.payments) d.payments = []; else if (!Array.isArray(d.payments)) d.payments = Object.values(d.payments); if (!d.currency) d.currency = 'INR'; }); state.gold.forEach(g => { if (!g.currency) g.currency = 'SAR'; }); state.sips.forEach(s => { if (!s.currency) s.currency = 'INR'; }); if (state.settings.people.length === 0 && state.banks.length > 0) { const owners = []; state.banks.forEach(b => { if (b.owner && !owners.includes(b.owner)) owners.push(b.owner); }); if (owners.length > 0) { state.settings.people = owners; saveData(); } } if (typeof val.liveRate === 'number' && !state.rates.SAR) state.rates.SAR = val.liveRate; }
 window.saveData = function() { if (typeof window.renderAll === 'function') window.renderAll(); if (!dataLoaded) { console.warn('saveData skipped: user data has not loaded from the server yet.'); return; } if (currentUser) { set(ref(db, `userData/${currentUser.loginId}`), state).catch(err => console.error("Firebase sync error:", err)); } };
@@ -677,7 +681,10 @@ async function loadAdminInfo() {
         const active = last && days < 14;
         const badge = active ? '<span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase bg-emerald-100 text-emerald-700">Active</span>' : '<span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase bg-red-100 text-red-700">Dormant</span>';
         const isSelf = currentUser && uid === currentUser.uid;
-        tbody.innerHTML += '<tr><td class="p-3 font-bold">' + (u.name || '-') + (u.role === 'admin' ? ' <i class="fa-solid fa-shield-halved text-amber-500"></i>' : '') + '</td><td class="p-3">' + (u.email || '-') + '</td><td class="p-3">' + badge + '</td><td class="p-3 text-center">' + (isSelf ? '<span class="text-[10px] text-slate-400 italic">You</span>' : '—') + '</td></tr>';
+        const blockedBadge = u.blocked ? ' <span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase bg-slate-800 text-white">Blocked</span>' : '';
+        const blkCls = u.blocked ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-amber-100 text-amber-700 hover:bg-amber-200';
+        const actions = isSelf ? '<span class="text-[10px] text-slate-400 italic">You</span>' : `<button onclick="toggleUserBlocked('${uid}', ${u.blocked ? 'true' : 'false'})" class="px-2 py-1 mx-0.5 rounded text-[10px] font-bold ${blkCls}">${u.blocked ? 'Unblock' : 'Block'}</button><button onclick="deleteUserAccount('${uid}')" class="px-2 py-1 mx-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700 hover:bg-red-200">Delete</button>`;
+        tbody.innerHTML += '<tr><td class="p-3 font-bold">' + (u.name || '-') + (u.role === 'admin' ? ' <i class="fa-solid fa-shield-halved text-amber-500"></i>' : '') + '</td><td class="p-3">' + (u.email || '-') + '</td><td class="p-3">' + badge + blockedBadge + '</td><td class="p-3 text-center">' + actions + '</td></tr>';
       });
       if (entries.length === 0) tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400 italic">No registered accounts.</td></tr>';
       const vmc = document.getElementById('adminUsersViewMoreContainer'); if (vmc) vmc.classList.toggle('hidden', !shouldShowViewMore('adminUsers', entries.length));
@@ -686,7 +693,7 @@ async function loadAdminInfo() {
 }
 window.loadAdminInfo = loadAdminInfo;
 window.toggleUserBlocked = async function(loginId, blocked) { try { const snap = await get(ref(db, `users/${loginId}`)); if (!snap.exists()) { alert("Account not found."); return; } const user = snap.val(); user.blocked = !blocked; await set(ref(db, `users/${loginId}`), user); loadAdminInfo(); } catch(err) { console.error(err); alert("Could not update this account. Please try again."); } };
-window.deleteUserAccount = async function(loginId) { if (!confirm(`Permanently delete account "${loginId}" and ALL of its data? This cannot be undone.`)) return; try { await remove(ref(db, `users/${loginId}`)); await remove(ref(db, `userData/${loginId}`)); loadAdminInfo(); } catch(err) { console.error(err); alert("Could not delete this account. Please try again."); } };
+window.deleteUserAccount = async function(loginId) { if (!confirm(`Permanently delete account "${loginId}" and ALL of its data? This cannot be undone.`)) return; try { const snap = await get(ref(db, `users/${loginId}`)); const u = snap.exists() ? snap.val() : {}; await remove(ref(db, `users/${loginId}`)); await remove(ref(db, `userData/${loginId}`)); await remove(ref(db, `publicProfiles/${loginId}`)); if (u.legacyLoginId && u.legacyLoginId !== loginId) { await remove(ref(db, `userData/${u.legacyLoginId}`)); await remove(ref(db, `users/${u.legacyLoginId}`)); } loadAdminInfo(); } catch(err) { console.error(err); alert("Could not delete this account. Please try again."); } };
 window.addEventListener('DOMContentLoaded', () => { const rem = localStorage.getItem('fintrack_remember_email'); if (rem) document.getElementById('loginId').value = rem; document.getElementById('authContainer').classList.remove('hidden'); });
 window.renderAll = function() { renderOverview(); renderExpenses(); renderFriendsSplit(); renderSettlements(); renderDebts(); renderGoldAndSip(); renderTransfers(); renderSettings(); renderFriendLedger(); renderCreditCardReminders(); renderSharedTables(); };
 function renderSharedTables() {
@@ -769,28 +776,53 @@ function renderOverview() {
   netEl.className = `text-2xl font-black mt-2 ${netInr >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
   renderAccountSpendSummary();
   renderIndividualSummary();
+  renderPendingPayments();
 }
+function renderPendingPayments() {
+  const owedByCurr = {}, youOweByCurr = {};
+  (window.state.friends || []).forEach(f => {
+    const bal = friendBalanceByCurrency(f.id);
+    Object.keys(bal).forEach(c => { const v = bal[c]; if (v > 0.01) owedByCurr[c] = (owedByCurr[c] || 0) + v; else if (v < -0.01) youOweByCurr[c] = (youOweByCurr[c] || 0) + Math.abs(v); });
+  });
+  const owedEl = document.getElementById('sumOwedToYou'); const youEl = document.getElementById('sumYouOwe'); const hhEl = document.getElementById('sumHouseholdDue');
+  if (owedEl) owedEl.innerText = formatMultiCurrency(owedByCurr);
+  if (youEl) youEl.innerText = formatMultiCurrency(youOweByCurr);
+  if (hhEl) {
+    const mSel = document.getElementById('expenseMonthSelect');
+    const m = (mSel && mSel.value) ? mSel.value : currentMonthStr();
+    const people = window.getPeople();
+    const paidByPersonCurrency = {}; const totalByCurrency = {};
+    people.forEach(p => { paidByPersonCurrency[p] = {}; });
+    (window.state.expenses[m] || []).forEach(it => { if (!paidByPersonCurrency[it.paidBy]) paidByPersonCurrency[it.paidBy] = {}; paidByPersonCurrency[it.paidBy][it.currency] = (paidByPersonCurrency[it.paidBy][it.currency] || 0) + it.amount; totalByCurrency[it.currency] = (totalByCurrency[it.currency] || 0) + it.amount; });
+    const dueByCurr = {};
+    Object.keys(totalByCurrency).forEach(c => { const info = calculateMonthlyBalance(m, c, people, paidByPersonCurrency, totalByCurrency[c]); if (info && info.dueAmount > 0.01) { const dc = info.dueCurrency || c; dueByCurr[dc] = (dueByCurr[dc] || 0) + info.dueAmount; } });
+    hhEl.innerText = formatMultiCurrency(dueByCurr);
+  }
+}
+window.renderPendingPayments = renderPendingPayments;
 function renderAccountSpendSummary() {
-  const month = currentMonthStr();
-  let primarySpend = 0, secondarySpend = 0, creditCardSpend = 0;
+  const monthSel = document.getElementById('expenseMonthSelect');
+  const month = (monthSel && monthSel.value) ? monthSel.value : currentMonthStr();
+  let primarySpend = 0, secondarySpend = 0, creditCardSpend = 0, unassignedSpend = 0;
   const expenses = (window.state.expenses[month] || []);
   expenses.forEach(exp => {
-    if (!exp.deductBankId) return;
-    const bank = (window.state.banks || []).find(b => String(b.id) === String(exp.deductBankId));
-    if (!bank) return;
-    const amountInr = window.convertToINR(exp.deductAmount || exp.amount || 0, exp.currency);
-    if (bank.bankType === 1) primarySpend += amountInr;
-    else if (bank.bankType === 2) secondarySpend += amountInr;
-    else if (bank.bankType === 3) creditCardSpend += amountInr;
+    const amountInr = window.convertToINR(exp.amount || 0, exp.currency);
+    const bank = exp.deductBankId ? (window.state.banks || []).find(b => String(b.id) === String(exp.deductBankId)) : null;
+    if (bank && bank.bankType === 1) primarySpend += amountInr;
+    else if (bank && bank.bankType === 2) secondarySpend += amountInr;
+    else if (bank && bank.bankType === 3) creditCardSpend += amountInr;
+    else unassignedSpend += amountInr;
   });
-  const pEl = document.getElementById('sumPrimarySpend'); const sEl = document.getElementById('sumSecondarySpend'); const cEl = document.getElementById('sumCreditCardSpend');
-  const pMonth = document.getElementById('primarySpendMonth'); const sMonth = document.getElementById('secondarySpendMonth'); const cMonth = document.getElementById('creditCardSpendMonth');
+  const pEl = document.getElementById('sumPrimarySpend'); const sEl = document.getElementById('sumSecondarySpend'); const cEl = document.getElementById('sumCreditCardSpend'); const uEl = document.getElementById('sumUnassignedSpend');
+  const pMonth = document.getElementById('primarySpendMonth'); const sMonth = document.getElementById('secondarySpendMonth'); const cMonth = document.getElementById('creditCardSpendMonth'); const uMonth = document.getElementById('unassignedSpendMonth');
   if (pEl) pEl.innerText = window.formatInDisplayCurrency(primarySpend);
   if (sEl) sEl.innerText = window.formatInDisplayCurrency(secondarySpend);
   if (cEl) cEl.innerText = window.formatInDisplayCurrency(creditCardSpend);
+  if (uEl) uEl.innerText = window.formatInDisplayCurrency(unassignedSpend);
   if (pMonth) pMonth.innerText = `Month: ${month}`;
   if (sMonth) sMonth.innerText = `Month: ${month}`;
   if (cMonth) cMonth.innerText = `Month: ${month}`;
+  if (uMonth) uMonth.innerText = `Month: ${month}`;
 }
 window.renderAccountSpendSummary = renderAccountSpendSummary;
 function renderIndividualSummary() {
@@ -850,7 +882,7 @@ window.renderExpenses = function() {
 };
 function calculateMonthlyBalance(month, currency, people, paidByPersonCurrency, totalExpenses) {
   const numPeople = people.length;
-  if (numPeople === 0) return { statusText: 'No people configured', friendsSplitNote: '' };
+  if (numPeople === 0) return { statusText: 'No people configured', friendsSplitNote: '', dueAmount: 0, dueCurrency: currency };
   let settledByPayer = {}; let settledByPayee = {};
   people.forEach(p => { settledByPayer[p] = 0; settledByPayee[p] = 0; });
   (window.state.settlements[month] || []).forEach(s => { if (s.currency === currency) { if (settledByPayer[s.payer] !== undefined) settledByPayer[s.payer] += s.amount; if (settledByPayee[s.payee] !== undefined) settledByPayee[s.payee] += s.amount; } });
@@ -876,16 +908,17 @@ function calculateMonthlyBalance(month, currency, people, paidByPersonCurrency, 
     if (Math.abs(balance) < 0.1) statusText = "All Settled Up ✓";
     else if (balance > 0) statusText = `${p2} owes ${p1}: ${balance.toFixed(2)} ${currency}`;
     else statusText = `${p1} owes ${p2}: ${Math.abs(balance).toFixed(2)} ${currency}`;
-    return { statusText, friendsSplitNote };
+    return { statusText, friendsSplitNote, dueAmount: Math.abs(balance) < 0.1 ? 0 : Math.abs(balance), dueCurrency: currency };
   } else {
     let balances = {};
     people.forEach(p => { const paid = (paidByPersonCurrency[p] && paidByPersonCurrency[p][currency]) || 0; balances[p] = paid - (totalExpenses / numPeople) + settledByPayee[p] - settledByPayer[p] + friendsSplitAdjustment[p]; });
     let creditors = people.filter(p => balances[p] > 0.1).map(p => ({ name: p, amt: balances[p] }));
     let debtors = people.filter(p => balances[p] < -0.1).map(p => ({ name: p, amt: -balances[p] }));
     let statusText;
+    let dueTotal = 0;
     if (creditors.length === 0 && debtors.length === 0) { statusText = "All Settled Up ✓"; }
-    else { let parts = []; creditors.forEach(c => { debtors.forEach(d => { const settleAmt = Math.min(c.amt, d.amt); if (settleAmt > 0.01) { parts.push(`${d.name}→${c.name}: ${settleAmt.toFixed(2)}`); c.amt -= settleAmt; d.amt -= settleAmt; } }); }); statusText = parts.join(' | ') || 'All Settled Up ✓'; }
-    return { statusText, friendsSplitNote };
+    else { let parts = []; creditors.forEach(c => { debtors.forEach(d => { const settleAmt = Math.min(c.amt, d.amt); if (settleAmt > 0.01) { parts.push(`${d.name}→${c.name}: ${settleAmt.toFixed(2)}`); dueTotal += settleAmt; c.amt -= settleAmt; d.amt -= settleAmt; } }); }); statusText = parts.join(' | ') || 'All Settled Up ✓'; }
+    return { statusText, friendsSplitNote, dueAmount: dueTotal, dueCurrency: currency };
   }
 }
 window.renderFriendsSplit = function() {
