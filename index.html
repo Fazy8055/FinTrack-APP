@@ -774,7 +774,7 @@ async function loadAdminInfo() {
     const cfg = cfgSnap.val() || {};
     const inp = document.getElementById('maxUsersInput'); if (inp && typeof cfg.maxUsers === 'number') inp.value = cfg.maxUsers;
     const usersSnap = await get(ref(db, 'users')); const users = usersSnap.exists() ? usersSnap.val() : {};
-    const entries = Object.entries(users).filter(([k, v]) => v && (v.email || ((v.password || v.name) && !v.migrated)));
+    const entries = Object.entries(users).filter(([k, v]) => v && (v.email || ((v.password || v.name) && !v.migrated))).sort((a, b) => { const ta = (a[1] && a[1].createdAt) ? new Date(a[1].createdAt).getTime() : 0; const tb = (b[1] && b[1].createdAt) ? new Date(b[1].createdAt).getTime() : 0; return tb - ta; });
     const legacyCount = entries.filter(([k, v]) => !v.email).length;
     const el = document.getElementById('adminUserCount'); if (el) el.innerText = entries.length + ' account(s) registered' + (legacyCount ? ' (' + legacyCount + ' awaiting email upgrade)' : '');
     const tbody = document.getElementById('adminUsersTable');
